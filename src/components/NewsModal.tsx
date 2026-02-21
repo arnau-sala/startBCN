@@ -6,36 +6,42 @@ function getDummyBullets(item: DashboardNewsItem) {
   if (t.includes("crypto")) {
     return [
       "Crypto moved fast after traders reduced risk.",
-      "Short-term volatility is higher than usual."
+      "Short-term volatility is higher than usual.",
+      "If volume stays elevated, swings can persist for several sessions."
     ];
   }
   if (t.includes("rates")) {
     return [
       "Rate expectations changed market pricing.",
-      "Risky assets may cool while savings can improve."
+      "Risky assets may cool while savings can improve.",
+      "Watch central-bank guidance, because wording can move markets quickly."
     ];
   }
   if (t.includes("earnings")) {
     return [
       "Quarterly results beat/missed expectations.",
-      "Price moves depend on guidance, not only results."
+      "Price moves depend on guidance, not only results.",
+      "In the short term, sentiment can outweigh fundamentals after the release."
     ];
   }
   if (t.includes("ai") || t.includes("tech")) {
     return [
       "AI/tech momentum remains a market driver.",
-      "Related stocks often move together."
+      "Related stocks often move together.",
+      "This can help returns, but also increases concentration risk in one theme."
     ];
   }
   if (t.includes("macro")) {
     return [
       "Macro headlines can move many assets at once.",
-      "Expectation shifts drive most of the reaction."
+      "Expectation shifts drive most of the reaction.",
+      "Cross-asset reactions (equities, bonds, FX) often confirm trend strength."
     ];
   }
   return [
     "This headline can shift short-term sentiment.",
-    "Expect temporary volatility around the news."
+    "Expect temporary volatility around the news.",
+    "Use follow-up headlines to confirm whether the move is noise or trend."
   ];
 }
 
@@ -96,11 +102,6 @@ function getAffectedHoldings(item: DashboardNewsItem) {
     .filter((ticker) => held.has(ticker));
 }
 
-function getAffectedCryptoHoldings(assets: string[]) {
-  const crypto = new Set(["BTC", "ETH", "SOL", "ADA", "XRP", "DOGE", "AVAX", "DOT", "MATIC"]);
-  return assets.filter((asset) => crypto.has(asset));
-}
-
 function getConfidence(item: DashboardNewsItem): "High" | "Medium" {
   if (item.tags.includes("crypto") || item.tags.includes("rates") || item.tags.includes("earnings")) {
     return "High";
@@ -128,7 +129,6 @@ export function NewsModal({
   if (!item) return null;
   const portfolioView = getAffectAndAction(item);
   const affectedHoldings = getAffectedHoldings(item);
-  const affectedCrypto = getAffectedCryptoHoldings(affectedHoldings);
   const confidence = getConfidence(item);
   const whyMatters = getWhyMattersToYou(item, affectedHoldings);
   const actionTone = portfolioView.recommendation === "reduce"
@@ -185,12 +185,10 @@ export function NewsModal({
               </span>
             </div>
             <h3 className="mt-1 text-lg font-semibold text-slate-900">{item.title}</h3>
-            <div className="mt-2 rounded-lg border border-teal-100 bg-teal-50 px-3 py-2">
-              <p className="clamp-1 text-sm text-teal-800">
-                <span className="font-semibold text-teal-700">Why this matters to you:</span> {whyMatters}
-              </p>
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
+            <p className="mt-2 clamp-1 text-sm text-teal-800">
+              <span className="font-semibold text-teal-700">Why this matters to you:</span> {whyMatters}
+            </p>
+            <div className="mt-2 space-y-1.5 text-xs">
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="font-semibold uppercase tracking-wide text-slate-500">Tags</span>
                 {item.tags.map((tag) => (
@@ -200,18 +198,18 @@ export function NewsModal({
                 ))}
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="font-semibold uppercase tracking-wide text-slate-500">Affected crypto</span>
-                {affectedCrypto.length > 0 ? (
-                  affectedCrypto.map((ticker) => (
+                <span className="font-semibold uppercase tracking-wide text-slate-500">Affected assets</span>
+                {affectedHoldings.length > 0 ? (
+                  affectedHoldings.map((ticker) => (
                     <span
-                      key={`top-affected-crypto-${item.id}-${ticker}`}
+                      key={`top-affected-asset-${item.id}-${ticker}`}
                       className="rounded-md border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-700"
                     >
                       {ticker}
                     </span>
                   ))
                 ) : (
-                  <span className="text-slate-500">No direct crypto impacted</span>
+                  <span className="text-slate-500">No direct asset impacted</span>
                 )}
               </div>
             </div>
@@ -219,8 +217,8 @@ export function NewsModal({
         </div>
 
         <div className="mt-3 grid gap-3 md:grid-cols-[1.05fr_0.95fr] md:items-stretch">
-          <div className="h-full rounded-lg border border-slate-200 bg-white p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">TL;DR (30 sec explanation)</p>
+          <div className="h-full p-1">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Simple explanation</p>
             <ul className="mt-2 space-y-1.5 text-sm text-slate-700">
               {getDummyBullets(item).map((bullet, index) => (
                 <li key={bullet} className="flex items-start gap-2">
@@ -247,17 +245,6 @@ export function NewsModal({
                 </span>
               </div>
               <p className={`mt-1 text-sm ${actionTone.text}`}>{portfolioView.action}</p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                <span className={`inline-flex items-center gap-1 rounded-full border border-current/30 bg-white/60 px-2 py-0.5 text-[11px] ${actionTone.text}`}>
-                  📈 Longer timeframe
-                </span>
-                <span className={`inline-flex items-center gap-1 rounded-full border border-current/30 bg-white/60 px-2 py-0.5 text-[11px] ${actionTone.text}`}>
-                  📰 Related news
-                </span>
-                <span className={`inline-flex items-center gap-1 rounded-full border border-current/30 bg-white/60 px-2 py-0.5 text-[11px] ${actionTone.text}`}>
-                  🤖 Ask assistant
-                </span>
-              </div>
             </div>
           </div>
         </div>
