@@ -6,6 +6,7 @@ export interface DashboardNewsItem {
   source: string;
   timeAgo: string;
   tags: string[];
+  tickers?: string[];
   summary: string;
   detail: string;
   imageUrl?: string;
@@ -161,6 +162,7 @@ function toDashboardItem(item: NewsItem): DashboardNewsItem {
     source: item.source,
     timeAgo: "Today",
     tags: item.tags,
+    tickers: item.tickers,
     summary: item.shortSummary,
     detail: `${item.shortSummary} ${item.keyNumbers?.length ? `Key numbers: ${item.keyNumbers.join(", ")}.` : ""}`.trim(),
     imageUrl: imageByNewsId[item.id]

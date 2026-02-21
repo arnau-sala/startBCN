@@ -74,15 +74,14 @@ function NewsRowCarousel({
     return "A market update that may affect your portfolio";
   };
 
-  const getPortfolioImpact = (item: DashboardNewsItem) => {
-    const t = item.tags;
-    if (t.includes("rates")) return "Portfolio impact: higher rates can pressure growth stocks and improve savings yield.";
-    if (t.includes("crypto")) return "Portfolio impact: crypto volatility can increase drawdowns and shift your risk balance.";
-    if (t.includes("earnings")) return "Portfolio impact: earnings surprises can move single-stock positions quickly in either direction.";
-    if (t.includes("ai") || t.includes("tech")) return "Portfolio impact: AI/tech momentum can boost returns, but concentration risk rises.";
-    if (t.includes("etf")) return "Portfolio impact: ETF rotations can change your sector exposure without changing your holdings.";
-    if (t.includes("macro")) return "Portfolio impact: macro events can move correlations and affect all positions at once.";
-    return "Portfolio impact: this can alter short-term volatility and your portfolio's risk/reward profile.";
+  const tickerStyle: Record<string, { bg: string; text: string; border: string }> = {
+    BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
+    ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
+    NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
+    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
+    GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
+    EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
   };
 
   if (items.length === 0) {
@@ -97,31 +96,50 @@ function NewsRowCarousel({
   const cardContent = (news: DashboardNewsItem) => (
     <div className="grid grid-cols-[1fr_auto] gap-3">
       <div className="min-w-0">
-        <p style={{ color: "var(--text-tertiary)" }} className="text-[11px]">
-          {news.source} · {news.timeAgo}
-        </p>
+        <div className="flex items-center gap-2">
+          <p style={{ color: "var(--text-tertiary)" }} className="text-[11px]">
+            {news.source} · {news.timeAgo}
+          </p>
+          {whyForYou && (
+            <p className="clamp-1 text-[11px]" style={{ color: "var(--accent-dark)" }}>
+              {whyForYou(news)}
+            </p>
+          )}
+        </div>
         <p
           className="mt-1 clamp-2 text-sm font-semibold leading-snug"
           style={{ color: "var(--text-primary)" }}
         >
           {getDummyTitle(news)}
         </p>
-        {whyForYou && (
-          <p className="mt-1 clamp-1 text-[11px]" style={{ color: "var(--accent-dark)" }}>
-            {whyForYou(news)}
-          </p>
-        )}
-        <p className="mt-1 clamp-2 text-[11px] leading-4" style={{ color: "var(--text-secondary)" }}>
-          {getPortfolioImpact(news)}
-        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          {(news.tickers ?? []).slice(0, 2).map((ticker) => {
+            const t = ticker.toUpperCase();
+            const style = tickerStyle[t] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" };
+            return (
+              <span
+                key={`${news.id}-${t}`}
+                className="rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide"
+                style={{ background: style.bg, color: style.text, borderColor: style.border }}
+              >
+                {t}
+              </span>
+            );
+          })}
+        </div>
       </div>
       {news.imageUrl && (
-        <img
-          src={news.imageUrl}
-          alt={news.title}
-          className="h-16 w-16 shrink-0 rounded-lg object-cover"
-          loading="lazy"
-        />
+        <div
+          className="flex h-[76px] w-[108px] shrink-0 items-center justify-center overflow-hidden rounded-lg border"
+          style={{ borderColor: "var(--border-subtle)", background: "var(--surface-raised)" }}
+        >
+          <img
+            src={news.imageUrl}
+            alt={news.title}
+            className="h-full w-full object-contain"
+            loading="lazy"
+          />
+        </div>
       )}
     </div>
   );
@@ -201,6 +219,19 @@ function LegalDocRowCarousel({
   const item = items[safeIndex];
   const prevItem =
     previousIndex === null ? null : items[((previousIndex % items.length) + items.length) % items.length];
+  const heldTickers = new Set(holdings.map((h) => h.ticker.toUpperCase()));
+  const cryptoTickers = new Set(["BTC", "ETH", "SOL", "ADA", "XRP", "DOGE", "AVAX", "DOT", "MATIC"]);
+  const cryptoVisual: Record<string, string> = {
+    BTC: "₿",
+    ETH: "◆",
+    SOL: "◎",
+    ADA: "◌",
+    XRP: "✕",
+    DOGE: "Ð",
+    AVAX: "▲",
+    DOT: "●",
+    MATIC: "⬢"
+  };
 
   const content = (doc: LegalDigestItem) => (
     <div className="flex h-full items-start justify-between gap-3 overflow-hidden">
@@ -209,13 +240,34 @@ function LegalDocRowCarousel({
         <p className="mt-1 clamp-1 text-xs text-slate-500">
           Deadline {doc.deadline} · {doc.pages} pages · {doc.keyPoints.length} key points
         </p>
+        <div className="mt-1 flex flex-wrap items-center gap-1">
+          {doc.affectedAssets
+            .map((asset) => asset.toUpperCase())
+            .filter((asset) => heldTickers.has(asset) && cryptoTickers.has(asset))
+            .slice(0, 2)
+            .map((asset) => (
+              <span
+                key={`${doc.id}-${asset}`}
+                className="inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium"
+                style={{ borderColor: "var(--accent-border)", background: "var(--accent-subtle)", color: "var(--accent-dark)" }}
+              >
+                <span aria-hidden>{cryptoVisual[asset] ?? "◉"}</span>
+                {asset}
+              </span>
+            ))}
+        </div>
       </div>
-      <img
-        src={doc.imageUrl}
-        alt={doc.dummyTitle}
-        className="h-12 w-12 shrink-0 rounded-lg object-cover"
-        loading="lazy"
-      />
+      <div
+        className="flex h-[76px] w-[108px] shrink-0 items-center justify-center overflow-hidden rounded-lg border"
+        style={{ borderColor: "var(--border-subtle)", background: "var(--surface-raised)" }}
+      >
+        <img
+          src={doc.imageUrl}
+          alt={doc.dummyTitle}
+          className="h-full w-full object-contain"
+          loading="lazy"
+        />
+      </div>
     </div>
   );
 
@@ -226,11 +278,11 @@ function LegalDocRowCarousel({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={() => onOpen(item)}
-      className="relative block h-[84px] w-full overflow-hidden text-left"
+      className="relative block h-[96px] w-full overflow-hidden text-left"
     >
       {animating && prevItem && (
         <div
-          className={`pointer-events-none absolute inset-0 rounded-xl border p-3 ${
+          className={`pointer-events-none absolute inset-0 rounded-xl border p-2.5 ${
             direction === "next"
               ? "animate-[news-out-left_.38s_ease_forwards]"
               : "animate-[news-out-right_.38s_ease_forwards]"
@@ -241,7 +293,7 @@ function LegalDocRowCarousel({
         </div>
       )}
       <div
-        className={`h-full rounded-xl border p-3 ${
+        className={`h-full rounded-xl border p-2.5 ${
           animating && prevItem
             ? `absolute inset-0 ${
               direction === "next"
@@ -287,9 +339,15 @@ export default function ForYouPage() {
   const [globalAutoPlay, setGlobalAutoPlay] = useState(true);
   const [personalAutoPlay, setPersonalAutoPlay] = useState(true);
   const [legalAutoPlay, setLegalAutoPlay] = useState(true);
+  const [tipAutoPlay, setTipAutoPlay] = useState(true);
   const [globalHovering, setGlobalHovering] = useState(false);
   const [personalHovering, setPersonalHovering] = useState(false);
   const [legalHovering, setLegalHovering] = useState(false);
+  const [tipHovering, setTipHovering] = useState(false);
+  const [tipPrevIndex, setTipPrevIndex] = useState<number | null>(null);
+  const [tipAnimationKey, setTipAnimationKey] = useState(0);
+  const [tipDirection, setTipDirection] = useState<"next" | "prev">("next");
+  const [tipAnimating, setTipAnimating] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: "c1", role: "assistant", text: "Hi Pepe, I can help you understand today's portfolio moves." }
@@ -356,6 +414,8 @@ export default function ForYouPage() {
     [dailyTip, profile]
   );
   const currentTip = dailyTips[((tipIndex % dailyTips.length) + dailyTips.length) % dailyTips.length];
+  const previousTip =
+    tipPrevIndex === null ? null : dailyTips[((tipPrevIndex % dailyTips.length) + dailyTips.length) % dailyTips.length];
 
   useEffect(() => {
     if (globalNewsLoop.length <= 1 || !globalAutoPlay || globalHovering) return;
@@ -395,6 +455,29 @@ export default function ForYouPage() {
     }, 5000);
     return () => window.clearInterval(timer);
   }, [legalDocsLoop.length, legalAutoPlay, legalHovering]);
+
+  useEffect(() => {
+    if (dailyTips.length <= 1 || !tipAutoPlay || tipHovering) return;
+    const timer = window.setInterval(() => {
+      setTipIndex((prev) => {
+        setTipPrevIndex(prev);
+        setTipDirection("next");
+        setTipAnimationKey((k) => k + 1);
+        return (prev + 1) % dailyTips.length;
+      });
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [dailyTips.length, tipAutoPlay, tipHovering]);
+
+  useEffect(() => {
+    if (tipPrevIndex === null) return;
+    setTipAnimating(true);
+    const t = window.setTimeout(() => {
+      setTipAnimating(false);
+      setTipPrevIndex(null);
+    }, 380);
+    return () => window.clearTimeout(t);
+  }, [tipAnimationKey, tipPrevIndex]);
 
   useEffect(() => {
     setPersonalNewsIndex(0);
@@ -627,10 +710,37 @@ export default function ForYouPage() {
           <div className="flex flex-col md:border-l md:pl-5" style={{ borderColor: "var(--border-subtle)" }}>
             <SectionHeader eyebrow="Tip of the day" title="Daily Tip" />
             <div
-              className="mt-2 flex min-h-[136px] items-center justify-center rounded-[var(--radius-md)] border p-4 md:h-[156px]"
+              className="relative mt-2 flex min-h-[136px] items-center justify-center overflow-hidden rounded-[var(--radius-md)] border p-4 md:h-[156px]"
               style={{ borderColor: "var(--border-subtle)", background: "var(--surface-sunken)" }}
+              onMouseEnter={() => setTipHovering(true)}
+              onMouseLeave={() => setTipHovering(false)}
             >
-              <p className="text-center text-sm leading-6" style={{ color: "var(--text-primary)" }}>
+              {tipAnimating && previousTip && (
+                <p
+                  key={`tip-prev-${tipAnimationKey}`}
+                  className={`pointer-events-none absolute inset-0 flex items-center justify-center px-4 text-center text-sm leading-6 ${
+                    tipDirection === "next"
+                      ? "animate-[news-out-left_.38s_ease_forwards]"
+                      : "animate-[news-out-right_.38s_ease_forwards]"
+                  }`}
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {previousTip}
+                </p>
+              )}
+              <p
+                key={`tip-current-${tipAnimationKey}-${tipIndex}`}
+                className={`text-center text-sm leading-6 ${
+                  tipAnimating
+                    ? `absolute inset-0 flex items-center justify-center px-4 ${
+                      tipDirection === "next"
+                        ? "animate-[news-in-right_.38s_ease_forwards]"
+                        : "animate-[news-in-left_.38s_ease_forwards]"
+                    }`
+                    : ""
+                }`}
+                style={{ color: "var(--text-primary)" }}
+              >
                 {currentTip}
               </p>
             </div>
@@ -638,7 +748,13 @@ export default function ForYouPage() {
               <button
                 type="button"
                 aria-label="Previous tip"
-                onClick={() => setTipIndex((prev) => (prev - 1 + dailyTips.length) % dailyTips.length)}
+                onClick={() => {
+                  setTipAutoPlay(false);
+                  setTipPrevIndex(tipIndex);
+                  setTipDirection("prev");
+                  setTipIndex((prev) => (prev - 1 + dailyTips.length) % dailyTips.length);
+                  setTipAnimationKey((k) => k + 1);
+                }}
                 className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
                 style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
               >
@@ -652,7 +768,13 @@ export default function ForYouPage() {
                       key={`tip-dot-${index}`}
                       type="button"
                       aria-label={`Go to tip ${index + 1}`}
-                      onClick={() => setTipIndex(index)}
+                      onClick={() => {
+                        setTipAutoPlay(false);
+                        setTipPrevIndex(tipIndex);
+                        setTipDirection(index >= tipIndex ? "next" : "prev");
+                        setTipIndex(index);
+                        setTipAnimationKey((k) => k + 1);
+                      }}
                       className="h-2 w-2 rounded-full transition"
                       style={{ background: active ? "var(--accent)" : "var(--border-subtle)" }}
                     />
@@ -662,7 +784,13 @@ export default function ForYouPage() {
               <button
                 type="button"
                 aria-label="Next tip"
-                onClick={() => setTipIndex((prev) => (prev + 1) % dailyTips.length)}
+                onClick={() => {
+                  setTipAutoPlay(false);
+                  setTipPrevIndex(tipIndex);
+                  setTipDirection("next");
+                  setTipIndex((prev) => (prev + 1) % dailyTips.length);
+                  setTipAnimationKey((k) => k + 1);
+                }}
                 className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
                 style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
               >
