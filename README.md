@@ -1,226 +1,134 @@
-# 🧩 Hackathon Plan — División de trabajo (Equipo de 4 personas)
+# AI Curator for Financial News (N26 Case)
 
-Guía práctica para organizar el trabajo en un hackathon de **24h**, con unas **12h efectivas** de desarrollo real.
+MVP demo-friendly en Next.js para resolver el reto de N26: **menos ruido, mas claridad y mas personalizacion** en noticias financieras.
 
----
-
-# 🎯 Objetivo
-
-Trabajar en paralelo desde el inicio para:
-
-- No pisarse el trabajo
-- Tener un MVP funcional
-- Llegar con tiempo al pitch y la demo
+El producto es un **curator educativo**, no un broker ni un portfolio tracker completo.
 
 ---
 
-# 👥 Roles recomendados
+## Problem we solve
 
-Aunque todos seáis programadores, asignar un rol principal evita conflictos.
-
-## 👨‍💻 Persona 1 — Backend / Arquitectura
-- Diseñar estructura técnica.
-- API y lógica de negocio.
-- Base de datos.
-- Integración final.
-
-## 👨‍💻 Persona 2 — Frontend / UI principal
-- Layout general.
-- Componentes reutilizables.
-- UI principal.
-- Integración con backend.
-
-## 👨‍💻 Persona 3 — Feature builder / Full-stack
-- Implementar funcionalidades clave.
-- Apoyo backend + frontend.
-- Actuar como “pegamento”.
-
-## 👨‍💻 Persona 4 — Product + Pitch + QA
-- Definir flujo del usuario.
-- Documentación.
-- Slides y storytelling.
-- Testing constante.
-- Apoyo en desarrollo cuando sea necesario.
-
-⚠️ Error típico: dejar el pitch para el final.
+- Information overload: 100+ noticias al dia.
+- Noticias demasiado complejas para usuarios retail.
+- Feed poco personalizado (misma experiencia para todos).
 
 ---
 
-# ⏱️ Plan cronológico (12h reales)
+## MVP Features
+
+### 1) For You (core)
+- Feed de noticias mock (14 items) reordenado por relevancia.
+- Personalizacion por perfil: intereses, riesgo, nivel y watchlist.
+- Etiquetas de relevancia: `High`, `Medium`, `Low`.
+- Justificacion tipo: "porque sigues NVDA y te interesa AI".
+- Boton `Simplify` con IA real para convertir complejo -> claro.
+- Tip del dia personalizado (IA con fallback).
+
+### 2) Alerts & Trends (core)
+- Deteccion simple de tendencias por frecuencia de tags.
+- Topicos trending visibles en UI.
+- Alertas personalizadas (BTC, TSLA earnings, ECB rates, etc).
+- Noticias relacionadas destacadas como `ALERT`.
+
+### 3) Explain (core)
+- Buscador de conceptos: inflacion, ETF, volatilidad, tipo de interes...
+- `Explain like I'm 10` (ELI10).
+- `Explain for my level` (beginner/intermediate/advanced).
+- Respuesta estructurada:
+  - En una frase
+  - Ejemplo sencillo
+  - Que vigilar
+  - Errores comunes
+
+### 4) Settings / Profile (core)
+- Presets de perfil:
+  - Beginner Conservative (Savings focus)
+  - Beginner Moderate (Index/ETFs)
+  - Aggressive Crypto
+  - Stock picker AI/Tech
+- Edicion de intereses, riesgo, nivel, watchlist y alertas.
 
 ---
 
-## 🟢 FASE 1 — Ideación rápida (0h – 1h)
+## What is real vs mock
 
-### Objetivo
-Elegir idea rápida y viable.
+### Real
+- Llamadas LLM en:
+  - `POST /api/news/simplify`
+  - `POST /api/explain`
+  - `POST /api/tip`
+- Integracion OpenAI-compatible via `fetch`.
 
-### Proceso
-- Máximo 3 ideas.
-- 10 minutos por idea.
-- Elegir la que tenga:
-  - Demo fácil
-  - Impacto claro
-  - Simplicidad técnica
-
-### Resultado
-- Problema
-- Solución
-- Demo concreta
+### Mock
+- Dataset de noticias y perfiles (`/src/lib/mock`).
+- Perfil en memoria/localStorage (sin DB real).
+- Trends/alerts por heuristica simple.
 
 ---
 
-## 🟡 FASE 2 — Diseño técnico (1h – 2h)
+## Tech Stack
 
-Definir arquitectura mínima:
-
-- Frontend
-- Backend/API
-- Base de datos o storage
-
-Regla hackathon:
-
-> Si no se puede explicar en 30 segundos, es demasiado complejo.
+- Next.js (App Router) + TypeScript
+- TailwindCSS
+- API routes en `src/app/api/*/route.ts`
+- Datos mock sin base de datos
+- LLM OpenAI-compatible por `.env`
 
 ---
 
-## 🔵 FASE 3 — Desarrollo paralelo (2h – 8h)
+## API Endpoints
 
-### Persona 1 (Backend)
-- Setup repo.
-- API base.
-- Modelos de datos.
-- Endpoints mock.
-
-### Persona 2 (Frontend)
-- Layout base.
-- Navegación.
-- Componentes UI.
-
-### Persona 3 (Feature dev)
-- Funcionalidad estrella.
-- Primera integración API.
-
-### Persona 4 (Product / Pitch)
-- Definir user journey.
-- Estructura pitch.
-- Testing continuo.
+- `GET /api/news?profile=<preset-id>`
+  - Devuelve noticias + `relevanceScore`, `relevanceLabel`, `reason`
+- `POST /api/news/simplify`
+  - Body: `{ newsId, profile }`
+  - Response: `{ simplified }`
+- `POST /api/explain`
+  - Body: `{ concept, mode: "eli10" | "level", profile }`
+  - Response: `{ explanation }`
+- `POST /api/tip`
+  - Body: `{ profile, trendingTopics }`
+  - Response: `{ tip }` (fallback si falla LLM)
+- `GET|POST /api/profile`
+  - Perfil en memoria para demo
 
 ---
 
-### 🔄 Sync cada 1.5 horas (10 min)
+## Environment Variables
 
-Checklist:
-- Qué funciona
-- Qué bloquea
-- Qué se puede recortar
+Copia `.env.example` a `.env.local`:
 
-Hackathon = reducir scope rápido.
+```bash
+LLM_BASE_URL=https://api.openai.com/v1
+LLM_API_KEY=your_api_key_here
+LLM_MODEL=gpt-4o-mini
+```
 
----
-
-## 🟠 FASE 4 — Integración (8h – 10h)
-
-Todo el equipo:
-
-- Conectar frontend y backend.
-- Corregir bugs visibles.
-- Mejorar experiencia demo.
-
-Persona 4:
-- Screenshots.
-- Storytelling final.
+Si no hay clave, los endpoints IA devuelven `LLM not configured` (y `tip` usa fallback).
 
 ---
 
-## 🔴 FASE 5 — Demo y Pitch (10h – 12h)
+## Run locally
 
-### Equipo
-- Probar demo varias veces.
+```bash
+npm install
+npm run dev
+```
 
-### Persona 4 lidera slides
-
-Estructura recomendada (máx. 5 slides):
-
-1. Problema
-2. Solución
-3. Demo
-4. Impacto
-5. Tech stack
-
-### Roles pitch
-- Intro producto
-- Demo en vivo
-- Explicación técnica
-- Cierre e impacto
+Abre `http://localhost:3000`.
 
 ---
 
-# 🚨 Reglas de oro (IMPORTANTE)
+## How this matches judging criteria
 
-## 1️⃣ Git por ramas
-Ejemplo:
-- feature/backend
-- feature/frontend
-- feature/featureX
-- feature/pitch
-
-Merge solo cuando funciona.
+- **Proof of Concept (40%)**: feed funcional, ranking personalizado, trends/alerts, endpoints API y llamadas IA reales.
+- **User Experience (30%)**: navegacion lateral fintech, cards limpias, chips, estados de carga/error, flujo claro en 4 tabs.
+- **AI Innovation (20%)**: simplificacion contextual por perfil, modo ELI10, explicacion por nivel, tip diario personalizado.
+- **N26 Fit (10%)**: enfoque educativo y curacion de contexto (no trading), facil de integrar como modulo dentro de app bancaria.
 
 ---
 
-## 2️⃣ API mock primero
-Frontend NO espera backend.
+## Disclaimer
 
----
-
-## 3️⃣ MVP pequeño
-Mejor:
-
-✔️ 1 feature perfecta
-
-que:
-
-❌ muchas cosas rotas.
-
----
-
-## 4️⃣ Demo > código bonito
-
-El jurado evalúa:
-- Claridad
-- Impacto
-- Fluidez
-
-No arquitectura compleja.
-
----
-
-# 🧠 Estrategia PRO
-
-Intentar llegar a la hora 6 con:
-
-- Algo clicable
-- Aunque sea fake
-
-Reduce muchísimo el estrés final.
-
----
-
-# 🏆 Stack rápido recomendado
-
-- Frontend: React / Next.js
-- Backend: Node/Express o FastAPI
-- DB: Firebase / Supabase / SQLite
-- Deploy: Vercel / Render
-
----
-
-# 🎉 Objetivo final
-
-Al final del hackathon deberíais tener:
-
-- MVP funcional
-- Demo estable
-- Pitch claro
-- Roles definidos
+Este proyecto ofrece **informacion educativa** y contexto financiero.
+**No constituye asesoramiento financiero ni recomendacion de compra/venta.**
