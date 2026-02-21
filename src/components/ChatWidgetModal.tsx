@@ -59,7 +59,7 @@ export function ChatWidgetModal({
         {messages.map((message) => (
           <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
             <p
-              className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
+              className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-line ${
                 message.role === "user" ? "bg-[var(--n26-teal)] text-white" : "bg-white text-slate-700"
               }`}
             >

@@ -78,6 +78,19 @@ El producto es un **curator educativo**, no un broker ni un portfolio tracker co
 
 ## API Endpoints
 
+### API unificada (Persona 1 + Persona 2)
+
+- `GET /api/portfolio` — Cartera de Pepe (balance total + activos: Gold, Bitcoin, Microsoft).
+- `GET /api/portfolio/chart/[period]` — Gráfico simulado: `1D`, `1S`, `1M`, `1A`, `MAX`.
+- `GET /api/news/unified?enrich=eli10` — Noticias desde `noticias.json`, global/personalizadas, con ELI10 en las primeras.
+- `GET /api/daily-tip` — Consejo del día fijo (misma estructura que backend Python).
+- `POST /api/chat` — Chatbot con IA (contexto cartera/noticias). Body: `{ message, userName?, assetsSummary?, news? }`.
+- `POST /api/eli10` — Convierte texto técnico en ELI10. Body: `{ title, technical_content, category }`. Para que el backend Python llame a la IA.
+- `GET /api/daily-resume` — Resumen del día estático (Persona 2).
+- `GET /api/trend-alerts` — Alertas de tendencia estáticas.
+
+### Endpoints existentes (feed y perfil)
+
 - `GET /api/news?profile=<preset-id>`
   - Devuelve noticias + `relevanceScore`, `relevanceLabel`, `reason`
 - `POST /api/news/simplify`
@@ -96,15 +109,36 @@ El producto es un **curator educativo**, no un broker ni un portfolio tracker co
 
 ## Environment Variables
 
-Copia `.env.example` a `.env.local`:
+Copia `.env.example` a `.env.local` y rellena tu clave.
+
+**Opción 1 — Gemini (recomendado):**
+
+```bash
+GEMINI_API_KEY=tu_clave_de_gemini
+# Opcional: LLM_MODEL=gemini-2.0-flash
+```
+
+Obtén la key en [Google AI Studio](https://aistudio.google.com/apikey). Modelos válidos: `gemini-2.0-flash`, `gemini-2.0-flash-exp`, `gemini-1.5-flash`, etc.
+
+**Opción 2 — OpenAI (o compatible):**
 
 ```bash
 LLM_BASE_URL=https://api.openai.com/v1
-LLM_API_KEY=your_api_key_here
+LLM_API_KEY=your_openai_key_here
 LLM_MODEL=gpt-4o-mini
 ```
 
-Si no hay clave, los endpoints IA devuelven `LLM not configured` (y `tip` usa fallback).
+Si no hay ninguna clave (Gemini ni OpenAI), los endpoints de IA devuelven un mensaje amigable y `tip` usa fallback.
+
+**Unificar con backend Python (opcional):** Si corres el backend FastAPI (`backend/`) y quieres que use la IA de Next.js, arranca primero Next.js y luego:
+
+```bash
+# En .env del backend o en la shell:
+export NEXTJS_API_URL=http://localhost:3000
+uvicorn main:app --reload --port 8000
+```
+
+Así el backend Python llama a `POST /api/chat` y `POST /api/eli10` para respuestas reales.
 
 ---
 

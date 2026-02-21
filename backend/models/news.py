@@ -3,7 +3,7 @@ from typing import List, Optional
 
 
 class NewsArticle(BaseModel):
-    """A single financial news article."""
+    """Una noticia financiera."""
     id: int
     title: str
     summary: str
@@ -12,21 +12,21 @@ class NewsArticle(BaseModel):
     tags: List[str]
     published_at: str
     image_url: Optional[str] = None
-    eli10_summary: Optional[str] = None  # Filled by AI Engine (Persona 2)
+    eli10_summary: Optional[str] = None  # Rellenado por el motor de IA (Persona 2)
 
 
 class NewsResponse(BaseModel):
-    """Filtered news response split into global and personalized."""
+    """Respuesta de noticias: globales y personalizadas."""
     global_news: List[NewsArticle]
     personalized_news: List[NewsArticle]
 
 
 class ChatMessage(BaseModel):
-    """Incoming chat message from the user."""
+    """Mensaje de chat del usuario."""
     message: str
 
 
 class ChatResponse(BaseModel):
-    """Response from the AI Engine chat."""
+    """Respuesta del chat con IA."""
     reply: str
     source: str = "ai_engine"

@@ -3,22 +3,22 @@ from typing import List, Optional
 
 
 class Asset(BaseModel):
-    """Represents a single asset in Pepe's portfolio."""
+    """Un activo de la cartera de Pepe."""
     name: str
     symbol: str
-    value: float  # Current value in EUR
-    change_percent: float  # % change
-    icon: str  # Emoji or icon identifier
+    value: float  # Valor actual en EUR
+    change_percent: float  # Variación %
+    icon: str
 
 
 class ChartPoint(BaseModel):
-    """A single data point for the portfolio evolution chart."""
-    timestamp: str  # ISO format datetime string
+    """Un punto del gráfico de evolución de la cartera."""
+    timestamp: str  # Fecha/hora en formato ISO
     value: float
 
 
 class PortfolioResponse(BaseModel):
-    """Full portfolio response including balance, assets, and chart data."""
+    """Respuesta completa de cartera: balance, activos y opcionalmente gráfico."""
     total_balance: float
     currency: str = "EUR"
     assets: List[Asset]

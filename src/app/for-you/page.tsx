@@ -70,16 +70,39 @@ export default function ForYouPage() {
 
   const dailyTip = useMemo(() => getDailyTipForProfile(profile), [profile]);
 
-  const handleSendChat = () => {
+  const handleSendChat = async () => {
     if (!chatInput.trim()) return;
-    const userMessage: ChatMessage = { id: `${Date.now()}-u`, role: "user", text: chatInput.trim() };
-    const assistantMessage: ChatMessage = {
-      id: `${Date.now()}-a`,
-      role: "assistant",
-      text: "Mock assistant: great question. I would break this down into trend, risk and your profile fit."
-    };
-    setChatMessages((prev) => [...prev, userMessage, assistantMessage]);
+    const text = chatInput.trim();
     setChatInput("");
+    const userMessage: ChatMessage = { id: `${Date.now()}-u`, role: "user", text };
+    const placeholderId = `${Date.now()}-a`;
+    const assistantPlaceholder: ChatMessage = { id: placeholderId, role: "assistant", text: "…" };
+    setChatMessages((prev) => [...prev, userMessage, assistantPlaceholder]);
+
+    const assetsSummary = `Balance ~${new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(totalBalanceByRange[timeframe])} (Gold, Bitcoin, Microsoft in portfolio).`;
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          userName: profile.name,
+          assetsSummary
+        })
+      });
+      const data = await res.json();
+      const reply = data.reply ?? (data.error ? `Error: ${data.error}` : "I couldn't generate a response.");
+      setChatMessages((prev) =>
+        prev.map((m) => (m.id === placeholderId ? { ...m, text: reply } : m))
+      );
+    } catch {
+      setChatMessages((prev) =>
+        prev.map((m) =>
+          m.id === placeholderId ? { ...m, text: "Could not connect to the assistant. Please try again." } : m
+        )
+      );
+    }
   };
 
   const header = (

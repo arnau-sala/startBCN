@@ -1,85 +1,67 @@
 """
-AIEngine Service — The Bridge for Persona 2 (AI Integration)
+Servicio AIEngine — Puente con Persona 2 (integración IA).
 
-This module contains placeholder functions for AI-powered features.
-Persona 2 will replace the implementations with actual OpenAI logic.
-
-Functions:
-    - translateToELI10: Simplifies financial text for a 10-year-old audience
-    - getChatResponse: Generates AI-powered chat responses about finance
+Si está definida NEXTJS_API_URL (ej. http://localhost:3000), llama a la API de Next.js
+para ELI10 y chat real. Si no, usa placeholders para que el backend funcione solo.
 """
+
+import os
+import httpx
+
+NEXTJS_API = os.getenv("NEXTJS_API_URL", "").rstrip("/")
 
 
 async def translateToELI10(text: str) -> str:
     """
-    Translate financial text into simple language a 10-year-old can understand.
-
-    TODO (Persona 2): Replace this placeholder with OpenAI API call.
-    
-    Suggested prompt strategy:
-        - System role: "You are a friendly financial educator for kids"
-        - Ask the model to explain using simple words, analogies, and emojis
-    
-    Args:
-        text: The original financial news summary or article text.
-    
-    Returns:
-        A simplified version of the text. Currently returns a placeholder.
+    Convierte texto financiero a lenguaje sencillo (ELI10).
+    Si NEXTJS_API_URL está definida, hace POST a {NEXTJS_API}/api/eli10.
     """
-    # ============================================================
-    # 🔌 PERSONA 2: INSERT YOUR OPENAI LOGIC HERE
-    # 
-    # Example implementation:
-    #   from openai import AsyncOpenAI
-    #   client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    #   response = await client.chat.completions.create(
-    #       model="gpt-4",
-    #       messages=[
-    #           {"role": "system", "content": "Explain like I'm 10..."},
-    #           {"role": "user", "content": text}
-    #       ]
-    #   )
-    #   return response.choices[0].message.content
-    # ============================================================
-    return f"[ELI10 PENDING] {text}"
+    if NEXTJS_API:
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                r = await client.post(
+                    f"{NEXTJS_API}/api/eli10",
+                    json={
+                        "title": "Noticia",
+                        "technical_content": text,
+                        "category": "macro",
+                    },
+                )
+                if r.is_success:
+                    data = r.json()
+                    return data.get("eli10_content", "") or f"[ELI10] {text}"
+        except Exception:
+            pass
+    return f"[ELI10 pending] {text}"
 
 
 async def getChatResponse(message: str, context: dict = None) -> str:
     """
-    Generate an AI-powered response to a user's financial question.
-
-    TODO (Persona 2): Replace this placeholder with OpenAI API call.
-    
-    Suggested prompt strategy:
-        - System role: "You are an AI financial advisor assistant"
-        - Include portfolio context for personalized answers
-        - Keep responses concise and actionable
-    
-    Args:
-        message: The user's question or message.
-        context: Optional dict with user's portfolio data for personalized responses.
-                 Example: {"assets": [...], "total_balance": 1760}
-    
-    Returns:
-        An AI-generated response string. Currently returns a placeholder.
+    Respuesta del chat con IA. Si NEXTJS_API_URL está definida, hace POST a {NEXTJS_API}/api/chat
+    con contexto de cartera.
     """
-    # ============================================================
-    # 🔌 PERSONA 2: INSERT YOUR OPENAI LOGIC HERE
-    #
-    # Example implementation:
-    #   from openai import AsyncOpenAI
-    #   client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    #   system_msg = f"You are a financial advisor. User portfolio: {context}"
-    #   response = await client.chat.completions.create(
-    #       model="gpt-4",
-    #       messages=[
-    #           {"role": "system", "content": system_msg},
-    #           {"role": "user", "content": message}
-    #       ]
-    #   )
-    #   return response.choices[0].message.content
-    # ============================================================
+    if NEXTJS_API:
+        try:
+            payload = {"message": message}
+            if context:
+                total = context.get("total_balance")
+                assets = context.get("assets", [])
+                if total is not None or assets:
+                    payload["assetsSummary"] = (
+                        f"Balance total {total} EUR. "
+                        + ", ".join(
+                            f"{a.get('name', a.get('symbol', ''))} {a.get('value')}€"
+                            for a in assets[:5]
+                        )
+                    )
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                r = await client.post(f"{NEXTJS_API}/api/chat", json=payload)
+                if r.is_success:
+                    data = r.json()
+                    return data.get("reply", "")
+        except Exception:
+            pass
     return (
-        f"[AI PLACEHOLDER] Recibí tu pregunta: '{message}'. "
-        "Cuando Persona 2 conecte OpenAI, recibirás una respuesta inteligente aquí. 🤖"
+        f"[AI placeholder] Received your question: '{message}'. "
+        "Set NEXTJS_API_URL (e.g. http://localhost:3000) and LLM_API_KEY in Next.js for real responses."
     )

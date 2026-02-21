@@ -48,13 +48,13 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       {open && (
         <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50/80 p-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-indigo-900">Resumen simplificado</p>
+            <p className="text-sm font-semibold text-indigo-900">Simplified summary</p>
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="text-xs text-indigo-700 hover:text-indigo-900"
             >
-              Cerrar
+              Close
             </button>
           </div>
 

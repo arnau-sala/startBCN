@@ -1,5 +1,5 @@
 """
-Portfolio Routes — Endpoints for Pepe's portfolio and chart data.
+Rutas de cartera — Endpoints de la cartera de Pepe y datos del gráfico.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -15,16 +15,15 @@ VALID_PERIODS = {"1D", "1S", "1M", "1A", "MAX"}
 
 @router.get("", response_model=PortfolioResponse)
 async def portfolio():
-    """Get Pepe's full portfolio: total balance and asset breakdown."""
+    """Obtiene la cartera de Pepe: balance total y desglose de activos."""
     return get_portfolio()
 
 
 @router.get("/chart/{period}", response_model=List[ChartPoint])
 async def portfolio_chart(period: str):
     """
-    Get simulated chart data for portfolio evolution.
-
-    Supported periods: 1D, 1S, 1M, 1A, MAX
+    Datos simulados del gráfico de evolución.
+    Períodos: 1D, 1S, 1M, 1A, MAX
     """
     if period.upper() not in VALID_PERIODS:
         raise HTTPException(

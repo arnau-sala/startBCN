@@ -1,5 +1,5 @@
 """
-Daily Tip Route — Serves a static financial tip of the day.
+Ruta del consejo del día — Sirve un consejo financiero estático.
 """
 
 from fastapi import APIRouter
@@ -7,10 +7,10 @@ from fastapi import APIRouter
 router = APIRouter(prefix="/api", tags=["Daily Tip"])
 
 DAILY_TIP = {
-    "title": "💡 Consejo del día",
-    "tip": "Diversifica tu cartera: no pongas todos los huevos en la misma cesta. "
-           "Una buena regla es la del 60/30/10: 60% en activos estables (oro, bonos), "
-           "30% en acciones de crecimiento y 10% en activos de alto riesgo como crypto.",
+    "title": "💡 Daily tip",
+    "tip": "Diversify your portfolio: don't put all your eggs in one basket. "
+           "A simple rule is 60/30/10: 60% in stable assets (gold, bonds), "
+           "30% in growth stocks and 10% in higher-risk assets like crypto.",
     "source": "N26 Financial Education",
     "category": "investment_basics",
 }
@@ -18,5 +18,5 @@ DAILY_TIP = {
 
 @router.get("/daily-tip")
 async def daily_tip():
-    """Get today's financial tip. Always returns the same static tip."""
+    """Devuelve el consejo del día (siempre el mismo contenido estático)."""
     return DAILY_TIP

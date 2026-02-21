@@ -1,10 +1,10 @@
 """
-N26 AI Curator for Financial News — Backend API
-================================================
+N26 AI Curator — API Backend de noticias financieras
+====================================================
 
-Main entry point. Registers all routers and configures CORS.
+Punto de entrada. Registra routers y CORS.
 
-Run with:
+Ejecutar:
     uvicorn main:app --reload --port 8000
 """
 
@@ -15,37 +15,37 @@ from routes.portfolio import router as portfolio_router
 from routes.news import router as news_router
 from routes.daily_tip import router as daily_tip_router
 
-# ── App Setup ────────────────────────────────────────────────────────────────
+# ── Configuración de la app ───────────────────────────────────────────────────
 
 app = FastAPI(
-    title="N26 AI Curator — Financial News API",
-    description="Backend API for portfolio management, financial news curation, "
-                "and AI-powered insights. Built for the N26 StartBCN challenge.",
+    title="N26 AI Curator — API de noticias financieras",
+    description="API backend para cartera, noticias y respuestas con IA. "
+                "Reto N26 StartBCN.",
     version="1.0.0",
 )
 
-# ── CORS (allow frontend to connect) ────────────────────────────────────────
+# ── CORS (permitir frontend) ─────────────────────────────────────────────────
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict to your frontend domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ── Register Routers ────────────────────────────────────────────────────────
+# ── Routers ──────────────────────────────────────────────────────────────────
 
 app.include_router(portfolio_router)
 app.include_router(news_router)
 app.include_router(daily_tip_router)
 
 
-# ── Health Check ─────────────────────────────────────────────────────────────
+# ── Health check ─────────────────────────────────────────────────────────────
 
 @app.get("/", tags=["Health"])
 async def root():
-    """Health check endpoint."""
+    """Comprueba que la API responde."""
     return {
         "status": "ok",
         "app": "N26 AI Curator",
