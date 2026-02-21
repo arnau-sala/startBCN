@@ -75,13 +75,13 @@ export function getWhyForYou(interests: FrontInterest[], tags: string[]) {
 
 export function getDailyTipForProfile(profile: FrontendProfileState) {
   if (profile.risk === "conservative") {
-    return "Prioriza claridad sobre rapidez: compara 2 fuentes y anota el riesgo principal antes de actuar.";
+    return "Prioritise clarity over speed: compare 2 sources and note the main risk before acting.";
   }
   if (profile.risk === "aggressive") {
-    return "En dias volatilies, define tu limite de perdida antes de abrir una posicion. La disciplina evita decisiones impulsivas.";
+    return "On volatile days, set your loss limit before opening a position. Discipline avoids impulsive decisions.";
   }
   if (profile.interests.includes("crypto")) {
-    return "Si sigues cripto, revisa primero noticias de regulacion y liquidez: suelen mover mas que el ruido en redes.";
+    return "If you follow crypto, check regulation and liquidity news first — they usually move markets more than social media noise.";
   }
-  return "Bloquea 10 minutos al dia para revisar solo 3 noticias: contexto macro, tu watchlist y un concepto educativo.";
+  return "Block 10 minutes a day to review just 3 news items: macro context, your watchlist and one educational concept.";
 }

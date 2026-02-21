@@ -30,10 +30,10 @@ export function ProfileForm({
       body: JSON.stringify({ profile })
     });
     if (response.ok) {
-      setSavedMessage("Perfil guardado en memoria para esta sesion.");
+      setSavedMessage("Profile saved in memory for this session.");
       onProfileChange?.(profile);
     } else {
-      setSavedMessage("No se pudo guardar el perfil.");
+      setSavedMessage("Could not save the profile.");
     }
   }
 
@@ -50,7 +50,7 @@ export function ProfileForm({
     <form className="card space-y-4" onSubmit={saveProfile}>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Profile</p>
-        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Personalizacion real</h1>
+        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Your Personalization</h1>
       </div>
 
       <div>
@@ -73,7 +73,7 @@ export function ProfileForm({
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-slate-700">Intereses</p>
+        <p className="mb-2 text-sm font-medium text-slate-700">Interests</p>
         <div className="flex flex-wrap gap-2">
           {allInterests.map((interest) => {
             const active = profile.interests.includes(interest);
@@ -82,9 +82,8 @@ export function ProfileForm({
                 key={interest}
                 type="button"
                 onClick={() => toggleInterest(interest)}
-                className={`rounded-full px-3 py-1 text-sm ${
-                  active ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-700"
-                }`}
+                className={`rounded-full px-3 py-1 text-sm ${active ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-700"
+                  }`}
               >
                 {interest}
               </button>
@@ -95,7 +94,7 @@ export function ProfileForm({
 
       <div className="grid gap-3 md:grid-cols-2">
         <label className="text-sm">
-          <span className="mb-1 block font-medium text-slate-700">Riesgo</span>
+          <span className="mb-1 block font-medium text-slate-700">Risk</span>
           <select
             className="w-full rounded-xl border border-slate-300 px-3 py-2"
             value={profile.risk}
@@ -109,7 +108,7 @@ export function ProfileForm({
           </select>
         </label>
         <label className="text-sm">
-          <span className="mb-1 block font-medium text-slate-700">Nivel</span>
+          <span className="mb-1 block font-medium text-slate-700">Level</span>
           <select
             className="w-full rounded-xl border border-slate-300 px-3 py-2"
             value={profile.level}
@@ -142,7 +141,7 @@ export function ProfileForm({
       </label>
 
       <label className="block text-sm">
-        <span className="mb-1 block font-medium text-slate-700">Alertas</span>
+        <span className="mb-1 block font-medium text-slate-700">Alerts</span>
         <input
           className="w-full rounded-xl border border-slate-300 px-3 py-2"
           value={profile.alerts.join(", ")}
@@ -159,7 +158,7 @@ export function ProfileForm({
       </label>
 
       <button type="submit" className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white">
-        Guardar perfil
+        Save profile
       </button>
       {savedMessage && <p className="text-sm text-slate-600">{savedMessage}</p>}
     </form>

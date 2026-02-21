@@ -23,12 +23,12 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       const data = (await response.json()) as { simplified?: string; error?: string };
 
       if (!response.ok) {
-        throw new Error(data.error ?? "No se pudo simplificar la noticia");
+        throw new Error(data.error ?? "Could not simplify the news item");
       }
 
-      setContent(data.simplified ?? "No hubo respuesta.");
+      setContent(data.simplified ?? "No response received.");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Error desconocido";
+      const message = err instanceof Error ? err.message : "Unknown error";
       setError(message);
     } finally {
       setLoading(false);
@@ -48,17 +48,17 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       {open && (
         <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50/80 p-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-indigo-900">Resumen simplificado</p>
+            <p className="text-sm font-semibold text-indigo-900">Simplified summary</p>
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="text-xs text-indigo-700 hover:text-indigo-900"
             >
-              Cerrar
+              Close
             </button>
           </div>
 
-          {loading && <p className="mt-2 text-sm text-slate-600">Pensando...</p>}
+          {loading && <p className="mt-2 text-sm text-slate-600">Thinking...</p>}
           {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
           {!loading && !error && (
             <pre className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{content}</pre>
