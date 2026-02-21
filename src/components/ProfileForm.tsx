@@ -13,12 +13,12 @@ export function ProfileForm({
   initialProfile?: UserProfile;
   onProfileChange?: (profile: UserProfile) => void;
 }) {
-  const [profile, setProfile] = useState<UserProfile>(initialProfile ?? defaultProfile);
+  const [profile, setProfile] = useState<UserProfile>(ensureProfileDefaults(initialProfile ?? defaultProfile));
   const [savedMessage, setSavedMessage] = useState("");
 
   useEffect(() => {
     if (initialProfile) {
-      setProfile(initialProfile);
+      setProfile(ensureProfileDefaults(initialProfile));
     }
   }, [initialProfile]);
 
@@ -30,10 +30,10 @@ export function ProfileForm({
       body: JSON.stringify({ profile })
     });
     if (response.ok) {
-      setSavedMessage("Perfil guardado en memoria para esta sesion.");
+      setSavedMessage("Profile saved in memory for this session.");
       onProfileChange?.(profile);
     } else {
-      setSavedMessage("No se pudo guardar el perfil.");
+      setSavedMessage("Profile could not be saved.");
     }
   }
 
@@ -50,7 +50,7 @@ export function ProfileForm({
     <form className="card space-y-4" onSubmit={saveProfile}>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Profile</p>
-        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Personalizacion real</h1>
+        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Personalization</h1>
       </div>
 
       <div>
@@ -60,8 +60,9 @@ export function ProfileForm({
           value={profile.id}
           onChange={(event) => {
             const preset = profilePresets.find((item) => item.id === event.target.value) ?? defaultProfile;
-            setProfile(preset);
-            onProfileChange?.(preset);
+            const normalizedPreset = ensureProfileDefaults(preset);
+            setProfile(normalizedPreset);
+            onProfileChange?.(normalizedPreset);
           }}
         >
           {profilePresets.map((preset) => (
@@ -72,8 +73,42 @@ export function ProfileForm({
         </select>
       </div>
 
+      <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+        <h2 className="text-sm font-semibold text-slate-900">Personal details</h2>
+        <p className="mt-1 text-xs text-slate-500">
+          You can change how you appear in the app at any time.
+        </p>
+
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <label className="text-sm">
+            <span className="mb-1 block font-medium text-slate-700">Name</span>
+            <input
+              className="w-full rounded-xl border border-slate-300 px-3 py-2"
+              value={profile.name}
+              onChange={(event) => setProfile((prev) => ({ ...prev, name: event.target.value }))}
+              placeholder="e.g. Arnau"
+            />
+          </label>
+
+          <label className="text-sm">
+            <span className="mb-1 block font-medium text-slate-700">Username</span>
+            <input
+              className="w-full rounded-xl border border-slate-300 px-3 py-2"
+              value={profile.username ?? ""}
+              onChange={(event) =>
+                setProfile((prev) => ({
+                  ...prev,
+                  username: normalizeUsername(event.target.value)
+                }))
+              }
+              placeholder="e.g. arnau.sala"
+            />
+          </label>
+        </div>
+      </div>
+
       <div>
-        <p className="mb-2 text-sm font-medium text-slate-700">Intereses</p>
+        <p className="mb-2 text-sm font-medium text-slate-700">Interests</p>
         <div className="flex flex-wrap gap-2">
           {allInterests.map((interest) => {
             const active = profile.interests.includes(interest);
@@ -95,7 +130,7 @@ export function ProfileForm({
 
       <div className="grid gap-3 md:grid-cols-2">
         <label className="text-sm">
-          <span className="mb-1 block font-medium text-slate-700">Riesgo</span>
+          <span className="mb-1 block font-medium text-slate-700">Risk</span>
           <select
             className="w-full rounded-xl border border-slate-300 px-3 py-2"
             value={profile.risk}
@@ -109,7 +144,7 @@ export function ProfileForm({
           </select>
         </label>
         <label className="text-sm">
-          <span className="mb-1 block font-medium text-slate-700">Nivel</span>
+          <span className="mb-1 block font-medium text-slate-700">Level</span>
           <select
             className="w-full rounded-xl border border-slate-300 px-3 py-2"
             value={profile.level}
@@ -142,7 +177,7 @@ export function ProfileForm({
       </label>
 
       <label className="block text-sm">
-        <span className="mb-1 block font-medium text-slate-700">Alertas</span>
+        <span className="mb-1 block font-medium text-slate-700">Alerts</span>
         <input
           className="w-full rounded-xl border border-slate-300 px-3 py-2"
           value={profile.alerts.join(", ")}
@@ -159,9 +194,21 @@ export function ProfileForm({
       </label>
 
       <button type="submit" className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white">
-        Guardar perfil
+        Save profile
       </button>
       {savedMessage && <p className="text-sm text-slate-600">{savedMessage}</p>}
     </form>
   );
+}
+
+function normalizeUsername(value: string) {
+  const clean = value.trim().replace(/^@+/, "");
+  return clean.toLowerCase().replace(/\s+/g, ".");
+}
+
+function ensureProfileDefaults(profile: UserProfile): UserProfile {
+  return {
+    ...profile,
+    username: profile.username ?? normalizeUsername(profile.name)
+  };
 }

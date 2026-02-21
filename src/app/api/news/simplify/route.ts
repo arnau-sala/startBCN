@@ -20,21 +20,21 @@ export async function POST(request: NextRequest) {
         {
           role: "user",
           content: `
-Perfil usuario:
-- Intereses: ${body.profile.interests.join(", ")}
-- Riesgo: ${body.profile.risk}
-- Nivel: ${body.profile.level}
+User profile:
+- Interests: ${body.profile.interests.join(", ")}
+- Risk: ${body.profile.risk}
+- Level: ${body.profile.level}
 - Watchlist: ${body.profile.watchlist.join(", ")}
 
-Noticia:
-- Titulo: ${news.title}
-- Fuente: ${news.source}
+News:
+- Title: ${news.title}
+- Source: ${news.source}
 - Tags: ${news.tags.join(", ")}
 - Tickers: ${news.tickers.join(", ")}
-- Resumen base: ${news.shortSummary}
-- Numeros clave: ${(news.keyNumbers ?? []).join(" | ")}
+- Base summary: ${news.shortSummary}
+- Key numbers: ${(news.keyNumbers ?? []).join(" | ")}
 
-Devuelvelo con las secciones exigidas en formato corto y bullets.
+Return it using the required sections in a short bullet format.
           `.trim()
         }
       ]

@@ -39,14 +39,14 @@ export function rankNewsForProfile(news: NewsItem[], profile: UserProfile): Rank
         const matchingTag = interestTagMap[interest].find((tag) => item.tags.includes(tag));
         if (matchingTag) {
           score += 14;
-          reasons.push(`te interesa ${interest}`);
+          reasons.push(`you are interested in ${interest}`);
         }
       });
 
       const matchedWatchlist = profile.watchlist.filter((ticker) => item.tickers.includes(ticker));
       if (matchedWatchlist.length > 0) {
         score += 24;
-        reasons.push(`sigues ${matchedWatchlist.join(", ")}`);
+        reasons.push(`you follow ${matchedWatchlist.join(", ")}`);
       }
 
       const matchedAlerts = profile.alerts.filter((alert) =>
@@ -54,7 +54,7 @@ export function rankNewsForProfile(news: NewsItem[], profile: UserProfile): Rank
       );
       if (matchedAlerts.length > 0) {
         score += 10;
-        reasons.push(`coincide con alerta: ${matchedAlerts[0]}`);
+        reasons.push(`matches alert: ${matchedAlerts[0]}`);
       }
 
       if (profile.risk === "aggressive" && item.tags.includes("market momentum")) {
@@ -75,7 +75,7 @@ export function rankNewsForProfile(news: NewsItem[], profile: UserProfile): Rank
         ...item,
         relevanceScore: score,
         relevanceLabel: labelFromScore(score),
-        reason: reasons[0] ?? "alineado con tu perfil general"
+        reason: reasons[0] ?? "aligned with your overall profile"
       };
     })
     .sort((a, b) => b.relevanceScore - a.relevanceScore);

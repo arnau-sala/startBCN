@@ -21,16 +21,16 @@ export async function POST(request: NextRequest) {
         {
           role: "user",
           content: `
-Concepto: ${body.concept}
-Modo: ${body.mode}
-Nivel usuario: ${body.profile.level}
-Intereses: ${body.profile.interests.join(", ")}
+Concept: ${body.concept}
+Mode: ${body.mode}
+User level: ${body.profile.level}
+Interests: ${body.profile.interests.join(", ")}
 
-Recuerda estructura:
-- En una frase
-- Ejemplo sencillo
-- Que vigilar
-- Errores comunes
+Reminder format:
+- In one sentence
+- Simple example
+- What to watch
+- Common mistakes
           `.trim()
         }
       ]

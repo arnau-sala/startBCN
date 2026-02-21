@@ -4,7 +4,7 @@ import { TIP_PROMPT } from "@/lib/prompts";
 import { UserProfile } from "@/lib/types";
 
 const fallbackTip =
-  "Mini-habito: antes de reaccionar a una noticia, compara 2 fuentes y anota si el dato clave cambia. Accion educativa: crea tu checklist de 3 preguntas para entender contexto.\nInformacion educativa, no asesoramiento financiero.";
+  "Micro habit: before reacting to a headline, compare two sources and note whether the key metric changes. Educational action: create a 3-question checklist to understand context.\nEducational information, not financial advice.";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
         {
           role: "user",
           content: `
-Perfil:
-- Intereses: ${body.profile.interests.join(", ")}
-- Riesgo: ${body.profile.risk}
-- Nivel: ${body.profile.level}
+Profile:
+- Interests: ${body.profile.interests.join(", ")}
+- Risk: ${body.profile.risk}
+- Level: ${body.profile.level}
 - Watchlist: ${body.profile.watchlist.join(", ")}
 Trending topics: ${(body.trendingTopics ?? []).join(", ")}
           `.trim()

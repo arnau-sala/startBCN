@@ -4,6 +4,7 @@ export const profilePresets: UserProfile[] = [
   {
     id: "beginner-conservative",
     name: "Beginner Conservative (Savings focus)",
+    username: "saver.pepe",
     interests: ["savings", "macro"],
     risk: "conservative",
     level: "beginner",
@@ -14,6 +15,7 @@ export const profilePresets: UserProfile[] = [
   {
     id: "beginner-moderate",
     name: "Beginner Moderate (Index/ETFs)",
+    username: "pepe.index",
     interests: ["stocks", "savings", "macro"],
     risk: "moderate",
     level: "beginner",
@@ -24,6 +26,7 @@ export const profilePresets: UserProfile[] = [
   {
     id: "aggressive-crypto",
     name: "Aggressive Crypto",
+    username: "pepe.crypto",
     interests: ["crypto", "macro"],
     risk: "aggressive",
     level: "intermediate",
@@ -34,6 +37,7 @@ export const profilePresets: UserProfile[] = [
   {
     id: "stock-picker-ai-tech",
     name: "Stock picker AI/Tech",
+    username: "pepe.tech",
     interests: ["stocks", "macro"],
     risk: "aggressive",
     level: "advanced",
@@ -50,12 +54,14 @@ export type FrontInterest = "crypto" | "stocks" | "savings" | "macro";
 
 export interface FrontendProfileState {
   name: string;
+  username: string;
   risk: FrontRiskLevel;
   interests: FrontInterest[];
 }
 
 export const defaultFrontendProfile: FrontendProfileState = {
   name: "Pepe",
+  username: "pepe.n26",
   risk: "moderate",
   interests: ["stocks", "crypto"]
 };
@@ -75,13 +81,13 @@ export function getWhyForYou(interests: FrontInterest[], tags: string[]) {
 
 export function getDailyTipForProfile(profile: FrontendProfileState) {
   if (profile.risk === "conservative") {
-    return "Prioriza claridad sobre rapidez: compara 2 fuentes y anota el riesgo principal antes de actuar.";
+    return "Prioritize clarity over speed: compare two sources and note the main risk before acting.";
   }
   if (profile.risk === "aggressive") {
-    return "En dias volatilies, define tu limite de perdida antes de abrir una posicion. La disciplina evita decisiones impulsivas.";
+    return "On volatile days, define your downside limit before opening a position. Discipline prevents impulsive decisions.";
   }
   if (profile.interests.includes("crypto")) {
-    return "Si sigues cripto, revisa primero noticias de regulacion y liquidez: suelen mover mas que el ruido en redes.";
+    return "If you follow crypto, check regulation and liquidity news first: they usually move markets more than social noise.";
   }
-  return "Bloquea 10 minutos al dia para revisar solo 3 noticias: contexto macro, tu watchlist y un concepto educativo.";
+  return "Block 10 minutes per day to review only three items: macro context, your watchlist, and one learning concept.";
 }

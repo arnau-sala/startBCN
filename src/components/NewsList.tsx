@@ -3,7 +3,7 @@ import { RankedNewsItem, UserProfile } from "@/lib/types";
 
 export function NewsList({ items, profile }: { items: RankedNewsItem[]; profile: UserProfile }) {
   if (items.length === 0) {
-    return <div className="card text-sm text-slate-600">No hay noticias para mostrar.</div>;
+    return <div className="card text-sm text-slate-600">No news to display.</div>;
   }
 
   return (

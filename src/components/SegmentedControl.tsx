@@ -23,9 +23,9 @@ export function SegmentedControl({
           type="button"
           aria-label={`Set timeframe ${item.label}`}
           onClick={() => onChange(item.key)}
-          className={`rounded-lg px-2.5 py-1 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 ${
+          className={`rounded-lg px-2.5 py-1 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600 ${
             value === item.key
-              ? "bg-white text-[var(--n26-teal-dark)] shadow-sm"
+              ? "bg-white text-teal-700 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
           }`}
         >

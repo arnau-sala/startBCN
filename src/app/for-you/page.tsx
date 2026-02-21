@@ -83,10 +83,10 @@ export default function ForYouPage() {
   };
 
   const header = (
-    <header className="relative rounded-2xl border border-[var(--n26-border)] bg-white px-4 py-3 shadow-sm">
+    <header className="relative rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--n26-teal-dark)]">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-teal-700">
             N26 Companion
           </p>
           <h1 className="text-lg font-semibold text-slate-900">Home Summary</h1>
@@ -96,12 +96,15 @@ export default function ForYouPage() {
             type="button"
             aria-label="Open profile settings"
             onClick={() => setShowProfile((prev) => !prev)}
-            className="flex items-center gap-2 rounded-xl border border-[var(--n26-border)] px-2.5 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
           >
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--n26-chip-bg)] text-xs font-semibold text-[var(--n26-chip-text)]">
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-teal-50 text-xs font-semibold text-teal-700">
               P
             </span>
-            {profile.name}
+            <span className="text-left leading-tight">
+              <span className="block">{profile.name}</span>
+              <span className="block text-[11px] text-slate-500">@{profile.username}</span>
+            </span>
           </button>
 
           <ProfileMenu
@@ -120,7 +123,7 @@ export default function ForYouPage() {
       <Card>
         <p className="text-xs text-slate-500">Total Balance</p>
         <p className="mt-1 text-2xl font-semibold text-slate-900">
-          {new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(
+          {new Intl.NumberFormat("en-US", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(
             totalBalanceByRange[timeframe]
           )}
         </p>
@@ -136,7 +139,7 @@ export default function ForYouPage() {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search stocks, crypto..."
-          className="mt-1.5 w-full rounded-lg border border-[var(--n26-border)] px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--n26-teal)]"
+          className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600"
         />
         {searchResults.length > 0 && (
           <div className="mt-2 space-y-1">
@@ -179,7 +182,7 @@ export default function ForYouPage() {
         <button
           type="button"
           onClick={() => setShowResume(true)}
-          className="mt-2 rounded-lg border border-[var(--n26-teal)] px-3 py-1.5 text-xs text-[var(--n26-teal-dark)] hover:bg-[var(--n26-chip-bg)]"
+          className="mt-2 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 hover:bg-teal-50"
         >
           See details
         </button>
@@ -217,7 +220,7 @@ export default function ForYouPage() {
         <p className="mt-1.5 text-xs leading-5 text-slate-700 clamp-2">{dailyTip}</p>
         <button
           type="button"
-          className="mt-2 rounded-lg border border-[var(--n26-teal)] px-3 py-1.5 text-xs text-[var(--n26-teal-dark)] hover:bg-[var(--n26-chip-bg)]"
+          className="mt-2 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 hover:bg-teal-50"
         >
           Learn more
         </button>
@@ -234,7 +237,7 @@ export default function ForYouPage() {
 
       {showResume && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/30 px-4">
-          <div className="w-full max-w-xl rounded-2xl border border-[var(--n26-border)] bg-white p-4 shadow-xl">
+          <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold text-slate-900">Daily Resume Details</h3>
               <button type="button" onClick={() => setShowResume(false)} className="text-slate-500 hover:text-slate-700">

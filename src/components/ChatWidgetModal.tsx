@@ -60,7 +60,7 @@ export function ChatWidgetModal({
           <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
             <p
               className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
-                message.role === "user" ? "bg-[var(--n26-teal)] text-white" : "bg-white text-slate-700"
+                message.role === "user" ? "bg-teal-600 text-white" : "bg-white text-slate-700"
               }`}
             >
               {message.text}
@@ -76,7 +76,7 @@ export function ChatWidgetModal({
               key={prompt}
               type="button"
               onClick={() => onQuickPrompt(prompt)}
-              className="rounded-full bg-[var(--n26-chip-bg)] px-2.5 py-1 text-xs text-[var(--n26-chip-text)] hover:brightness-95"
+              className="rounded-full bg-teal-50 px-2.5 py-1 text-xs text-teal-700 hover:brightness-95"
             >
               {prompt}
             </button>
@@ -92,9 +92,9 @@ export function ChatWidgetModal({
               if (event.key === "Enter") onSend();
             }}
             placeholder="Ask me about your portfolio..."
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--n26-teal)]"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600"
           />
-          <button type="button" aria-label="Send chat message" onClick={onSend} className="rounded-lg bg-[var(--n26-teal)] px-3 py-2 text-sm text-white hover:bg-[var(--n26-teal-dark)]">
+          <button type="button" aria-label="Send chat message" onClick={onSend} className="rounded-lg bg-teal-600 px-3 py-2 text-sm text-white hover:bg-teal-700">
             Send
           </button>
         </div>

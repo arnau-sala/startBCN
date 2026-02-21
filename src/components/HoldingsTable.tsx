@@ -50,7 +50,7 @@ export function HoldingsTable({
         type="button"
         aria-label="View more holdings"
         onClick={onViewMore}
-        className="mt-3 rounded-lg border px-3 py-1.5 text-xs text-[var(--n26-teal-dark)] transition hover:bg-[var(--n26-chip-bg)]"
+        className="mt-3 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 transition hover:bg-teal-50"
       >
         View more
       </button>

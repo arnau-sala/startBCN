@@ -11,10 +11,10 @@ export function NewsModal({
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/30 px-4">
-      <div className="w-full max-w-2xl scale-100 rounded-2xl border border-[var(--n26-border)] bg-white p-4 shadow-xl transition">
+      <div className="w-full max-w-2xl scale-100 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl transition">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-wide text-[var(--n26-teal-dark)]">{item.source}</p>
+            <p className="text-xs uppercase tracking-wide text-teal-700">{item.source}</p>
             <h3 className="mt-1 text-lg font-semibold text-slate-900">{item.title}</h3>
           </div>
           <button
@@ -31,17 +31,17 @@ export function NewsModal({
 
         <div className="mt-4 flex flex-wrap gap-2">
           {item.tags.map((tag) => (
-            <span key={`${item.id}-${tag}`} className="rounded-full bg-[var(--n26-chip-bg)] px-2.5 py-1 text-xs text-[var(--n26-chip-text)]">
+            <span key={`${item.id}-${tag}`} className="rounded-full bg-teal-50 px-2.5 py-1 text-xs text-teal-700">
               #{tag}
             </span>
           ))}
         </div>
 
         <div className="mt-4 flex gap-2">
-          <button type="button" className="rounded-lg bg-[var(--n26-teal)] px-3 py-2 text-sm text-white transition hover:bg-[var(--n26-teal-dark)]">
+          <button type="button" className="rounded-lg bg-teal-600 px-3 py-2 text-sm text-white transition hover:bg-teal-700">
             Simplify
           </button>
-          <button type="button" className="rounded-lg border border-[var(--n26-teal)] px-3 py-2 text-sm text-[var(--n26-teal-dark)] transition hover:bg-[var(--n26-chip-bg)]">
+          <button type="button" className="rounded-lg border border-teal-600 px-3 py-2 text-sm text-teal-700 transition hover:bg-teal-50">
             Explain terms
           </button>
         </div>
