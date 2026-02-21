@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { DashboardNewsItem } from "@/lib/mock/news";
 import { holdings } from "@/lib/mock/portfolio";
 
@@ -119,6 +120,52 @@ function getWhyMattersToYou(item: DashboardNewsItem, affectedHoldings: string[])
   return "Because this headline can change short-term market risk conditions.";
 }
 
+function getTechnicalArticle(item: DashboardNewsItem) {
+  const t = item.tags;
+
+  if (t.includes("crypto")) {
+    return {
+      subtitle: "Technical market note",
+      paragraphs: [
+        "Price action reflects a deleveraging sequence across perpetual futures, with open interest normalization and a compression in funding asymmetry. The pullback is consistent with a momentum reset rather than a structural breakdown in long-term demand.",
+        "On-chain transfer velocity and exchange netflow behavior suggest mixed positioning: tactical distribution from short-term holders alongside strategic accumulation by longer-horizon wallets. Liquidity depth remains thinner around key psychological levels, amplifying intraday swings.",
+        "From a risk perspective, monitoring realized volatility, liquidation clusters, and basis dynamics can help distinguish continuation from mean-reversion scenarios in the next sessions."
+      ]
+    };
+  }
+
+  if (t.includes("rates") || t.includes("macro")) {
+    return {
+      subtitle: "Macro technical note",
+      paragraphs: [
+        "The headline reprices the terminal-rate path and shifts discount-rate assumptions used in cross-asset valuation. Duration-sensitive assets react first, followed by sector rotation in equities as capital reallocates along the risk curve.",
+        "Forward guidance language and data-dependency framing now matter as much as the headline decision itself. Small changes in policy communication can materially move real yields, which then cascade into growth and cyclical exposures.",
+        "A practical framework is to track rate-volatility, yield-curve shape, and credit-spread behavior jointly to confirm whether this is a transient repricing or a broader regime move."
+      ]
+    };
+  }
+
+  if (t.includes("earnings") || t.includes("ai") || t.includes("tech")) {
+    return {
+      subtitle: "Equity technical note",
+      paragraphs: [
+        "Post-release price discovery is being driven by expectation revision more than by absolute prints. The market is re-rating the forward multiple based on guidance durability, margin trajectory, and capex signaling.",
+        "Cross-name correlation in the same theme (AI/semis/platforms) indicates that factor exposure is currently stronger than idiosyncratic dispersion. This improves momentum carry but increases concentration risk in thematic portfolios.",
+        "Watching estimate revisions, implied volatility term structure, and breadth participation helps validate whether the move is supported by fundamentals or primarily positioning-driven."
+      ]
+    };
+  }
+
+  return {
+    subtitle: "Technical context note",
+    paragraphs: [
+      "The move appears to be driven by a combination of positioning reset and narrative repricing. In this phase, market microstructure often dominates over long-form fundamental interpretation.",
+      "Confirmation generally comes from follow-through in volume profile, correlation behavior, and volatility regime rather than from a single headline reaction.",
+      "For portfolio construction, the key is to separate signal from noise by comparing this event against existing exposure concentration and risk-budget constraints."
+    ]
+  };
+}
+
 export function NewsModal({
   item,
   onClose
@@ -126,11 +173,19 @@ export function NewsModal({
   item: DashboardNewsItem | null;
   onClose: () => void;
 }) {
+  const [showFullArticle, setShowFullArticle] = useState(false);
+
+  useEffect(() => {
+    if (!item) return;
+    setShowFullArticle(false);
+  }, [item?.id]);
+
   if (!item) return null;
   const portfolioView = getAffectAndAction(item);
   const affectedHoldings = getAffectedHoldings(item);
   const confidence = getConfidence(item);
   const whyMatters = getWhyMattersToYou(item, affectedHoldings);
+  const technicalArticle = getTechnicalArticle(item);
   const actionTone = portfolioView.recommendation === "reduce"
     ? {
       wrapper: "border-red-100 bg-red-50",
@@ -183,6 +238,13 @@ export function NewsModal({
               <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
                 Confidence: {confidence}
               </span>
+              <button
+                type="button"
+                onClick={() => setShowFullArticle((prev) => !prev)}
+                className="rounded-full border border-teal-200 bg-teal-50 px-2.5 py-0.5 text-[10px] font-semibold text-teal-700 transition hover:bg-teal-100"
+              >
+                {showFullArticle ? "Hide full article" : "Read full article"}
+              </button>
             </div>
             <h3 className="mt-1 text-lg font-semibold text-slate-900">{item.title}</h3>
             <p className="mt-2 clamp-1 text-sm text-teal-800">
@@ -248,6 +310,20 @@ export function NewsModal({
             </div>
           </div>
         </div>
+
+        {showFullArticle && (
+          <div className="mt-3 rounded-lg border border-slate-200 bg-white p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+              Full article (technical mock)
+            </p>
+            <p className="mt-1 text-sm font-medium text-slate-800">{technicalArticle.subtitle}</p>
+            <div className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
+              {technicalArticle.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
