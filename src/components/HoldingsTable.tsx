@@ -104,12 +104,8 @@ export function HoldingsTable({
         type="button"
         aria-label="View more holdings"
         onClick={onViewMore}
-<<<<<<< HEAD
-        className="mt-3 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 transition hover:bg-teal-50"
-=======
-        className="mt-3 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:opacity-75"
+        className="mt-3 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:bg-teal-50"
         style={{ borderColor: "var(--accent-border)", color: "var(--accent-dark)" }}
->>>>>>> aitor
       >
         View more
       </button>

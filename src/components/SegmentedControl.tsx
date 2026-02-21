@@ -16,24 +16,6 @@ export function SegmentedControl({
   onChange: (value: Timeframe) => void;
 }) {
   return (
-<<<<<<< HEAD
-    <div className="inline-flex rounded-xl bg-slate-100 p-1">
-      {labels.map((item) => (
-        <button
-          key={item.key}
-          type="button"
-          aria-label={`Set timeframe ${item.label}`}
-          onClick={() => onChange(item.key)}
-          className={`rounded-lg px-2.5 py-1 text-xs font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600 ${
-            value === item.key
-              ? "bg-white text-teal-700 shadow-sm"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          {item.label}
-        </button>
-      ))}
-=======
     <div
       className="flex w-full rounded-full p-[3px]"
       style={{ background: "var(--surface-sunken)" }}
@@ -61,7 +43,6 @@ export function SegmentedControl({
           </button>
         );
       })}
->>>>>>> aitor
     </div>
   );
 }

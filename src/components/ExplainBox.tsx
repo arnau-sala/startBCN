@@ -22,11 +22,7 @@ export function ExplainBox({ profile }: { profile: UserProfile }) {
       });
       const data = (await response.json()) as { explanation?: string; error?: string };
       if (!response.ok) {
-<<<<<<< HEAD
         throw new Error(data.error ?? "Could not generate explanation.");
-=======
-        throw new Error(data.error ?? "Could not generate the explanation.");
->>>>>>> aitor
       }
       setResult(data.explanation ?? "");
     } catch (err) {
@@ -45,11 +41,7 @@ export function ExplainBox({ profile }: { profile: UserProfile }) {
         <input
           value={concept}
           onChange={(event) => setConcept(event.target.value)}
-<<<<<<< HEAD
           placeholder="Ex: ETF, volatility, interest rate"
-=======
-          placeholder="E.g.: ETF, volatility, interest rate"
->>>>>>> aitor
           className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500"
         />
         <button

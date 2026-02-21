@@ -33,11 +33,7 @@ export function ProfileForm({
       setSavedMessage("Profile saved in memory for this session.");
       onProfileChange?.(profile);
     } else {
-<<<<<<< HEAD
       setSavedMessage("Profile could not be saved.");
-=======
-      setSavedMessage("Could not save the profile.");
->>>>>>> aitor
     }
   }
 
@@ -54,11 +50,7 @@ export function ProfileForm({
     <form className="card space-y-4" onSubmit={saveProfile}>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Profile</p>
-<<<<<<< HEAD
         <h1 className="mt-1 text-2xl font-semibold text-slate-900">Personalization</h1>
-=======
-        <h1 className="mt-1 text-2xl font-semibold text-slate-900">Your Personalization</h1>
->>>>>>> aitor
       </div>
 
       <div>
@@ -81,7 +73,7 @@ export function ProfileForm({
         </select>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
         <h2 className="text-sm font-semibold text-slate-900">Personal details</h2>
         <p className="mt-1 text-xs text-slate-500">
           You can change how you appear in the app at any time.

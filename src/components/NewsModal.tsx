@@ -10,7 +10,7 @@ export function NewsModal({
   if (!item) return null;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/30 px-4">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-300 px-4">
       <div className="w-full max-w-2xl scale-100 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl transition">
         <div className="flex items-start justify-between gap-4">
           <div>

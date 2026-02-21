@@ -31,11 +31,7 @@ export function DailyTipCard({
         setTip(data.tip);
       } catch {
         setTip(
-<<<<<<< HEAD
           "Fallback tip: review two high-relevance stories and note one key question before making decisions."
-=======
-          "Tip: review 2 high-relevance news items and note one key question before making decisions."
->>>>>>> aitor
         );
       } finally {
         setIsLoading(false);
@@ -48,11 +44,7 @@ export function DailyTipCard({
   return (
     <section className="card">
       <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Daily tip</p>
-<<<<<<< HEAD
       <h2 className="mt-1 text-lg font-semibold text-slate-900">Your daily tip</h2>
-=======
-      <h2 className="mt-1 text-lg font-semibold text-slate-900">Today's tip for you</h2>
->>>>>>> aitor
       <p className="mt-3 whitespace-pre-line text-sm text-slate-700">
         {isLoading ? "Loading..." : tip}
       </p>

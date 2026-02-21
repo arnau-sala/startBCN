@@ -23,17 +23,10 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       const data = (await response.json()) as { simplified?: string; error?: string };
 
       if (!response.ok) {
-<<<<<<< HEAD
         throw new Error(data.error ?? "Could not simplify this news item");
       }
 
       setContent(data.simplified ?? "No response was returned.");
-=======
-        throw new Error(data.error ?? "Could not simplify the news item");
-      }
-
-      setContent(data.simplified ?? "No response received.");
->>>>>>> aitor
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       setError(message);
@@ -53,7 +46,7 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       </button>
 
       {open && (
-        <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50/80 p-4">
+        <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50 p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-indigo-900">Simplified summary</p>
             <button

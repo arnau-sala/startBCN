@@ -147,32 +147,6 @@ export default function ForYouPage() {
 
   /* ── Header ──────────────────────────────────────────────────────────────── */
   const header = (
-<<<<<<< HEAD
-    <header className="relative rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-teal-700">
-            N26 Companion
-          </p>
-          <h1 className="text-lg font-semibold text-slate-900">Home Summary</h1>
-        </div>
-        <div className="relative flex items-center gap-3">
-          <button
-            type="button"
-            aria-label="Open profile settings"
-            onClick={() => setShowProfile((prev) => !prev)}
-            className="flex items-center gap-2 rounded-xl border border-slate-200 px-2.5 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
-          >
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-teal-50 text-xs font-semibold text-teal-700">
-              P
-            </span>
-            <span className="text-left leading-tight">
-              <span className="block">{profile.name}</span>
-              <span className="block text-[11px] text-slate-500">@{profile.username}</span>
-            </span>
-          </button>
-
-=======
     <header
       className="rounded-[var(--radius-lg)] border px-6 py-4"
       style={{
@@ -206,7 +180,6 @@ export default function ForYouPage() {
             onClick={() => setShowProfile((p) => !p)}
             ariaLabel="Open profile settings"
           />
->>>>>>> aitor
           <ProfileMenu
             open={showProfile}
             profile={profile}
@@ -223,34 +196,6 @@ export default function ForYouPage() {
     <>
       {/* Balance */}
       <Card>
-<<<<<<< HEAD
-        <p className="text-xs text-slate-500">Total Balance</p>
-        <p className="mt-1 text-2xl font-semibold text-slate-900">
-          {new Intl.NumberFormat("en-US", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(
-            totalBalanceByRange[timeframe]
-          )}
-        </p>
-        <div className="mt-2">
-          <SegmentedControl value={timeframe} onChange={setTimeframe} />
-        </div>
-        <SparklineChart points={chartSeriesByRange[timeframe]} />
-      </Card>
-
-      <Card>
-        <label className="block text-xs font-medium text-slate-700">Quick search</label>
-        <input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search stocks, crypto..."
-          className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-600"
-        />
-        {searchResults.length > 0 && (
-          <div className="mt-2 space-y-1">
-            {searchResults.slice(0, 4).map((item) => (
-              <div key={item.symbol} className="flex items-center justify-between rounded-lg bg-slate-50 px-2.5 py-1.5 text-xs">
-                <p className="text-slate-700">
-                  {item.name} <span className="text-slate-500">({item.symbol})</span>
-=======
         {/* ── Derived scrub values ── */}
         {(() => {
           const series = chartSeriesByRange[timeframe];
@@ -292,7 +237,6 @@ export default function ForYouPage() {
                   style={{ color: "var(--text-primary)" }}
                 >
                   {fmt.format(displayValue)}
->>>>>>> aitor
                 </p>
                 <span
                   className="flex items-center gap-0.5 text-sm font-semibold"
@@ -411,12 +355,8 @@ export default function ForYouPage() {
         <button
           type="button"
           onClick={() => setShowResume(true)}
-<<<<<<< HEAD
-          className="mt-2 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 hover:bg-teal-50"
-=======
-          className="mt-5 w-full rounded-[var(--radius-md)] py-2.5 text-sm font-semibold transition hover:opacity-90"
+          className="mt-5 w-full rounded-[var(--radius-md)] py-2.5 text-sm font-semibold transition hover:brightness-95"
           style={{ background: "var(--accent)", color: "var(--text-inverse)" }}
->>>>>>> aitor
         >
           See full digest
         </button>
@@ -445,16 +385,6 @@ export default function ForYouPage() {
 
       {/* Daily Tip */}
       <Card>
-<<<<<<< HEAD
-        <h2 className="text-base font-semibold text-slate-900">Daily Tip</h2>
-        <p className="mt-1.5 text-xs leading-5 text-slate-700 clamp-2">{dailyTip}</p>
-        <button
-          type="button"
-          className="mt-2 rounded-lg border border-teal-600 px-3 py-1.5 text-xs text-teal-700 hover:bg-teal-50"
-        >
-          Learn more
-        </button>
-=======
         <SectionHeader eyebrow="Tip of the day" title="Daily Tip" />
         <p className="text-sm leading-6" style={{ color: "var(--text-secondary)" }}>
           {dailyTip}
@@ -465,7 +395,6 @@ export default function ForYouPage() {
           variant="accent"
           className="mt-4"
         />
->>>>>>> aitor
       </Card>
     </>
   );
@@ -479,13 +408,8 @@ export default function ForYouPage() {
       <ExplainModal item={eli10News} onClose={() => setEli10News(null)} />
 
       {showResume && (
-<<<<<<< HEAD
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/30 px-4">
-          <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
-=======
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-[var(--text-primary)]/20 px-4">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-300 px-4">
           <Card className="w-full max-w-xl" style={{ boxShadow: "var(--shadow-modal)" }}>
->>>>>>> aitor
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
                 Daily Digest Details
