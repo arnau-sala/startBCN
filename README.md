@@ -1,68 +1,68 @@
 # AI Curator for Financial News (N26 Case)
 
-MVP demo-friendly en Next.js para resolver el reto de N26: **menos ruido, mas claridad y mas personalizacion** en noticias financieras.
+A demo-friendly Next.js MVP for the N26 challenge: **less noise, more clarity, and stronger personalization** for financial news.
 
-El producto es un **curator educativo**, no un broker ni un portfolio tracker completo.
+The product is an **educational curator**, not a broker or a full portfolio tracker.
 
 ---
 
 ## Problem we solve
 
-- Information overload: 100+ noticias al dia.
-- Noticias demasiado complejas para usuarios retail.
-- Feed poco personalizado (misma experiencia para todos).
+- Information overload: 100+ news items per day.
+- News is often too complex for retail users.
+- Low personalization (same feed for everyone).
 
 ---
 
 ## MVP Features
 
 ### 1) For You (core)
-- Feed de noticias mock (14 items) reordenado por relevancia.
-- Personalizacion por perfil: intereses, riesgo, nivel y watchlist.
-- Etiquetas de relevancia: `High`, `Medium`, `Low`.
-- Justificacion tipo: "porque sigues NVDA y te interesa AI".
-- Boton `Simplify` con IA real para convertir complejo -> claro.
-- Tip del dia personalizado (IA con fallback).
+- Mock news feed (14 items) ranked by relevance.
+- Profile personalization: interests, risk, level, and watchlist.
+- Relevance labels: `High`, `Medium`, `Low`.
+- Explanation example: "because you follow NVDA and like AI".
+- `Simplify` button with real AI to turn complex into clear.
+- Personalized daily tip (AI with fallback).
 
 ### 2) Alerts & Trends (core)
-- Deteccion simple de tendencias por frecuencia de tags.
-- Topicos trending visibles en UI.
-- Alertas personalizadas (BTC, TSLA earnings, ECB rates, etc).
-- Noticias relacionadas destacadas como `ALERT`.
+- Simple trend detection by tag frequency.
+- Trending topics visible in the UI.
+- Personalized alerts (BTC, TSLA earnings, ECB rates, etc).
+- Related stories highlighted as `ALERT`.
 
 ### 3) Explain (core)
-- Buscador de conceptos: inflacion, ETF, volatilidad, tipo de interes...
+- Concept search: inflation, ETF, volatility, interest rate...
 - `Explain like I'm 10` (ELI10).
 - `Explain for my level` (beginner/intermediate/advanced).
-- Respuesta estructurada:
-  - En una frase
-  - Ejemplo sencillo
-  - Que vigilar
-  - Errores comunes
+- Structured response:
+  - In one sentence
+  - Simple example
+  - What to watch
+  - Common mistakes
 
 ### 4) Settings / Profile (core)
-- Presets de perfil:
+- Profile presets:
   - Beginner Conservative (Savings focus)
   - Beginner Moderate (Index/ETFs)
   - Aggressive Crypto
   - Stock picker AI/Tech
-- Edicion de intereses, riesgo, nivel, watchlist y alertas.
+- Editing for interests, risk, level, watchlist, and alerts.
 
 ---
 
 ## What is real vs mock
 
 ### Real
-- Llamadas LLM en:
+- LLM calls in:
   - `POST /api/news/simplify`
   - `POST /api/explain`
   - `POST /api/tip`
-- Integracion OpenAI-compatible via `fetch`.
+- OpenAI-compatible integration via `fetch`.
 
 ### Mock
-- Dataset de noticias y perfiles (`/src/lib/mock`).
-- Perfil en memoria/localStorage (sin DB real).
-- Trends/alerts por heuristica simple.
+- News/profile dataset in `/src/lib/mock`.
+- In-memory/localStorage profile (no real DB).
+- Trends/alerts via simple heuristics.
 
 ---
 
@@ -70,9 +70,9 @@ El producto es un **curator educativo**, no un broker ni un portfolio tracker co
 
 - Next.js (App Router) + TypeScript
 - TailwindCSS
-- API routes en `src/app/api/*/route.ts`
-- Datos mock sin base de datos
-- LLM OpenAI-compatible por `.env`
+- API routes in `src/app/api/*/route.ts`
+- Mock data with no database
+- OpenAI-compatible LLM through `.env`
 
 ---
 
@@ -92,7 +92,7 @@ El producto es un **curator educativo**, no un broker ni un portfolio tracker co
 ### Endpoints existentes (feed y perfil)
 
 - `GET /api/news?profile=<preset-id>`
-  - Devuelve noticias + `relevanceScore`, `relevanceLabel`, `reason`
+  - Returns news + `relevanceScore`, `relevanceLabel`, `reason`
 - `POST /api/news/simplify`
   - Body: `{ newsId, profile }`
   - Response: `{ simplified }`
@@ -101,26 +101,26 @@ El producto es un **curator educativo**, no un broker ni un portfolio tracker co
   - Response: `{ explanation }`
 - `POST /api/tip`
   - Body: `{ profile, trendingTopics }`
-  - Response: `{ tip }` (fallback si falla LLM)
+  - Response: `{ tip }` (fallback if LLM fails)
 - `GET|POST /api/profile`
-  - Perfil en memoria para demo
+  - In-memory profile for demo
 
 ---
 
 ## Environment Variables
 
-Copia `.env.example` a `.env.local` y rellena tu clave.
+Copy `.env.example` to `.env.local` and add your key.
 
-**Opción 1 — Gemini (recomendado):**
+**Option 1 — Gemini (recommended):**
 
 ```bash
-GEMINI_API_KEY=tu_clave_de_gemini
-# Opcional: LLM_MODEL=gemini-2.0-flash
+GEMINI_API_KEY=your_gemini_key
+# Optional: LLM_MODEL=gemini-2.5-flash
 ```
 
-Obtén la key en [Google AI Studio](https://aistudio.google.com/apikey). Modelos válidos: `gemini-2.0-flash`, `gemini-2.0-flash-exp`, `gemini-1.5-flash`, etc.
+Get the key at [Google AI Studio](https://aistudio.google.com/apikey). Models: `gemini-2.5-flash`, `gemini-2.5-flash-lite`, etc.
 
-**Opción 2 — OpenAI (o compatible):**
+**Option 2 — OpenAI (or compatible):**
 
 ```bash
 LLM_BASE_URL=https://api.openai.com/v1
@@ -128,17 +128,14 @@ LLM_API_KEY=your_openai_key_here
 LLM_MODEL=gpt-4o-mini
 ```
 
-Si no hay ninguna clave (Gemini ni OpenAI), los endpoints de IA devuelven un mensaje amigable y `tip` usa fallback.
+If no key is set (Gemini or OpenAI), AI endpoints return a friendly message and `tip` uses a fallback.
 
-**Unificar con backend Python (opcional):** Si corres el backend FastAPI (`backend/`) y quieres que use la IA de Next.js, arranca primero Next.js y luego:
+**Optional — Python backend:** To use the FastAPI backend (`backend/`) with Next.js AI, start Next.js first, then:
 
 ```bash
-# En .env del backend o en la shell:
 export NEXTJS_API_URL=http://localhost:3000
 uvicorn main:app --reload --port 8000
 ```
-
-Así el backend Python llama a `POST /api/chat` y `POST /api/eli10` para respuestas reales.
 
 ---
 
@@ -149,20 +146,20 @@ npm install
 npm run dev
 ```
 
-Abre `http://localhost:3000`.
+Open `http://localhost:3000`.
 
 ---
 
 ## How this matches judging criteria
 
-- **Proof of Concept (40%)**: feed funcional, ranking personalizado, trends/alerts, endpoints API y llamadas IA reales.
-- **User Experience (30%)**: navegacion lateral fintech, cards limpias, chips, estados de carga/error, flujo claro en 4 tabs.
-- **AI Innovation (20%)**: simplificacion contextual por perfil, modo ELI10, explicacion por nivel, tip diario personalizado.
-- **N26 Fit (10%)**: enfoque educativo y curacion de contexto (no trading), facil de integrar como modulo dentro de app bancaria.
+- **Proof of Concept (40%)**: working feed, personalized ranking, trends/alerts, API endpoints, and real AI calls.
+- **User Experience (30%)**: fintech navigation, clean cards, chips, loading/error states, and clear 4-tab flow.
+- **AI Innovation (20%)**: contextual simplification by profile, ELI10 mode, level-based explanations, and personalized daily tip.
+- **N26 Fit (10%)**: educational and contextual curation (not trading), easy to integrate as a module inside a banking app.
 
 ---
 
 ## Disclaimer
 
-Este proyecto ofrece **informacion educativa** y contexto financiero.
-**No constituye asesoramiento financiero ni recomendacion de compra/venta.**
+This project provides **educational information** and financial context.
+**It is not financial advice and does not recommend buying/selling assets.**

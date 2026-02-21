@@ -15,7 +15,7 @@ export function DailyTipCard({
   profile: UserProfile;
   trendingTopics: string[];
 }) {
-  const [tip, setTip] = useState<string>("Generando tip personalizado...");
+  const [tip, setTip] = useState<string>("Generating personalized tip...");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function DailyTipCard({
         setTip(data.tip);
       } catch {
         setTip(
-          "Tip fallback: revisa 2 noticias de alta relevancia y anota una pregunta clave antes de tomar decisiones."
+          "Fallback tip: review two high-relevance stories and note one key question before making decisions."
         );
       } finally {
         setIsLoading(false);
@@ -44,9 +44,9 @@ export function DailyTipCard({
   return (
     <section className="card">
       <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Daily tip</p>
-      <h2 className="mt-1 text-lg font-semibold text-slate-900">Tip del dia para ti</h2>
+      <h2 className="mt-1 text-lg font-semibold text-slate-900">Your daily tip</h2>
       <p className="mt-3 whitespace-pre-line text-sm text-slate-700">
-        {isLoading ? "Cargando..." : tip}
+        {isLoading ? "Loading..." : tip}
       </p>
     </section>
   );

@@ -1,42 +1,150 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────────────────
+   N26 DESIGN TOKENS — semantic naming, single source of truth
+   ────────────────────────────────────────────────────────────────────────── */
 :root {
   color-scheme: light;
-  --n26-teal: #1aa7a1;
-  --n26-teal-dark: #128981;
-  --n26-bg: #f4f8fa;
-  --n26-border: #dbe5ea;
-  --n26-chip-bg: #e8f7f6;
-  --n26-chip-text: #0f7f7a;
+
+  /* ── Brand / Accent ──────────────────────────────────────────────────── */
+  --accent: #1aa7a1;
+  /* primary interactive teal */
+  --accent-dark: #128981;
+  /* darker teal for text on light */
+  --accent-subtle: #e8f7f6;
+  /* very light teal, chip/tag backgrounds */
+  --accent-border: #b2e6e3;
+  /* teal-tinted border */
+
+  /* ── Surface ─────────────────────────────────────────────────────────── */
+  --surface-page: #f4f7fa;
+  /* page / app background */
+  --surface-raised: #ffffff;
+  /* cards, modals, sheets */
+  --surface-sunken: #f0f4f7;
+  /* inset rows, inputs */
+  --surface-hover: #eaf1f5;
+  /* hover state for rows */
+
+  /* ── Border ──────────────────────────────────────────────────────────── */
+  --border-subtle: #dde5ea;
+  /* default card/row border */
+  --border-medium: #c4d0d8;
+  /* stronger dividers */
+  --border-accent: var(--accent);
+
+  /* ── Text ────────────────────────────────────────────────────────────── */
+  --text-primary: #0f172a;
+  /* headings, strong labels */
+  --text-secondary: #475569;
+  /* body, descriptions */
+  --text-tertiary: #94a3b8;
+  /* meta, timestamps */
+  --text-accent: var(--accent-dark);
+  --text-inverse: #ffffff;
+
+  /* ── Feedback ────────────────────────────────────────────────────────── */
+  --positive: #059669;
+  /* green for gains */
+  --positive-bg: #ecfdf5;
+  --negative: #dc2626;
+  /* red for losses */
+  --negative-bg: #fef2f2;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+
+  /* ── Radius ──────────────────────────────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* ── Spacing scale (used in components) ─────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* ── Shadow ──────────────────────────────────────────────────────────── */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / .06), 0 1px 2px -1px rgb(0 0 0 / .04);
+  --shadow-modal: 0 8px 32px 0 rgb(0 0 0 / .12);
+
+  /* ── Legacy aliases (keep for existing components) ───────────────────── */
+  --n26-teal: var(--accent);
+  --n26-teal-dark: var(--accent-dark);
+  --n26-bg: var(--surface-page);
+  --n26-border: var(--border-subtle);
+  --n26-chip-bg: var(--accent-subtle);
+  --n26-chip-text: var(--accent-dark);
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   BASE RESET & TYPOGRAPHY
+   ────────────────────────────────────────────────────────────────────────── */
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--n26-bg);
-  color: #0f172a;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   UTILITY CLASSES
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Card — primary surface */
 .card {
-  @apply rounded-2xl border bg-white shadow-sm;
-  border-color: var(--n26-border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5);
 }
 
+/* Inset row — sunken list item */
+.row-inset {
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  padding: var(--space-3) var(--space-4);
+  transition: background 120ms ease;
+}
+
+.row-inset:hover {
+  background: var(--surface-hover);
+}
+
+/* Chip / pill */
 .chip {
-  @apply rounded-full px-2.5 py-1 text-xs;
-  background: var(--n26-chip-bg);
-  color: var(--n26-chip-text);
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-subtle);
+  color: var(--accent-dark);
+  white-space: nowrap;
 }
 
+/* Accent link */
 .n26-link {
-  color: var(--n26-teal);
+  color: var(--accent-dark);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 120ms;
 }
 
 .n26-link:hover {
-  text-decoration: underline;
+  opacity: 0.75;
 }
 
+/* Text clamp helpers */
 .clamp-1,
 .clamp-2 {
   display: -webkit-box;
@@ -46,8 +154,28 @@ body {
 
 .clamp-1 {
   -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 .clamp-2 {
   -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Positive / negative value colours */
+.value-up {
+  color: var(--positive);
+}
+
+.value-down {
+  color: var(--negative);
+}
+
+/* Section eyebrow label */
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
 }

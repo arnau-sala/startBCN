@@ -1,26 +1,26 @@
 import { DashboardNewsItem } from "@/lib/mock/news";
 
 const fallbackBullets = [
-  "Esta noticia resume un cambio de mercado que puede afectar a varias categorias de activos.",
-  "La clave es entender si el movimiento es puntual o parte de una tendencia mas larga.",
-  "Mira el contexto (tipos, resultados o regulacion) antes de reaccionar."
+  "This news summarises a market shift that may affect several asset categories.",
+  "The key is understanding whether the move is short-lived or part of a longer trend.",
+  "Look at context (rates, earnings or regulation) before reacting."
 ];
 
 const eli10ById: Record<string, string[]> = {
   g1: [
-    "El banco central no ha cambiado las reglas del juego todavia.",
-    "Cuando pasa eso, los mercados se mueven con mas prudencia.",
-    "Para ti significa: espera menos sorpresas positivas a corto plazo."
+    "The central bank hasn't changed the rules of the game yet.",
+    "When that happens, markets move more cautiously.",
+    "For you it means: expect fewer positive surprises in the short term."
   ],
   g2: [
-    "Bitcoin subio muy rapido y ahora corrige, como cuando corres y luego frenas.",
-    "Muchos traders cerraron posiciones para reducir riesgo.",
-    "La volatilidad alta implica movimientos bruscos en poco tiempo."
+    "Bitcoin rallied fast and is now pulling back — like sprinting and then braking.",
+    "Many traders closed positions to reduce risk.",
+    "High volatility means sharp moves in a short time."
   ],
   p1: [
-    "Las empresas de chips venden 'palas' para la fiebre del oro de la IA.",
-    "Si siguen vendiendo mucho, sus ingresos suben y el mercado se anima.",
-    "Pero si expectativas son demasiado altas, una pequena decepcion pesa mucho."
+    "Chip companies sell 'shovels' for the AI gold rush.",
+    "If they keep selling a lot, revenues rise and the market gets excited.",
+    "But if expectations are too high, a small disappointment weighs heavily."
   ]
 };
 
@@ -35,10 +35,10 @@ export function ExplainModal({
   const bullets = eli10ById[item.id] ?? fallbackBullets;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 px-4">
-      <div className="w-full max-w-md rounded-2xl border border-[var(--n26-border)] bg-white p-4 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-300 px-4">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--n26-teal-dark)]">ELI10</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">ELI10</p>
           <button
             type="button"
             aria-label="Close ELI10 modal"

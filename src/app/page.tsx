@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import ForYouPage from "@/app/for-you/page";
 
 export default function HomePage() {
-  redirect("/for-you");
+  return <ForYouPage />;
 }

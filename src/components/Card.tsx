@@ -1,14 +1,30 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
-export function Card({
-  children,
-  className = ""
-}: {
+interface CardProps {
   children: ReactNode;
+  /** Extra class names */
   className?: string;
-}) {
+  style?: CSSProperties;
+  /**
+   * flat   — no shadow, border only (for sub-cards inside another card)
+   * noPad  — remove default padding (caller controls spacing)
+   */
+  variant?: "default" | "flat" | "noPad";
+}
+
+/**
+ * N26-style surface card.
+ * Uses semantic tokens from globals.css so colours stay in sync automatically.
+ */
+export function Card({ children, className = "", variant = "default", style }: CardProps) {
+  const pad = variant === "noPad" ? "" : "p-5";
+  const shadow = variant === "flat" ? "" : "shadow-[var(--shadow-card)]";
+
   return (
-    <section className={`rounded-2xl border border-[var(--n26-border)] bg-white p-3.5 shadow-sm transition hover:shadow-md ${className}`}>
+    <section
+      className={`rounded-[var(--radius-lg)] border bg-[var(--surface-raised)] ${pad} ${shadow} ${className}`}
+      style={{ borderColor: "var(--border-subtle)", ...style }}
+    >
       {children}
     </section>
   );

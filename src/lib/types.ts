@@ -19,6 +19,7 @@ export interface NewsItem {
 export interface UserProfile {
   id: string;
   name: string;
+  username?: string;
   interests: Interest[];
   risk: RiskLevel;
   level: KnowledgeLevel;

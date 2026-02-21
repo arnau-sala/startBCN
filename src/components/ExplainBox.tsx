@@ -4,7 +4,7 @@ import { useState } from "react";
 import { UserProfile } from "@/lib/types";
 
 export function ExplainBox({ profile }: { profile: UserProfile }) {
-  const [concept, setConcept] = useState("inflacion");
+  const [concept, setConcept] = useState("inflation");
   const [mode, setMode] = useState<"eli10" | "level">("eli10");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string>("");
@@ -22,11 +22,11 @@ export function ExplainBox({ profile }: { profile: UserProfile }) {
       });
       const data = (await response.json()) as { explanation?: string; error?: string };
       if (!response.ok) {
-        throw new Error(data.error ?? "No se pudo generar la explicacion.");
+        throw new Error(data.error ?? "Could not generate explanation.");
       }
       setResult(data.explanation ?? "");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error inesperado");
+      setError(err instanceof Error ? err.message : "Unexpected error");
     } finally {
       setLoading(false);
     }
@@ -35,13 +35,13 @@ export function ExplainBox({ profile }: { profile: UserProfile }) {
   return (
     <section className="card">
       <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Explain</p>
-      <h1 className="mt-1 text-2xl font-semibold text-slate-900">Entiende conceptos sin jerga</h1>
+      <h1 className="mt-1 text-2xl font-semibold text-slate-900">Understand concepts without jargon</h1>
 
       <div className="mt-4 flex flex-col gap-3 md:flex-row">
         <input
           value={concept}
           onChange={(event) => setConcept(event.target.value)}
-          placeholder="Ej: ETF, volatilidad, tipo de interes"
+          placeholder="Ex: ETF, volatility, interest rate"
           className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500"
         />
         <button
@@ -60,9 +60,9 @@ export function ExplainBox({ profile }: { profile: UserProfile }) {
         </button>
       </div>
 
-      <p className="mt-3 text-xs text-slate-500">Modo seleccionado: {mode}</p>
+      <p className="mt-3 text-xs text-slate-500">Selected mode: {mode}</p>
 
-      {loading && <p className="mt-3 text-sm text-slate-600">Generando explicacion...</p>}
+      {loading && <p className="mt-3 text-sm text-slate-600">Generating explanation...</p>}
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
       {!loading && !error && result && (
         <pre className="mt-3 whitespace-pre-wrap rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-800">

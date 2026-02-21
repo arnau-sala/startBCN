@@ -10,7 +10,7 @@ export function TrendingTopics({ topics }: { topics: Array<{ tag: string; hits: 
             className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
           >
             <span className="text-sm font-medium text-slate-700">#{topic.tag}</span>
-            <span className="text-xs text-slate-500">{topic.hits} menciones</span>
+            <span className="text-xs text-slate-500">{topic.hits} mentions</span>
           </div>
         ))}
       </div>
