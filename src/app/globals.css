@@ -2,20 +2,52 @@
 
 :root {
   color-scheme: light;
+  --n26-teal: #1aa7a1;
+  --n26-teal-dark: #128981;
+  --n26-bg: #f4f8fa;
+  --n26-border: #dbe5ea;
+  --n26-chip-bg: #e8f7f6;
+  --n26-chip-text: #0f7f7a;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top left, #f7f9ff 0%, #f1f5f9 35%, #eef2ff 100%);
+  background: var(--n26-bg);
   color: #0f172a;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
 .card {
-  @apply rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm;
+  @apply rounded-2xl border bg-white shadow-sm;
+  border-color: var(--n26-border);
 }
 
 .chip {
-  @apply rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-700;
+  @apply rounded-full px-2.5 py-1 text-xs;
+  background: var(--n26-chip-bg);
+  color: var(--n26-chip-text);
+}
+
+.n26-link {
+  color: var(--n26-teal);
+}
+
+.n26-link:hover {
+  text-decoration: underline;
+}
+
+.clamp-1,
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.clamp-1 {
+  -webkit-line-clamp: 1;
+}
+
+.clamp-2 {
+  -webkit-line-clamp: 2;
 }

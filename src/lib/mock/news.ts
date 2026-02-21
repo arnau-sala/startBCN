@@ -155,3 +155,100 @@ export const mockNews: NewsItem[] = [
     difficulty: "beginner-friendly"
   }
 ];
+
+export interface DashboardNewsItem {
+  id: string;
+  title: string;
+  source: string;
+  timeAgo: string;
+  tags: string[];
+  summary: string;
+  detail: string;
+}
+
+export const globalNews: DashboardNewsItem[] = [
+  {
+    id: "g1",
+    title: "Fed holds rates and keeps data-dependent stance",
+    source: "Bloomberg",
+    timeAgo: "2h ago",
+    tags: ["rates", "macro"],
+    summary: "Markets price a slower path for cuts as inflation remains sticky.",
+    detail: "The Fed maintained rates and signaled caution. Equity indexes were mixed while bond yields moved higher."
+  },
+  {
+    id: "g2",
+    title: "Bitcoin drops as leverage unwinds after ETF inflow streak",
+    source: "CoinDesk",
+    timeAgo: "3h ago",
+    tags: ["crypto", "volatility"],
+    summary: "BTC retraced after a sharp rally, with derivatives funding cooling down.",
+    detail: "Traders reduced risk after a volatile week. Spot demand remains healthy but intraday swings increased."
+  },
+  {
+    id: "g3",
+    title: "NVIDIA beats estimates with strong AI data center demand",
+    source: "Reuters",
+    timeAgo: "5h ago",
+    tags: ["earnings", "ai", "stocks"],
+    summary: "Revenue growth remained robust, with guidance above consensus.",
+    detail: "Management highlighted continued enterprise AI adoption. Valuation remains the key debate for investors."
+  },
+  {
+    id: "g4",
+    title: "Eurozone inflation softens ahead of ECB meeting",
+    source: "FT",
+    timeAgo: "7h ago",
+    tags: ["inflation", "ecb", "macro"],
+    summary: "Core inflation eased slightly, supporting cautious optimism in Europe.",
+    detail: "Economists expect no immediate pivot, but tone changes could impact bank and growth stocks."
+  },
+  {
+    id: "g5",
+    title: "Global ETF inflows continue as retail participation rises",
+    source: "Morningstar",
+    timeAgo: "9h ago",
+    tags: ["etf", "long-term", "savings"],
+    summary: "Low-cost diversified products remain preferred by beginner investors.",
+    detail: "Flows were broad-based across developed markets. Risk appetite remains selective."
+  }
+];
+
+export const personalizedNewsSeed: DashboardNewsItem[] = [
+  {
+    id: "p1",
+    title: "AI semiconductor momentum remains strong in US mega caps",
+    source: "WSJ",
+    timeAgo: "1h ago",
+    tags: ["ai", "stocks", "tech"],
+    summary: "Chip supply chains and cloud spend continue to drive AI names.",
+    detail: "Analysts raised forecasts for selected chipmakers while warning about high expectations."
+  },
+  {
+    id: "p2",
+    title: "Crypto regulation timeline in EU enters key implementation phase",
+    source: "The Block",
+    timeAgo: "4h ago",
+    tags: ["crypto", "regulation", "europe"],
+    summary: "Platforms prepare for stricter compliance and reporting obligations.",
+    detail: "Policy clarity may improve trust, but short-term compliance costs could pressure margins."
+  },
+  {
+    id: "p3",
+    title: "Savings products above 3% TAE gain traction among cautious profiles",
+    source: "Expansión",
+    timeAgo: "6h ago",
+    tags: ["savings", "rates"],
+    summary: "Households seek yield while preserving flexibility and lower volatility.",
+    detail: "Banks are competing on simple savings offers, with terms and liquidity as main differentiators."
+  },
+  {
+    id: "p4",
+    title: "Diversified index ETFs remain top pick for passive allocations",
+    source: "Investing",
+    timeAgo: "10h ago",
+    tags: ["stocks", "etf", "macro"],
+    summary: "Broad exposure and lower fees keep index strategies attractive.",
+    detail: "Experts recommend consistency and long-term discipline over short-term market timing."
+  }
+];
