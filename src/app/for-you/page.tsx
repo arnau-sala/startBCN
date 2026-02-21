@@ -6,6 +6,7 @@ import { Card } from "@/components/Card";
 import { ChatFab } from "@/components/ChatFab";
 import { ChatMessage, ChatWidgetModal } from "@/components/ChatWidgetModal";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { HoldingDetailModal } from "@/components/HoldingDetailModal";
 import { HoldingsModeToggle, HoldingsTable, HoldingsViewMode } from "@/components/HoldingsTable";
 import { IconButton } from "@/components/IconButton";
 import { LegalDocModal } from "@/components/LegalDocModal";
@@ -17,10 +18,12 @@ import { SegmentedControl } from "@/components/SegmentedControl";
 import { SparklineChart } from "@/components/SparklineChart";
 import { legalDigestDocs, LegalDigestItem } from "@/lib/mock/legalDocs";
 import { DashboardNewsItem, globalNews, personalizedNewsSeed } from "@/lib/mock/news";
+import { getAssetDetail } from "@/lib/mock/assetDetail";
 import {
   chartSeriesByRange,
   ChartPoint,
   holdings,
+  HoldingItem,
   searchUniverse,
   Timeframe,
   totalBalanceByRange,
@@ -292,6 +295,7 @@ export default function ForYouPage() {
   const [personalHovering, setPersonalHovering] = useState(false);
   const [legalHovering, setLegalHovering] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
+  const [selectedHolding, setSelectedHolding] = useState<HoldingItem | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: "c1", role: "assistant", text: "Hi Pepe, I can help you understand today's portfolio moves." }
   ]);
@@ -585,6 +589,7 @@ export default function ForYouPage() {
             items={holdings.slice(0, 3)}
             mode={holdingsMode}
             onViewMore={() => window.alert("Holdings page coming soon")}
+            onHoldingClick={(item) => setSelectedHolding(item)}
           />
         </div>
       </Card>
@@ -953,6 +958,12 @@ export default function ForYouPage() {
 
       <NewsModal item={selectedNews} onClose={() => setSelectedNews(null)} />
       <LegalDocModal item={selectedLegalDoc} onClose={() => setSelectedLegalDoc(null)} />
+      {selectedHolding && (
+        <HoldingDetailModal
+          detail={getAssetDetail(selectedHolding)}
+          onClose={() => setSelectedHolding(null)}
+        />
+      )}
 
       {showResume && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-[var(--text-primary)]/20 px-4">

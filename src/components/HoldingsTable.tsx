@@ -57,24 +57,28 @@ export function HoldingsModeToggle({
 export function HoldingsTable({
   items,
   mode,
-  onViewMore
+  onViewMore,
+  onHoldingClick
 }: {
   items: HoldingItem[];
   mode: HoldingsViewMode;
   onViewMore: () => void;
+  onHoldingClick?: (item: HoldingItem) => void;
 }) {
   return (
     <div>
-      {/* ── Rows ─────────────────────────────────────────────────────────── */}
+      {/* ── Rows (clic en cada holding abre el modal de detalle) ───────────── */}
       <div className="space-y-1.5">
         {items.map((item) => {
           const pl = mode === "sinceBuy" ? item.plEur : item.plEurToday;
           const plPct = mode === "sinceBuy" ? item.plPct : item.plPctToday;
           const pos = pl >= 0;
           return (
-            <div
+            <button
               key={item.id}
-              className="grid grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-xs"
+              type="button"
+              onClick={() => onHoldingClick?.(item)}
+              className="grid w-full grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-left text-xs transition hover:opacity-90 cursor-pointer focus:outline focus:ring-2 focus:ring-offset-1 focus:ring-[var(--accent-dark)]"
               style={{ background: "var(--surface-sunken)" }}
             >
               <div className="col-span-2">
@@ -94,7 +98,7 @@ export function HoldingsTable({
                   {pct(plPct)}
                 </p>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
