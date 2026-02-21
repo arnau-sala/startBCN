@@ -18,7 +18,7 @@ export function AlertsRibbon({ alerts }: { alerts: AlertBanner[] }) {
             <span className="mr-1">{alert.icon}</span>
             {alert.title}
           </p>
-          <p className="mt-1 text-xs text-slate-600">{alert.subtitle}</p>
+          <p className="mt-1 text-xs opacity-80">{alert.subtitle}</p>
         </div>
       ))}
     </div>

@@ -8,6 +8,7 @@ export interface DashboardNewsItem {
   tags: string[];
   summary: string;
   detail: string;
+  imageUrl?: string;
 }
 
 export const mockNews: NewsItem[] = [
@@ -138,6 +139,21 @@ export const mockNews: NewsItem[] = [
   }
 ];
 
+const imageByNewsId: Record<string, string> = {
+  n1: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800",
+  n2: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=800",
+  n3: "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=800",
+  n4: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800",
+  n5: "https://images.unsplash.com/photo-1560472355-536de3962603?w=800",
+  n6: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800",
+  n7: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=800",
+  n8: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=800",
+  n9: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800",
+  n10: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
+  n11: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800",
+  n12: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800"
+};
+
 function toDashboardItem(item: NewsItem): DashboardNewsItem {
   return {
     id: item.id,
@@ -146,7 +162,8 @@ function toDashboardItem(item: NewsItem): DashboardNewsItem {
     timeAgo: "Today",
     tags: item.tags,
     summary: item.shortSummary,
-    detail: `${item.shortSummary} ${item.keyNumbers?.length ? `Key numbers: ${item.keyNumbers.join(", ")}.` : ""}`.trim()
+    detail: `${item.shortSummary} ${item.keyNumbers?.length ? `Key numbers: ${item.keyNumbers.join(", ")}.` : ""}`.trim(),
+    imageUrl: imageByNewsId[item.id]
   };
 }
 

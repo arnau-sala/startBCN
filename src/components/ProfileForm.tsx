@@ -73,7 +73,7 @@ export function ProfileForm({
         </select>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
         <h2 className="text-sm font-semibold text-slate-900">Personal details</h2>
         <p className="mt-1 text-xs text-slate-500">
           You can change how you appear in the app at any time.

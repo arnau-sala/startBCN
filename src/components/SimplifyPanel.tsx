@@ -46,7 +46,7 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       </button>
 
       {open && (
-        <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50 p-4">
+        <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50/80 p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-indigo-900">Simplified summary</p>
             <button
