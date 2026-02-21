@@ -47,12 +47,12 @@ export function ProfileMenu({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-300 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4 backdrop-blur-sm"
       onMouseDown={onClose}
     >
       <div
         className={`w-[min(680px,92vw)] max-h-[88vh] overflow-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-xl transition-all duration-200 md:p-6 ${
-          isVisible ? "translate-y-0" : "translate-y-1.5"
+          isVisible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0"
         }`}
         onMouseDown={(event) => event.stopPropagation()}
       >
@@ -176,7 +176,7 @@ export function ProfileMenu({
               </ul>
             </div>
 
-            <div className="w-full flex-1 rounded-xl border border-slate-200 bg-teal-50 p-3">
+            <div className="w-full flex-1 rounded-xl border border-slate-200 bg-teal-50/40 p-3">
               <p className="text-sm font-semibold text-slate-800">How this affects your feed</p>
               <ul className="mt-2.5 flex h-[calc(100%-3.75rem)] flex-col justify-evenly text-xs text-slate-700">
                 {feedBullets.map((bullet) => (

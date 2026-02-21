@@ -179,3 +179,34 @@ body {
   text-transform: uppercase;
   color: var(--accent-dark);
 }
+
+@keyframes news-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes news-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes news-out-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes news-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes news-out-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}

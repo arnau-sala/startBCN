@@ -104,7 +104,7 @@ export function HoldingsTable({
         type="button"
         aria-label="View more holdings"
         onClick={onViewMore}
-        className="mt-3 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:bg-teal-50"
+        className="mt-3 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:opacity-75"
         style={{ borderColor: "var(--accent-border)", color: "var(--accent-dark)" }}
       >
         View more

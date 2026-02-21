@@ -35,7 +35,7 @@ export function ExplainModal({
   const bullets = eli10ById[item.id] ?? fallbackBullets;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-300 px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 px-4">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
         <div className="flex items-center justify-between">
           <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">ELI10</p>
