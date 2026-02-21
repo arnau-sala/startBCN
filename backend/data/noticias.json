@@ -1,0 +1,119 @@
+[
+    {
+        "id": 1,
+        "title": "Bitcoin supera los 100.000$ por primera vez en su historia",
+        "summary": "La criptomoneda líder ha alcanzado un nuevo máximo histórico impulsada por la adopción institucional y la aprobación de ETFs spot en múltiples mercados.",
+        "source": "CoinDesk",
+        "category": "Crypto",
+        "tags": [
+            "crypto",
+            "bitcoin",
+            "etf"
+        ],
+        "published_at": "2026-02-21T10:30:00Z",
+        "image_url": "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=400"
+    },
+    {
+        "id": 2,
+        "title": "Microsoft anuncia resultados trimestrales récord gracias a la IA",
+        "summary": "Las acciones de Microsoft suben un 8% tras reportar ingresos por encima de las expectativas, impulsados por Azure y sus servicios de inteligencia artificial.",
+        "source": "Bloomberg",
+        "category": "Stocks",
+        "tags": [
+            "stocks",
+            "microsoft",
+            "ai",
+            "tech"
+        ],
+        "published_at": "2026-02-21T09:15:00Z",
+        "image_url": "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=400"
+    },
+    {
+        "id": 3,
+        "title": "El BCE mantiene los tipos de interés sin cambios en febrero",
+        "summary": "El Banco Central Europeo ha decidido mantener los tipos de interés en el 3.5%, señalando que la inflación sigue convergiendo hacia el objetivo del 2%.",
+        "source": "Reuters",
+        "category": "Economy",
+        "tags": [
+            "economy",
+            "bce",
+            "interest-rates",
+            "europe"
+        ],
+        "published_at": "2026-02-20T14:00:00Z",
+        "image_url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=400"
+    },
+    {
+        "id": 4,
+        "title": "El oro alcanza máximos anuales ante la incertidumbre geopolítica",
+        "summary": "El precio del oro sube a 2.150$/oz mientras los inversores buscan refugio ante las tensiones internacionales y la debilidad del dólar.",
+        "source": "Financial Times",
+        "category": "Commodities",
+        "tags": [
+            "gold",
+            "commodities",
+            "safe-haven"
+        ],
+        "published_at": "2026-02-21T08:45:00Z",
+        "image_url": "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=400"
+    },
+    {
+        "id": 5,
+        "title": "Ethereum 2.0: La actualización Danksharding reduce las fees un 90%",
+        "summary": "La última actualización de Ethereum ha conseguido reducir drásticamente las comisiones de transacción, acercando la red a la adopción masiva.",
+        "source": "The Block",
+        "category": "Crypto",
+        "tags": [
+            "crypto",
+            "ethereum",
+            "defi"
+        ],
+        "published_at": "2026-02-20T16:20:00Z",
+        "image_url": "https://images.unsplash.com/photo-1639762681057-408e52192e55?w=400"
+    },
+    {
+        "id": 6,
+        "title": "El S&P 500 cierra en positivo por quinta semana consecutiva",
+        "summary": "El índice bursátil estadounidense continúa su rally alcista, acumulando una ganancia del 12% en lo que va de año gracias al optimismo en torno a la IA.",
+        "source": "CNBC",
+        "category": "Markets",
+        "tags": [
+            "stocks",
+            "markets",
+            "sp500",
+            "usa"
+        ],
+        "published_at": "2026-02-20T21:00:00Z",
+        "image_url": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400"
+    },
+    {
+        "id": 7,
+        "title": "Tesla pierde un 5% tras advertencia sobre márgenes en vehículos eléctricos",
+        "summary": "Las acciones de Tesla caen después de que la compañía advirtiera sobre la presión en los márgenes debido a la guerra de precios en el sector de vehículos eléctricos.",
+        "source": "MarketWatch",
+        "category": "Stocks",
+        "tags": [
+            "stocks",
+            "tesla",
+            "ev",
+            "tech"
+        ],
+        "published_at": "2026-02-21T11:00:00Z",
+        "image_url": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=400"
+    },
+    {
+        "id": 8,
+        "title": "La regulación MiCA entra en vigor en la Unión Europea",
+        "summary": "El nuevo marco regulatorio para criptoactivos en Europa comienza a aplicarse, estableciendo reglas claras para exchanges, stablecoins y proveedores de servicios crypto.",
+        "source": "CoinTelegraph",
+        "category": "Regulation",
+        "tags": [
+            "crypto",
+            "regulation",
+            "europe",
+            "mica"
+        ],
+        "published_at": "2026-02-19T12:00:00Z",
+        "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400"
+    }
+]
