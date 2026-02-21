@@ -28,10 +28,15 @@ export default function SettingsPage() {
       />
 
       <section className="card">
+<<<<<<< HEAD
         <h2 className="text-lg font-semibold text-slate-900">Active profile preview</h2>
         <p className="mt-2 text-sm text-slate-700">Name: {profile.name}</p>
         <p className="text-sm text-slate-700">Username: @{profile.username ?? "no-username"}</p>
         <p className="text-sm text-slate-700">Risk: {profile.risk}</p>
+=======
+        <h2 className="text-lg font-semibold text-slate-900">Active Profile Preview</h2>
+        <p className="mt-2 text-sm text-slate-700">Risk: {profile.risk}</p>
+>>>>>>> aitor
         <p className="text-sm text-slate-700">Level: {profile.level}</p>
         <p className="text-sm text-slate-700">Interests: {profile.interests.join(", ")}</p>
         <p className="text-sm text-slate-700">Watchlist: {profile.watchlist.join(", ")}</p>

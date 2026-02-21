@@ -23,10 +23,17 @@ export function SimplifyPanel({ news, profile }: { news: NewsItem; profile: User
       const data = (await response.json()) as { simplified?: string; error?: string };
 
       if (!response.ok) {
+<<<<<<< HEAD
         throw new Error(data.error ?? "Could not simplify this news item");
       }
 
       setContent(data.simplified ?? "No response was returned.");
+=======
+        throw new Error(data.error ?? "Could not simplify the news item");
+      }
+
+      setContent(data.simplified ?? "No response received.");
+>>>>>>> aitor
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       setError(message);

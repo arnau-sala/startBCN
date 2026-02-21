@@ -1,26 +1,47 @@
 import { DashboardNewsItem } from "@/lib/mock/news";
 
 const fallbackBullets = [
+<<<<<<< HEAD
   "This news summarizes a market shift that can affect multiple asset categories.",
   "The key is to understand whether this is a one-off move or part of a broader trend.",
   "Check the context (rates, earnings, or regulation) before reacting."
+=======
+  "This news summarises a market shift that may affect several asset categories.",
+  "The key is understanding whether the move is short-lived or part of a longer trend.",
+  "Look at context (rates, earnings or regulation) before reacting."
+>>>>>>> aitor
 ];
 
 const eli10ById: Record<string, string[]> = {
   g1: [
+<<<<<<< HEAD
     "The central bank has not changed the rules yet.",
     "When that happens, markets usually move more cautiously.",
     "For you: expect fewer positive surprises in the short term."
   ],
   g2: [
     "Bitcoin rose very quickly and is now correcting, like sprinting and then braking.",
+=======
+    "The central bank hasn't changed the rules of the game yet.",
+    "When that happens, markets move more cautiously.",
+    "For you it means: expect fewer positive surprises in the short term."
+  ],
+  g2: [
+    "Bitcoin rallied fast and is now pulling back — like sprinting and then braking.",
+>>>>>>> aitor
     "Many traders closed positions to reduce risk.",
     "High volatility means sharp moves in a short time."
   ],
   p1: [
+<<<<<<< HEAD
     "Chip companies sell the 'picks and shovels' for the AI gold rush.",
     "If demand keeps rising, revenue grows and markets stay optimistic.",
     "But when expectations are too high, even a small miss can hurt."
+=======
+    "Chip companies sell 'shovels' for the AI gold rush.",
+    "If they keep selling a lot, revenues rise and the market gets excited.",
+    "But if expectations are too high, a small disappointment weighs heavily."
+>>>>>>> aitor
   ]
 };
 

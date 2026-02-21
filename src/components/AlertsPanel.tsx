@@ -10,14 +10,22 @@ export function AlertsPanel({ matches, alerts }: { matches: RankedNewsItem[]; al
       <div className="mt-4 space-y-2">
         {matches.length === 0 && (
           <p className="rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
+<<<<<<< HEAD
             No alert matches yet.
+=======
+            No active alerts triggered right now.
+>>>>>>> aitor
           </p>
         )}
         {matches.map((item) => (
           <div key={item.id} className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2">
             <p className="text-sm font-semibold text-rose-800">{item.title}</p>
             <p className="mt-1 text-xs text-rose-700">
+<<<<<<< HEAD
               Match by tags/tickers: {item.tags.join(", ")} {item.tickers.join(" ")}
+=======
+              Matched by tags/tickers: {item.tags.join(", ")} {item.tickers.join(" ")}
+>>>>>>> aitor
             </p>
           </div>
         ))}
