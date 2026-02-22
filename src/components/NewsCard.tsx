@@ -1,5 +1,6 @@
 import { RankedNewsItem, UserProfile } from "@/lib/types";
 import { SimplifyPanel } from "@/components/SimplifyPanel";
+import { supportedAssetTickers, SupportedAssetTicker } from "@/lib/mock/assets";
 
 const relevanceStyles = {
   High: "bg-emerald-100 text-emerald-700",
@@ -7,7 +8,15 @@ const relevanceStyles = {
   Low: "bg-slate-100 text-slate-600"
 };
 
-export function NewsCard({ item, profile }: { item: RankedNewsItem; profile: UserProfile }) {
+export function NewsCard({
+  item,
+  profile,
+  onOpenAsset
+}: {
+  item: RankedNewsItem;
+  profile: UserProfile;
+  onOpenAsset?: (ticker: string) => void;
+}) {
   const isAlert = profile.alerts.some((alert) =>
     `${item.title} ${item.tags.join(" ")} ${item.tickers.join(" ")}`
       .toLowerCase()
@@ -37,9 +46,16 @@ export function NewsCard({ item, profile }: { item: RankedNewsItem; profile: Use
           </span>
         ))}
         {item.tickers.map((ticker) => (
-          <span key={`${item.id}-${ticker}`} className="chip bg-indigo-100 text-indigo-700">
+          <button
+            key={`${item.id}-${ticker}`}
+            type="button"
+            onClick={() => {
+              if (supportedAssetTickers.includes(ticker.toUpperCase() as SupportedAssetTicker)) onOpenAsset?.(ticker);
+            }}
+            className="chip bg-indigo-100 text-indigo-700"
+          >
             {ticker}
-          </span>
+          </button>
         ))}
       </div>
 

@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import { DashboardNewsItem } from "@/lib/mock/news";
 import { holdings } from "@/lib/mock/portfolio";
+import { supportedAssetTickers, SupportedAssetTicker } from "@/lib/mock/assets";
+
+function getTickerStyle(ticker: string) {
+  const map: Record<string, { bg: string; text: string; border: string }> = {
+    BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
+    ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
+    NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
+    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
+    GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
+    EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
+  };
+  return map[ticker.toUpperCase()] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" };
+}
 
 function getDummyBullets(item: DashboardNewsItem) {
   const t = item.tags;
@@ -168,9 +182,11 @@ function getTechnicalArticle(item: DashboardNewsItem) {
 
 export function NewsModal({
   item,
+  onOpenAsset,
   onClose
 }: {
   item: DashboardNewsItem | null;
+  onOpenAsset?: (ticker: string) => void;
   onClose: () => void;
 }) {
   const [showFullArticle, setShowFullArticle] = useState(false);
@@ -263,12 +279,23 @@ export function NewsModal({
                 <span className="font-semibold uppercase tracking-wide text-slate-500">Affected assets</span>
                 {affectedHoldings.length > 0 ? (
                   affectedHoldings.map((ticker) => (
-                    <span
-                      key={`top-affected-asset-${item.id}-${ticker}`}
-                      className="rounded-md border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-700"
-                    >
-                      {ticker}
-                    </span>
+                    (() => {
+                      const style = getTickerStyle(ticker);
+                      const isSupported = supportedAssetTickers.includes(ticker as SupportedAssetTicker);
+                      return (
+                        <button
+                          key={`top-affected-asset-${item.id}-${ticker}`}
+                          type="button"
+                          onClick={() => {
+                            if (isSupported) onOpenAsset?.(ticker);
+                          }}
+                          className="rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide"
+                          style={{ background: style.bg, color: style.text, borderColor: style.border }}
+                        >
+                          {ticker}
+                        </button>
+                      );
+                    })()
                   ))
                 ) : (
                   <span className="text-slate-500">No direct asset impacted</span>

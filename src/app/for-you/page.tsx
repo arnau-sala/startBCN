@@ -10,12 +10,14 @@ import { IconButton } from "@/components/IconButton";
 import { LegalDocModal } from "@/components/LegalDocModal";
 import { ListRow } from "@/components/ListRow";
 import { NewsModal } from "@/components/NewsModal";
+import { AssetDetailModal } from "@/components/AssetDetailModal";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SegmentedControl } from "@/components/SegmentedControl";
 import { SparklineChart } from "@/components/SparklineChart";
+import { supportedAssetTickers, SupportedAssetTicker } from "@/lib/mock/assets";
 import { legalDigestDocs, LegalDigestItem } from "@/lib/mock/legalDocs";
-import { DashboardNewsItem, globalNews, personalizedNewsSeed } from "@/lib/mock/news";
+import { allDashboardNews, DashboardNewsItem, globalNews, personalizedNewsSeed } from "@/lib/mock/news";
 import {
   chartSeriesByRange,
   ChartPoint,
@@ -28,9 +30,45 @@ import {
 import {
   defaultFrontendProfile,
   FrontendProfileState,
-  getDailyTipForProfile,
   getWhyForYou
 } from "@/lib/mock/profile";
+
+function CarouselArrowButton({
+  direction,
+  ariaLabel,
+  onClick
+}: {
+  direction: "prev" | "next";
+  ariaLabel: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      onClick={onClick}
+      className="inline-flex h-7 w-7 items-center justify-center rounded-full border bg-slate-50 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+      style={{ borderColor: "var(--border-subtle)" }}
+    >
+      <svg
+        viewBox="0 0 16 16"
+        className="h-3.5 w-3.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+      >
+        {direction === "prev" ? (
+          <path d="M10 3.5 5.5 8 10 12.5" />
+        ) : (
+          <path d="M6 3.5 10.5 8 6 12.5" />
+        )}
+      </svg>
+    </button>
+  );
+}
 
 /* ─── Single-row news carousel ────────────────────────────────────────────── */
 function NewsRowCarousel({
@@ -40,6 +78,7 @@ function NewsRowCarousel({
   animationKey,
   direction,
   onOpen,
+  onOpenAsset,
   onMouseEnter,
   onMouseLeave,
   whyForYou
@@ -50,6 +89,7 @@ function NewsRowCarousel({
   animationKey: number;
   direction: "next" | "prev";
   onOpen: (item: DashboardNewsItem) => void;
+  onOpenAsset?: (ticker: string) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   whyForYou?: (item: DashboardNewsItem) => string;
@@ -116,14 +156,22 @@ function NewsRowCarousel({
           {(news.tickers ?? []).slice(0, 2).map((ticker) => {
             const t = ticker.toUpperCase();
             const style = tickerStyle[t] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" };
+            const isSupportedAsset = supportedAssetTickers.includes(t as SupportedAssetTicker);
             return (
-              <span
+              <button
                 key={`${news.id}-${t}`}
-                className="rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (isSupportedAsset) onOpenAsset?.(t);
+                }}
+                className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide ${
+                  isSupportedAsset ? "cursor-pointer underline-offset-2 hover:underline" : "cursor-default"
+                }`}
                 style={{ background: style.bg, color: style.text, borderColor: style.border }}
               >
                 {t}
-              </span>
+              </button>
             );
           })}
         </div>
@@ -192,6 +240,7 @@ function LegalDocRowCarousel({
   animationKey,
   direction,
   onOpen,
+  onOpenAsset,
   onMouseEnter,
   onMouseLeave
 }: {
@@ -201,6 +250,7 @@ function LegalDocRowCarousel({
   animationKey: number;
   direction: "next" | "prev";
   onOpen: (item: LegalDigestItem) => void;
+  onOpenAsset?: (ticker: string) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }) {
@@ -220,17 +270,14 @@ function LegalDocRowCarousel({
   const prevItem =
     previousIndex === null ? null : items[((previousIndex % items.length) + items.length) % items.length];
   const heldTickers = new Set(holdings.map((h) => h.ticker.toUpperCase()));
-  const cryptoTickers = new Set(["BTC", "ETH", "SOL", "ADA", "XRP", "DOGE", "AVAX", "DOT", "MATIC"]);
-  const cryptoVisual: Record<string, string> = {
-    BTC: "₿",
-    ETH: "◆",
-    SOL: "◎",
-    ADA: "◌",
-    XRP: "✕",
-    DOGE: "Ð",
-    AVAX: "▲",
-    DOT: "●",
-    MATIC: "⬢"
+  const tickerStyle: Record<string, { bg: string; text: string; border: string }> = {
+    BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
+    ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
+    NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
+    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
+    GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
+    EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
   };
 
   const content = (doc: LegalDigestItem) => (
@@ -243,17 +290,25 @@ function LegalDocRowCarousel({
         <div className="mt-1 flex flex-wrap items-center gap-1">
           {doc.affectedAssets
             .map((asset) => asset.toUpperCase())
-            .filter((asset) => heldTickers.has(asset) && cryptoTickers.has(asset))
+            .filter((asset) => heldTickers.has(asset))
             .slice(0, 2)
             .map((asset) => (
-              <span
+              <button
                 key={`${doc.id}-${asset}`}
-                className="inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium"
-                style={{ borderColor: "var(--accent-border)", background: "var(--accent-subtle)", color: "var(--accent-dark)" }}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (supportedAssetTickers.includes(asset as SupportedAssetTicker)) onOpenAsset?.(asset);
+                }}
+                className="rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide"
+                style={{
+                  background: (tickerStyle[asset] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }).bg,
+                  color: (tickerStyle[asset] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }).text,
+                  borderColor: (tickerStyle[asset] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }).border
+                }}
               >
-                <span aria-hidden>{cryptoVisual[asset] ?? "◉"}</span>
                 {asset}
-              </span>
+              </button>
             ))}
         </div>
       </div>
@@ -272,12 +327,14 @@ function LegalDocRowCarousel({
   );
 
   return (
-    <button
+    <div
       key={`${item.id}-${animationKey}`}
-      type="button"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={() => onOpen(item)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onOpen(item)}
       className="relative block h-[96px] w-full overflow-hidden text-left"
     >
       {animating && prevItem && (
@@ -306,7 +363,7 @@ function LegalDocRowCarousel({
       >
         {content(item)}
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -321,6 +378,15 @@ export default function ForYouPage() {
   const [showResume, setShowResume] = useState(false);
   const [selectedNews, setSelectedNews] = useState<DashboardNewsItem | null>(null);
   const [selectedLegalDoc, setSelectedLegalDoc] = useState<LegalDigestItem | null>(null);
+  const [selectedAssetTicker, setSelectedAssetTicker] = useState<SupportedAssetTicker | null>(null);
+  const [assetModalTimeframe, setAssetModalTimeframe] = useState<Timeframe>("day");
+  const openAssetFromTicker = (ticker: string) => {
+    const t = ticker.toUpperCase();
+    if (!supportedAssetTickers.includes(t as SupportedAssetTicker)) return;
+    setAssetModalTimeframe("day");
+    setSelectedAssetTicker(t as SupportedAssetTicker);
+  };
+
   const [chatOpen, setChatOpen] = useState(false);
   const [chatExpanded, setChatExpanded] = useState(false);
   const [chatInput, setChatInput] = useState("");
@@ -399,19 +465,13 @@ export default function ForYouPage() {
     }).slice(0, 5);
   }, []);
 
-  const dailyTip = useMemo(() => getDailyTipForProfile(profile), [profile]);
   const dailyTips = useMemo(
-    () =>
-      [
-        dailyTip.split(/[.!?]/)[0]?.trim() || dailyTip,
-        profile.interests.includes("stocks")
-          ? "Check one earnings metric before acting."
-          : "Track one macro indicator this week.",
-        profile.risk === "aggressive"
-          ? "Set a loss limit before entering volatile assets."
-          : "Do a short review daily instead of a long weekly catch-up."
-      ],
-    [dailyTip, profile]
+    () => [
+      "BTC: Volatility is elevated today. Do not panic; avoid impulse decisions and focus on your long-term plan.",
+      "MSFT: Trend remains constructive. Keep position size balanced and watch the next guidance update.",
+      "GLD: Acting as a stabilizer in your portfolio. Use it for balance, not for chasing short-term returns."
+    ],
+    []
   );
   const currentTip = dailyTips[((tipIndex % dailyTips.length) + dailyTips.length) % dailyTips.length];
   const previousTip =
@@ -426,7 +486,7 @@ export default function ForYouPage() {
         setGlobalAnimationKey((k) => k + 1);
         return (prev + 1) % globalNewsLoop.length;
       });
-    }, 5000);
+    }, 10000);
     return () => window.clearInterval(timer);
   }, [globalNewsLoop.length, globalAutoPlay, globalHovering]);
 
@@ -439,7 +499,7 @@ export default function ForYouPage() {
         setPersonalAnimationKey((k) => k + 1);
         return (prev + 1) % personalizedNewsLoop.length;
       });
-    }, 5000);
+    }, 10000);
     return () => window.clearInterval(timer);
   }, [personalizedNewsLoop.length, personalAutoPlay, personalHovering]);
 
@@ -452,7 +512,7 @@ export default function ForYouPage() {
         setLegalAnimationKey((k) => k + 1);
         return (prev + 1) % legalDocsLoop.length;
       });
-    }, 5000);
+    }, 10000);
     return () => window.clearInterval(timer);
   }, [legalDocsLoop.length, legalAutoPlay, legalHovering]);
 
@@ -631,7 +691,26 @@ export default function ForYouPage() {
           <HoldingsTable
             items={holdings.slice(0, 3)}
             mode={holdingsMode}
-            onViewMore={() => window.alert("Holdings page coming soon")}
+            onViewMore={() => {}}
+            enabledDetailTickers={supportedAssetTickers}
+            onOpenAssetDetails={(ticker) => {
+              setAssetModalTimeframe("day");
+              setSelectedAssetTicker(ticker as SupportedAssetTicker);
+            }}
+            onZoomOutToYear={(ticker) => {
+              setAssetModalTimeframe("year");
+              setSelectedAssetTicker(ticker as SupportedAssetTicker);
+            }}
+            onOpenRelatedNews={(ticker) => {
+              const related = allDashboardNews.find((item) =>
+                (item.tickers ?? []).map((t) => t.toUpperCase()).includes(ticker.toUpperCase())
+              );
+              if (related) setSelectedNews(related);
+            }}
+            onAskAssistant={(holding) => {
+              setChatOpen(true);
+              setChatInput(`Can you explain in simple terms why ${holding.name} (${holding.ticker}) is down today and what I should monitor next?`);
+            }}
           />
         </div>
       </Card>
@@ -745,21 +824,16 @@ export default function ForYouPage() {
               </p>
             </div>
             <div className="mt-2 flex items-center justify-center gap-2">
-              <button
-                type="button"
-                aria-label="Previous tip"
+              <CarouselArrowButton
+                direction="prev"
+                ariaLabel="Previous tip"
                 onClick={() => {
-                  setTipAutoPlay(false);
                   setTipPrevIndex(tipIndex);
                   setTipDirection("prev");
                   setTipIndex((prev) => (prev - 1 + dailyTips.length) % dailyTips.length);
                   setTipAnimationKey((k) => k + 1);
                 }}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-              >
-                ←
-              </button>
+              />
               <div className="flex items-center gap-1.5">
                 {dailyTips.map((_, index) => {
                   const active = index === (tipIndex % dailyTips.length + dailyTips.length) % dailyTips.length;
@@ -769,7 +843,6 @@ export default function ForYouPage() {
                       type="button"
                       aria-label={`Go to tip ${index + 1}`}
                       onClick={() => {
-                        setTipAutoPlay(false);
                         setTipPrevIndex(tipIndex);
                         setTipDirection(index >= tipIndex ? "next" : "prev");
                         setTipIndex(index);
@@ -781,21 +854,16 @@ export default function ForYouPage() {
                   );
                 })}
               </div>
-              <button
-                type="button"
-                aria-label="Next tip"
+              <CarouselArrowButton
+                direction="next"
+                ariaLabel="Next tip"
                 onClick={() => {
-                  setTipAutoPlay(false);
                   setTipPrevIndex(tipIndex);
                   setTipDirection("next");
                   setTipIndex((prev) => (prev + 1) % dailyTips.length);
                   setTipAnimationKey((k) => k + 1);
                 }}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-              >
-                →
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -817,7 +885,6 @@ export default function ForYouPage() {
                         type="button"
                         aria-label={`Go to global news ${index + 1}`}
                         onClick={() => {
-                          setGlobalAutoPlay(false);
                           setGlobalPrevNewsIndex(globalNewsIndex);
                           setGlobalDirection(index >= globalNewsIndex ? "next" : "prev");
                           setGlobalNewsIndex(index);
@@ -829,36 +896,26 @@ export default function ForYouPage() {
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  aria-label="Previous global news"
+                <CarouselArrowButton
+                  direction="prev"
+                  ariaLabel="Previous global news"
                   onClick={() => {
-                    setGlobalAutoPlay(false);
                     setGlobalPrevNewsIndex(globalNewsIndex);
                     setGlobalDirection("prev");
                     setGlobalNewsIndex((prev) => (prev - 1 + globalNewsLoop.length) % globalNewsLoop.length);
                     setGlobalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next global news"
+                />
+                <CarouselArrowButton
+                  direction="next"
+                  ariaLabel="Next global news"
                   onClick={() => {
-                    setGlobalAutoPlay(false);
                     setGlobalPrevNewsIndex(globalNewsIndex);
                     setGlobalDirection("next");
                     setGlobalNewsIndex((prev) => (prev + 1) % globalNewsLoop.length);
                     setGlobalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  →
-                </button>
+                />
               </div>
             ) : null
           }
@@ -870,6 +927,7 @@ export default function ForYouPage() {
           animationKey={globalAnimationKey}
           direction={globalDirection}
           onOpen={setSelectedNews}
+          onOpenAsset={openAssetFromTicker}
           onMouseEnter={() => {
             setGlobalHovering(true);
           }}
@@ -894,7 +952,6 @@ export default function ForYouPage() {
                         type="button"
                         aria-label={`Go to personalized news ${index + 1}`}
                         onClick={() => {
-                          setPersonalAutoPlay(false);
                           setPersonalPrevNewsIndex(personalNewsIndex);
                           setPersonalDirection(index >= personalNewsIndex ? "next" : "prev");
                           setPersonalNewsIndex(index);
@@ -906,36 +963,26 @@ export default function ForYouPage() {
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  aria-label="Previous personalized news"
+                <CarouselArrowButton
+                  direction="prev"
+                  ariaLabel="Previous personalized news"
                   onClick={() => {
-                    setPersonalAutoPlay(false);
                     setPersonalPrevNewsIndex(personalNewsIndex);
                     setPersonalDirection("prev");
                     setPersonalNewsIndex((prev) => (prev - 1 + personalizedNewsLoop.length) % personalizedNewsLoop.length);
                     setPersonalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next personalized news"
+                />
+                <CarouselArrowButton
+                  direction="next"
+                  ariaLabel="Next personalized news"
                   onClick={() => {
-                    setPersonalAutoPlay(false);
                     setPersonalPrevNewsIndex(personalNewsIndex);
                     setPersonalDirection("next");
                     setPersonalNewsIndex((prev) => (prev + 1) % personalizedNewsLoop.length);
                     setPersonalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  →
-                </button>
+                />
               </div>
             ) : null
           }
@@ -947,6 +994,7 @@ export default function ForYouPage() {
           animationKey={personalAnimationKey}
           direction={personalDirection}
           onOpen={setSelectedNews}
+          onOpenAsset={openAssetFromTicker}
           onMouseEnter={() => {
             setPersonalHovering(true);
           }}
@@ -971,7 +1019,6 @@ export default function ForYouPage() {
                         type="button"
                         aria-label={`Go to legal digest ${index + 1}`}
                         onClick={() => {
-                          setLegalAutoPlay(false);
                           setLegalPrevDocIndex(legalDocIndex);
                           setLegalDirection(index >= legalDocIndex ? "next" : "prev");
                           setLegalDocIndex(index);
@@ -983,36 +1030,26 @@ export default function ForYouPage() {
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  aria-label="Previous legal digest"
+                <CarouselArrowButton
+                  direction="prev"
+                  ariaLabel="Previous legal digest"
                   onClick={() => {
-                    setLegalAutoPlay(false);
                     setLegalPrevDocIndex(legalDocIndex);
                     setLegalDirection("prev");
                     setLegalDocIndex((prev) => (prev - 1 + legalDocsLoop.length) % legalDocsLoop.length);
                     setLegalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next legal digest"
+                />
+                <CarouselArrowButton
+                  direction="next"
+                  ariaLabel="Next legal digest"
                   onClick={() => {
-                    setLegalAutoPlay(false);
                     setLegalPrevDocIndex(legalDocIndex);
                     setLegalDirection("next");
                     setLegalDocIndex((prev) => (prev + 1) % legalDocsLoop.length);
                     setLegalAnimationKey((k) => k + 1);
                   }}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
-                  style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
-                >
-                  →
-                </button>
+                />
               </div>
             ) : (
               <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600">
@@ -1029,6 +1066,7 @@ export default function ForYouPage() {
             animationKey={legalAnimationKey}
             direction={legalDirection}
             onOpen={setSelectedLegalDoc}
+            onOpenAsset={openAssetFromTicker}
             onMouseEnter={() => setLegalHovering(true)}
             onMouseLeave={() => setLegalHovering(false)}
           />
@@ -1043,8 +1081,14 @@ export default function ForYouPage() {
     <>
       <DashboardLayout header={header} left={left} right={right} scrollable />
 
-      <NewsModal item={selectedNews} onClose={() => setSelectedNews(null)} />
-      <LegalDocModal item={selectedLegalDoc} onClose={() => setSelectedLegalDoc(null)} />
+      <NewsModal item={selectedNews} onClose={() => setSelectedNews(null)} onOpenAsset={openAssetFromTicker} />
+      <LegalDocModal item={selectedLegalDoc} onClose={() => setSelectedLegalDoc(null)} onOpenAsset={openAssetFromTicker} />
+      <AssetDetailModal
+        ticker={selectedAssetTicker}
+        initialTimeframe={assetModalTimeframe}
+        onOpenAsset={openAssetFromTicker}
+        onClose={() => setSelectedAssetTicker(null)}
+      />
 
       {showResume && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-[var(--text-primary)]/20 px-4">
