@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { LocalTrendsButton } from "@/features/localTrends/LocalTrendsButton";
+import { LocalTrendsSheet } from "@/features/localTrends/LocalTrendsSheet";
 import { Card } from "@/components/Card";
 import { ChatFab } from "@/components/ChatFab";
 import { ChatMessage, ChatWidgetModal } from "@/components/ChatWidgetModal";
@@ -375,6 +378,8 @@ export default function ForYouPage() {
   const [holdingsMode, setHoldingsMode] = useState<HoldingsViewMode>("sinceBuy");
   const [search, setSearch] = useState("");
   const [showProfile, setShowProfile] = useState(false);
+  const [localTrendsOpen, setLocalTrendsOpen] = useState(false);
+  const localTrendsTriggerRef = useRef<HTMLButtonElement>(null);
   const [showResume, setShowResume] = useState(false);
   const [selectedNews, setSelectedNews] = useState<DashboardNewsItem | null>(null);
   const [selectedLegalDoc, setSelectedLegalDoc] = useState<LegalDigestItem | null>(null);
@@ -578,6 +583,19 @@ export default function ForYouPage() {
           </h1>
         </div>
         <div className="relative flex items-center gap-2">
+          <LocalTrendsButton onClick={() => setLocalTrendsOpen(true)} />
+          <Link
+            href="/reels"
+            className="flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-medium transition hover:opacity-90"
+            style={{
+              borderColor: "var(--accent-border)",
+              color: "var(--accent-dark)",
+              background: "var(--accent-subtle)",
+            }}
+          >
+            <span aria-hidden>▶</span>
+            FinTok
+          </Link>
           <IconButton
             icon={
               <span
@@ -1088,6 +1106,12 @@ export default function ForYouPage() {
         initialTimeframe={assetModalTimeframe}
         onOpenAsset={openAssetFromTicker}
         onClose={() => setSelectedAssetTicker(null)}
+      />
+
+      <LocalTrendsSheet
+        open={localTrendsOpen}
+        onClose={() => setLocalTrendsOpen(false)}
+        triggerRef={localTrendsTriggerRef}
       />
 
       {showResume && (
