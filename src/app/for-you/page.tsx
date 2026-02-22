@@ -17,7 +17,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { SegmentedControl } from "@/components/SegmentedControl";
 import { SparklineChart } from "@/components/SparklineChart";
 import { legalDigestDocs, LegalDigestItem } from "@/lib/mock/legalDocs";
-import { DashboardNewsItem, globalNews, personalizedNewsSeed } from "@/lib/mock/news";
+import { DashboardNewsItem, getDashboardNewsById, globalNews, personalizedNewsSeed } from "@/lib/mock/news";
 import { getAssetDetail } from "@/lib/mock/assetDetail";
 import {
   chartSeriesByRange,
@@ -295,6 +295,9 @@ export default function ForYouPage() {
   const [personalHovering, setPersonalHovering] = useState(false);
   const [legalHovering, setLegalHovering] = useState(false);
   const [tipIndex, setTipIndex] = useState(0);
+  const [tipPrevIndex, setTipPrevIndex] = useState<number | null>(null);
+  const [tipAnimationKey, setTipAnimationKey] = useState(0);
+  const [tipDirection, setTipDirection] = useState<"next" | "prev">("next");
   const [selectedHolding, setSelectedHolding] = useState<HoldingItem | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { id: "c1", role: "assistant", text: "Hi Pepe, I can help you understand today's portfolio moves." }
@@ -360,7 +363,25 @@ export default function ForYouPage() {
       ],
     [dailyTip, profile]
   );
-  const currentTip = dailyTips[((tipIndex % dailyTips.length) + dailyTips.length) % dailyTips.length];
+  const safeTipIndex = ((tipIndex % dailyTips.length) + dailyTips.length) % dailyTips.length;
+  const currentTip = dailyTips[safeTipIndex];
+  const prevTipIndex =
+    tipPrevIndex === null ? null : (tipPrevIndex % dailyTips.length + dailyTips.length) % dailyTips.length;
+  const prevTip = prevTipIndex === null ? null : dailyTips[prevTipIndex];
+
+  const goToTip = (newIndex: number, direction: "next" | "prev") => {
+    const idx = (newIndex % dailyTips.length + dailyTips.length) % dailyTips.length;
+    setTipPrevIndex(tipIndex);
+    setTipDirection(direction);
+    setTipAnimationKey((k) => k + 1);
+    setTipIndex(idx);
+  };
+
+  useEffect(() => {
+    if (tipPrevIndex === null) return;
+    const t = window.setTimeout(() => setTipPrevIndex(null), 380);
+    return () => window.clearTimeout(t);
+  }, [tipAnimationKey, tipPrevIndex]);
 
   useEffect(() => {
     if (globalNewsLoop.length <= 1 || !globalAutoPlay || globalHovering) return;
@@ -590,6 +611,10 @@ export default function ForYouPage() {
             mode={holdingsMode}
             onViewMore={() => window.alert("Holdings page coming soon")}
             onHoldingClick={(item) => setSelectedHolding(item)}
+            onOpenNews={(newsId) => {
+              const item = getDashboardNewsById(newsId);
+              if (item) setSelectedNews(item);
+            }}
           />
         </div>
       </Card>
@@ -668,18 +693,43 @@ export default function ForYouPage() {
           <div className="flex flex-col md:border-l md:pl-5" style={{ borderColor: "var(--border-subtle)" }}>
             <SectionHeader eyebrow="Tip of the day" title="Daily Tip" />
             <div
-              className="mt-2 flex min-h-[136px] items-center justify-center rounded-[var(--radius-md)] border p-4 md:h-[156px]"
+              className="relative mt-2 min-h-[136px] overflow-hidden rounded-[var(--radius-md)] border md:h-[156px]"
               style={{ borderColor: "var(--border-subtle)", background: "var(--surface-sunken)" }}
             >
-              <p className="text-center text-sm leading-6" style={{ color: "var(--text-primary)" }}>
-                {currentTip}
-              </p>
+              {tipPrevIndex !== null && prevTip != null && (
+                <div
+                  className={`pointer-events-none absolute inset-0 flex items-center justify-center p-4 ${
+                    tipDirection === "next"
+                      ? "animate-[news-out-left_.38s_ease_forwards]"
+                      : "animate-[news-out-right_.38s_ease_forwards]"
+                  }`}
+                >
+                  <p className="text-center text-sm leading-6" style={{ color: "var(--text-primary)" }}>
+                    {prevTip}
+                  </p>
+                </div>
+              )}
+              <div
+                className={`flex h-full min-h-[136px] items-center justify-center p-4 md:min-h-[156px] ${
+                  tipPrevIndex !== null && prevTip != null
+                    ? `absolute inset-0 ${
+                        tipDirection === "next"
+                          ? "animate-[news-in-right_.38s_ease_forwards]"
+                          : "animate-[news-in-left_.38s_ease_forwards]"
+                      }`
+                    : ""
+                }`}
+              >
+                <p className="text-center text-sm leading-6" style={{ color: "var(--text-primary)" }}>
+                  {currentTip}
+                </p>
+              </div>
             </div>
             <div className="mt-2 flex items-center justify-center gap-2">
               <button
                 type="button"
                 aria-label="Previous tip"
-                onClick={() => setTipIndex((prev) => (prev - 1 + dailyTips.length) % dailyTips.length)}
+                onClick={() => goToTip((tipIndex - 1 + dailyTips.length) % dailyTips.length, "prev")}
                 className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
                 style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
               >
@@ -687,13 +737,13 @@ export default function ForYouPage() {
               </button>
               <div className="flex items-center gap-1.5">
                 {dailyTips.map((_, index) => {
-                  const active = index === (tipIndex % dailyTips.length + dailyTips.length) % dailyTips.length;
+                  const active = index === safeTipIndex;
                   return (
                     <button
                       key={`tip-dot-${index}`}
                       type="button"
                       aria-label={`Go to tip ${index + 1}`}
-                      onClick={() => setTipIndex(index)}
+                      onClick={() => goToTip(index, index > safeTipIndex ? "next" : "prev")}
                       className="h-2 w-2 rounded-full transition"
                       style={{ background: active ? "var(--accent)" : "var(--border-subtle)" }}
                     />
@@ -703,7 +753,7 @@ export default function ForYouPage() {
               <button
                 type="button"
                 aria-label="Next tip"
-                onClick={() => setTipIndex((prev) => (prev + 1) % dailyTips.length)}
+                onClick={() => goToTip((tipIndex + 1) % dailyTips.length, "next")}
                 className="inline-flex h-7 w-7 items-center justify-center rounded-full border text-sm transition hover:bg-[var(--surface-sunken)]"
                 style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)" }}
               >

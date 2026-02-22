@@ -224,3 +224,112 @@ export function getRelatedNews(ticker: string): { id: string; title: string; sou
     summary: n.shortSummary
   }));
 }
+
+/** Emergency card (Contextual Panic Button): news-linked explanation + ELI10 toggle */
+export interface PanicCardContent {
+  headline: string;
+  /** Original explanation based on the linked news source */
+  explanation: string;
+  /** Simpler, more understandable version (ELI10) */
+  eli10: string;
+  technical: string;
+  sourceName: string;
+  newsId: string;
+}
+
+const panicCardsById: Record<string, PanicCardContent> = {
+  h1: {
+    newsId: "n2",
+    sourceName: "Bloomberg",
+    headline: "Why is my Bitcoin down?",
+    explanation:
+      "Bitcoin pulled back after a strong weekly rally as traders reduced risk and funding rates normalized across major exchanges. The move reflects short-term profit-taking and de-leveraging rather than a shift in the long-term thesis (Bloomberg).",
+    eli10:
+      "After a big run-up, some traders took profits and cooled off. Think of it as a quick breather, not a crash. Your entry price is still below current levels.",
+    technical: "~12% volatility detected. Technical support around $98,500."
+  },
+  h2: {
+    newsId: "n4",
+    sourceName: "WSJ",
+    headline: "Why is Microsoft down?",
+    explanation:
+      "US payroll revisions pointed to resilient employment, pushing rate-cut expectations further out (WSJ). Higher-for-longer rates have weighed on growth and tech valuations in the session; Microsoft is moving with the broader sector.",
+    eli10:
+      "Strong job numbers made the market think interest rates might stay higher a bit longer. Big tech often dips on that news—it’s usually short-lived and not about the company itself.",
+    technical: "RSI in neutral zone. AI keeps a high confidence view on the name medium-term."
+  },
+  h3: {
+    newsId: "n4",
+    sourceName: "WSJ",
+    headline: "Why is my Gold ETF down?",
+    explanation:
+      "Gold and gold ETFs slipped as the dollar firmed and rate-cut expectations were dialed back after US payroll revisions (WSJ). Gold often moves inversely to real rates and dollar strength; this is a typical macro-driven move.",
+    eli10:
+      "When the dollar gets stronger and people think rates will stay higher, gold sometimes dips. It’s a normal swing for a safe-haven asset—not a sign your strategy is wrong.",
+    technical: "Rate correlation detected. Volatility within usual range."
+  },
+  h4: {
+    newsId: "n4",
+    sourceName: "WSJ",
+    headline: "Why is NVIDIA down?",
+    explanation:
+      "NVIDIA and other growth stocks fell after US labor data suggested the Fed may delay rate cuts (WSJ). AI names had run hard; the pullback is a valuation reset on macro news, not a fundamental downgrade to the business.",
+    eli10:
+      "Like other tech stocks, NVIDIA took a breather after strong jobs data. The business is still strong; this is more about market nerves and interest-rate expectations.",
+    technical: "Elevated volatility (~15%). AI suggests holding if your horizon is long-term."
+  }
+};
+
+/** Returns the context card for a holding when P&L < 0. */
+export function getPanicCard(holding: { id: string }): PanicCardContent | null {
+  return panicCardsById[holding.id] ?? null;
+}
+
+/** Gain cards: news-linked explanation when P&L > 0 (same structure as panic). */
+const gainCardsById: Record<string, PanicCardContent> = {
+  h1: {
+    newsId: "n2",
+    sourceName: "Bloomberg",
+    headline: "Why is my Bitcoin up?",
+    explanation:
+      "Bitcoin had a strong weekly rally before the recent pullback; traders had been adding exposure and funding rates rose (Bloomberg). The move reflected renewed risk appetite and momentum in crypto.",
+    eli10:
+      "Bitcoin had a good run recently—more people wanted in and the price went up. Some are now taking profits; your gain is part of that earlier rally.",
+    technical: "Weekly momentum positive. Funding rates normalized after the run-up."
+  },
+  h2: {
+    newsId: "n3",
+    sourceName: "Reuters",
+    headline: "Why is Microsoft up?",
+    explanation:
+      "Microsoft benefits from the same AI infrastructure demand that is lifting NVIDIA’s suppliers (Reuters). Cloud and AI capex expectations have supported mega-cap tech, including Azure.",
+    eli10:
+      "Big tech is doing well because of AI and the cloud. Microsoft is part of that story—investors are positive on where the business is heading.",
+    technical: "Sector momentum supportive. AI and cloud narrative intact."
+  },
+  h3: {
+    newsId: "n4",
+    sourceName: "WSJ",
+    headline: "Why is my Gold ETF up?",
+    explanation:
+      "Gold and gold ETFs had been bid earlier as rate-cut expectations built and the dollar softened (WSJ). Safe-haven demand and real-rate dynamics have supported prices before the latest payroll data.",
+    eli10:
+      "Gold often goes up when people worry about the economy or expect rates to fall. Your ETF moved with that trend before the latest data.",
+    technical: "Real-rate sensitivity. Volatility in normal range."
+  },
+  h4: {
+    newsId: "n3",
+    sourceName: "Reuters",
+    headline: "Why is NVIDIA up?",
+    explanation:
+      "NVIDIA suppliers gained on renewed AI infrastructure demand, and the chip ecosystem is pricing in stronger AI capex (Reuters). NVIDIA is at the center of that narrative, with earnings and guidance in focus.",
+    eli10:
+      "AI and chips are in demand—companies are spending more on that. NVIDIA is a leader there, so the stock has been riding that wave.",
+    technical: "Sector +1.8% pre-market (Reuters). AI capex expectations supportive."
+  }
+};
+
+/** Returns the context card for a holding when P&L > 0. */
+export function getGainCard(holding: { id: string }): PanicCardContent | null {
+  return gainCardsById[holding.id] ?? null;
+}

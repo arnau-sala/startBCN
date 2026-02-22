@@ -175,3 +175,9 @@ export const personalizedNewsSeed: DashboardNewsItem[] = [
 ]
   .slice(0, 8)
   .map(toDashboardItem);
+
+/** Get full news item by id (for opening from holdings context links). */
+export function getDashboardNewsById(id: string): DashboardNewsItem | null {
+  const found = mockNews.find((n) => n.id === id);
+  return found ? toDashboardItem(found) : null;
+}
