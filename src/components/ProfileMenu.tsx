@@ -1,7 +1,8 @@
-import { FrontendProfileState, FrontInterest, FrontRiskLevel } from "@/lib/mock/profile";
+import { FrontendProfileState, FrontInterest, FrontKnowledgeLevel, FrontRiskLevel } from "@/lib/mock/profile";
 import { useEffect, useState } from "react";
 
 const interests: FrontInterest[] = ["crypto", "stocks", "savings", "macro"];
+const knowledgeOptions: FrontKnowledgeLevel[] = ["beginner", "intermediate", "advanced"];
 const riskOptions: FrontRiskLevel[] = ["conservative", "moderate", "aggressive"];
 
 export function ProfileMenu({
@@ -20,7 +21,10 @@ export function ProfileMenu({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setDraft(profile);
+    setDraft({
+      ...profile,
+      knowledge: profile.knowledge ?? "beginner"
+    });
   }, [profile]);
 
   useEffect(() => {
@@ -42,7 +46,8 @@ export function ProfileMenu({
 
   if (!open) return null;
 
-  const feedBullets = buildFeedBullets(draft.interests);
+  const aiProfileBullets = buildAiProfileBullets(draft.knowledge);
+  const feedBullets = buildFeedBullets(draft.interests, draft.knowledge);
   const riskTone = getRiskTone(draft.risk);
 
   return (
@@ -78,30 +83,55 @@ export function ProfileMenu({
 
         <div className="mt-4 grid items-stretch gap-3 lg:grid-cols-[1.12fr_0.88fr]">
           <div className="space-y-4">
-            <label className="block text-sm">
-              <span className="mb-2 block text-sm font-medium text-slate-700">Name</span>
-              <input
-                value={draft.name}
-                onChange={(event) => setDraft((prev) => ({ ...prev, name: event.target.value }))}
-                className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500"
-                placeholder="Your name"
-              />
-            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block text-sm">
+                <span className="mb-2 block text-sm font-medium text-slate-700">Name</span>
+                <input
+                  value={draft.name}
+                  onChange={(event) => setDraft((prev) => ({ ...prev, name: event.target.value }))}
+                  className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500"
+                  placeholder="Your name"
+                />
+              </label>
 
-            <label className="block text-sm">
-              <span className="mb-2 block text-sm font-medium text-slate-700">Username</span>
-              <input
-                value={draft.username}
-                onChange={(event) =>
-                  setDraft((prev) => ({
-                    ...prev,
-                    username: normalizeUsername(event.target.value)
-                  }))
-                }
-                className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500"
-                placeholder="username.n26"
-              />
-            </label>
+              <label className="block text-sm">
+                <span className="mb-2 block text-sm font-medium text-slate-700">Username</span>
+                <input
+                  value={draft.username}
+                  onChange={(event) =>
+                    setDraft((prev) => ({
+                      ...prev,
+                      username: normalizeUsername(event.target.value)
+                    }))
+                  }
+                  className="h-11 w-full rounded-xl border border-slate-300 px-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500"
+                  placeholder="username.n26"
+                />
+              </label>
+            </div>
+
+            <div>
+              <p className="mb-2 text-sm font-medium text-slate-700">Market knowledge</p>
+              <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1">
+                {knowledgeOptions.map((knowledge) => {
+                  const active = draft.knowledge === knowledge;
+                  return (
+                    <button
+                      key={knowledge}
+                      type="button"
+                      onClick={() => setDraft((prev) => ({ ...prev, knowledge }))}
+                      className={`w-full rounded-lg px-1 py-1.5 text-center text-xs font-medium transition ${
+                        active
+                          ? "bg-teal-600 text-white shadow-sm"
+                          : "bg-transparent text-slate-600 hover:bg-white hover:text-slate-900"
+                      }`}
+                    >
+                      {knowledge[0].toUpperCase() + knowledge.slice(1)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <div>
               <p className="mb-2 text-sm font-medium text-slate-700">Risk level</p>
@@ -161,18 +191,12 @@ export function ProfileMenu({
             <div className="w-full flex-1 rounded-xl border border-slate-200 bg-slate-50 p-3">
               <p className="text-sm font-semibold text-slate-800">Your AI profile</p>
               <ul className="mt-2.5 flex h-[calc(100%-1.5rem)] flex-col justify-evenly text-xs text-slate-600">
-                <li className="flex items-center gap-2">
-                  <CheckItemIcon />
-                  <span>Personalized news feed</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckItemIcon />
-                  <span>Daily brief</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckItemIcon />
-                  <span>Simplified explanations (ELI10)</span>
-                </li>
+                {aiProfileBullets.map((bullet) => (
+                  <li key={bullet} className="flex items-center gap-2">
+                    <CheckItemIcon />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -240,12 +264,41 @@ function getInitials(name: string) {
   );
 }
 
-function buildFeedBullets(selectedInterests: FrontInterest[]) {
+function buildAiProfileBullets(knowledge: FrontKnowledgeLevel) {
+  if (knowledge === "beginner") {
+    return [
+      "Simple language and practical context",
+      "Short daily brief with key takeaways",
+      "Extra plain-English explanations"
+    ];
+  }
+  if (knowledge === "advanced") {
+    return [
+      "Denser market context and signal focus",
+      "Direct risk and scenario framing",
+      "Less simplification, more detail"
+    ];
+  }
+  return [
+    "Balanced language and market context",
+    "Practical daily brief with key signals",
+    "Optional simplification when needed"
+  ];
+}
+
+function buildFeedBullets(selectedInterests: FrontInterest[], knowledge: FrontKnowledgeLevel) {
   const bullets: string[] = [];
-  if (selectedInterests.includes("crypto")) bullets.push("Crypto volatility and regulation updates");
-  if (selectedInterests.includes("stocks")) bullets.push("Earnings and major company moves");
-  if (selectedInterests.includes("savings")) bullets.push("Savings rates and low-risk products");
-  if (selectedInterests.includes("macro")) bullets.push("Central bank decisions and inflation");
+  const toneSuffix =
+    knowledge === "beginner"
+      ? "in simple terms"
+      : knowledge === "advanced"
+        ? "with deeper detail"
+        : "with balanced context";
+
+  if (selectedInterests.includes("crypto")) bullets.push(`Crypto volatility and regulation updates ${toneSuffix}`);
+  if (selectedInterests.includes("stocks")) bullets.push(`Earnings and major company moves ${toneSuffix}`);
+  if (selectedInterests.includes("savings")) bullets.push(`Savings rates and low-risk products ${toneSuffix}`);
+  if (selectedInterests.includes("macro")) bullets.push(`Central bank decisions and inflation ${toneSuffix}`);
 
   if (bullets.length === 0) {
     return ["Select interests to personalize your feed."];

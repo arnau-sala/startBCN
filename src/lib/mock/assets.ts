@@ -1,6 +1,6 @@
 import { Timeframe } from "@/lib/mock/portfolio";
 
-export type SupportedAssetTicker = "BTC" | "MSFT" | "GLD";
+export type SupportedAssetTicker = "BTC" | "SPY" | "GLD";
 export type AssetType = "crypto" | "stock" | "etf";
 export type GuidanceLabel = "HOLD" | "WAIT" | "REDUCE" | "REVIEW";
 
@@ -40,12 +40,12 @@ const btcSeries: Record<Timeframe, number[]> = {
   max: [21000, 23800, 27400, 31200, 35100, 39500, 44800, 51100, 57900, 64200, 68800, 72190]
 };
 
-const msftSeries: Record<Timeframe, number[]> = {
-  day: [463, 464, 462, 463, 465, 466, 465, 467, 468, 467, 469, 468],
-  week: [451, 453, 454, 456, 457, 458, 460, 462, 463, 465, 467, 468],
-  month: [432, 435, 437, 440, 442, 445, 448, 451, 455, 459, 463, 468],
-  year: [345, 352, 360, 371, 382, 394, 407, 421, 434, 447, 458, 468],
-  max: [248, 262, 277, 294, 313, 333, 355, 378, 401, 426, 448, 468]
+const spySeries: Record<Timeframe, number[]> = {
+  day: [524, 525, 523, 524, 526, 527, 526, 527, 528, 527, 529, 528],
+  week: [514, 516, 517, 519, 520, 522, 523, 525, 526, 527, 528, 528],
+  month: [498, 501, 504, 507, 510, 513, 516, 519, 522, 525, 527, 528],
+  year: [420, 430, 440, 452, 464, 476, 488, 498, 506, 514, 522, 528],
+  max: [310, 325, 342, 360, 380, 400, 422, 446, 470, 496, 514, 528]
 };
 
 const gldSeries: Record<Timeframe, number[]> = {
@@ -84,32 +84,32 @@ export const assetDetailsByTicker: Record<SupportedAssetTicker, AssetDetailMock>
     },
     chartSeries: btcSeries
   },
-  MSFT: {
-    ticker: "MSFT",
-    name: "Microsoft",
-    type: "stock",
-    iconText: "MS",
-    price: 468.8,
-    dayChangePct: 0.75,
-    descriptionShort: "Microsoft is a global software and cloud leader with strong enterprise and AI-related revenue drivers.",
-    descriptionLong: "Microsoft combines resilient recurring revenue from enterprise software with growth from cloud and AI products. The stock is often treated as a quality large-cap anchor, but valuation and guidance changes can still create sharp repricing after key updates.",
-    aiBrief: "Microsoft is one of the more stable big companies in the market, but its price can still swing after company updates. Right now the trend is generally positive. For most people, it works better as a long-term position than as a short-term trade. Keep your position size reasonable so one stock does not dominate your portfolio.",
+  SPY: {
+    ticker: "SPY",
+    name: "S&P 500",
+    type: "etf",
+    iconText: "SP",
+    price: 528.4,
+    dayChangePct: 0.6,
+    descriptionShort: "SPY is an ETF that tracks the S&P 500 index, offering broad exposure to the largest US companies.",
+    descriptionLong: "SPY is the most widely traded ETF in the world, providing diversified exposure to the 500 largest US companies. It is a core building block for most portfolios and tends to be less volatile than individual stocks.",
+    aiBrief: "The S&P 500 is one of the simplest ways to invest in the overall US stock market. It gives you broad diversification across sectors. For most investors, it works well as a long-term core holding. Short-term swings are normal but the long-term trend has historically been upward.",
     guidance: {
       label: "HOLD",
-      confidencePct: 74,
-      summary: "Trend is solid and fundamentals are healthy. Keep position size balanced.",
-      upside: "Strong cloud updates can push the stock higher.",
-      downside: "A soft outlook can trigger a quick pullback."
+      confidencePct: 78,
+      summary: "Broad market trend remains positive. A solid core holding for long-term portfolios.",
+      upside: "Continued earnings growth can push the index higher.",
+      downside: "A macro shock or rate surprise can trigger a correction."
     },
     position: {
-      qty: 60,
-      avgBuy: 416.7,
+      qty: 53,
+      avgBuy: 471.7,
       invested: 25000,
       currentValue: 28120,
       pnlEur: 3120,
       pnlPct: 12.48
     },
-    chartSeries: msftSeries
+    chartSeries: spySeries
   },
   GLD: {
     ticker: "GLD",
@@ -140,4 +140,4 @@ export const assetDetailsByTicker: Record<SupportedAssetTicker, AssetDetailMock>
   }
 };
 
-export const supportedAssetTickers: SupportedAssetTicker[] = ["BTC", "MSFT", "GLD"];
+export const supportedAssetTickers: SupportedAssetTicker[] = ["BTC", "SPY", "GLD"];

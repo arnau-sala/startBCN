@@ -13,20 +13,20 @@ export interface HoldingItem {
 
 /* ─── Final balance per timeframe ─────────────────────────────────────────── */
 export const totalBalanceByRange: Record<Timeframe, number> = {
-  day: 128420,
-  week: 126980,
-  month: 124310,
-  year: 116240,
-  max: 102500
+  day: 78910,
+  week: 78020,
+  month: 76380,
+  year: 71420,
+  max: 63000
 };
 
 /* ─── Opening balance per timeframe (used to compute delta) ──────────────── */
 export const openingBalanceByRange: Record<Timeframe, number> = {
-  day: 127520,
-  week: 124600,
-  month: 120100,
-  year: 97400,
-  max: 72000
+  day: 78360,
+  week: 76570,
+  month: 73800,
+  year: 59850,
+  max: 44200
 };
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
@@ -79,28 +79,28 @@ function buildSeries(
 }
 
 export const chartSeriesByRange: Record<Timeframe, ChartPoint[]> = {
-  day: buildSeries("day", 127520, 128420, 200),
-  week: buildSeries("week", 124600, 126980, 400),
-  month: buildSeries("month", 120100, 124310, 800),
-  year: buildSeries("year", 97400, 116240, 2000),
-  max: buildSeries("max", 72000, 102500, 4000)
+  day: buildSeries("day", 78360, 78910, 120),
+  week: buildSeries("week", 76570, 78020, 250),
+  month: buildSeries("month", 73800, 76380, 500),
+  year: buildSeries("year", 59850, 71420, 1200),
+  max: buildSeries("max", 44200, 63000, 2400)
 };
 
 /* ─── Holdings ────────────────────────────────────────────────────────────── */
 export const holdings: HoldingItem[] = [
   { id: "h1", name: "Bitcoin", ticker: "BTC", valueEur: 32560, plEur: -920, plPct: -2.75, plEurToday: -380, plPctToday: -1.15 },
-  { id: "h2", name: "Microsoft", ticker: "MSFT", valueEur: 28120, plEur: 3120, plPct: 12.48, plEurToday: 210, plPctToday: 0.75 },
-  { id: "h3", name: "Gold ETF", ticker: "GLD", valueEur: 18230, plEur: 860, plPct: 4.95, plEurToday: 55, plPctToday: 0.30 },
+  { id: "h2", name: "Gold ETF", ticker: "GLD", valueEur: 18230, plEur: 860, plPct: 4.95, plEurToday: 55, plPctToday: 0.30 },
+  { id: "h3", name: "S&P 500", ticker: "SPY", valueEur: 28120, plEur: 3120, plPct: 12.48, plEurToday: 210, plPctToday: 0.75 },
   { id: "h4", name: "NVIDIA", ticker: "NVDA", valueEur: 26400, plEur: 5240, plPct: 24.76, plEurToday: 490, plPctToday: 1.89 },
   { id: "h5", name: "Cash Reserve", ticker: "EUR", valueEur: 13850, plEur: 0, plPct: 0, plEurToday: 0, plPctToday: 0 }
 ];
 
-export const totalInvested = 119900;
+export const totalInvested = 75850;
 
 export const searchUniverse = [
   { symbol: "AAPL", name: "Apple", price: 211.23, changePct: 1.2 },
   { symbol: "TSLA", name: "Tesla", price: 182.6, changePct: -2.1 },
   { symbol: "BTC", name: "Bitcoin", price: 72100, changePct: -3.1 },
   { symbol: "ETH", name: "Ethereum", price: 3910, changePct: -1.5 },
-  { symbol: "MSFT", name: "Microsoft", price: 468.8, changePct: 0.9 }
+  { symbol: "SPY", name: "S&P 500", price: 528.4, changePct: 0.6 }
 ];
