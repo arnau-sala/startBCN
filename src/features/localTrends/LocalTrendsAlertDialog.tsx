@@ -84,9 +84,9 @@ export function LocalTrendsAlertDialog({ topic, locationName, onClose, onSaved }
                     {/* Option 1 */}
                     <div className="flex flex-col transition hover:bg-black/5" style={{ borderBottom: "1px solid var(--border-subtle)" }}>
                         <label className="flex cursor-pointer items-center justify-between p-4">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col pr-4">
                                 <span className="text-[15px] font-semibold" style={{ color: "var(--text-primary)" }}>Daily briefing</span>
-                                <span className="text-[13px] mt-0.5" style={{ color: "var(--text-tertiary)" }}>Morning market briefing focused on this topic. Delivered 8AM CET weekdays.</span>
+                                <span className="text-[13px] mt-0.5 leading-snug" style={{ color: "var(--text-tertiary)" }}>A focused morning note on this topic, delivered weekdays at 08:00 CET.</span>
                             </div>
                             <div className="flex shrink-0 ml-3 items-center justify-center w-5 h-5 rounded-full border" style={{ borderColor: alertType === "daily_briefing" ? "var(--accent)" : "var(--border-medium)", background: alertType === "daily_briefing" ? "var(--accent)" : "transparent" }}>
                                 {alertType === "daily_briefing" && <div className="w-2 h-2 rounded-full bg-white" />}
@@ -102,34 +102,32 @@ export function LocalTrendsAlertDialog({ topic, locationName, onClose, onSaved }
                         </label>
 
                         {/* Daily Briefing Preview Block */}
-                        {alertType === "daily_briefing" && topic.briefingPreview && (
+                        {alertType === "daily_briefing" && (
                             <div className="px-4 pb-4">
-                                <div className="p-4 rounded-[var(--radius-md)] tabular-nums overflow-hidden" style={{ background: "var(--surface-sunken)", border: "1px solid var(--border-medium)" }}>
-                                    {topic.briefingPreview.replace(/(^"|"$)/g, '').split('\n\n').map((block, i) => {
-                                        const isStatus = block.startsWith('Status:');
-                                        const isKeyDev = block.startsWith('Key developments');
-                                        const isImplications = block.startsWith('Investor implications');
-                                        const isHeader = isStatus || isKeyDev || isImplications;
-
-                                        return (
-                                            <div key={i} className={`mb-4 last:mb-0 ${i === 0 ? 'text-[11px] font-medium text-[var(--text-tertiary)]' : 'text-[12px] font-mono text-[var(--text-secondary)] whitespace-pre-wrap'}`}>
-                                                {isHeader ? (
-                                                    <>
-                                                        <h4 className="text-[13px] font-bold font-sans tracking-tight mb-1" style={{ color: "var(--text-primary)" }}>
-                                                            {block.split('\n')[0]}
-                                                        </h4>
-                                                        <div className="leading-loose">
-                                                            {block.substring(block.indexOf('\n') + 1)}
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="leading-relaxed">
-                                                        {block}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
+                                <div className="p-4 rounded-[var(--radius-md)] flex flex-col gap-3" style={{ background: "var(--surface-sunken)", border: "1px solid var(--border-medium)" }}>
+                                    <div className="text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                                        <span className="font-semibold" style={{ color: "var(--text-primary)" }}>Today's angle:</span> {topic.whatsGoingOn[0]}
+                                    </div>
+                                    <div className="text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                                        <span className="font-semibold" style={{ color: "var(--text-primary)" }}>Key driver:</span> {topic.keyDriverArticle.title}
+                                    </div>
+                                    <div className="text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                                        <span className="font-semibold" style={{ color: "var(--text-primary)" }}>Why it matters:</span>
+                                        <ul className="list-disc pl-4 mt-1 space-y-1">
+                                            <li><strong className="font-medium" style={{ color: "var(--text-primary)" }}>Upside:</strong> {topic.forInvestorsUpside}</li>
+                                            <li><strong className="font-medium" style={{ color: "var(--text-primary)" }}>Risk:</strong> {topic.forInvestorsRisk}</li>
+                                        </ul>
+                                    </div>
+                                    <div className="text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                                        <span className="font-semibold" style={{ color: "var(--text-primary)" }}>What to watch next:</span> {topic.whatsGoingOn[1] || "Local engagement with this topic remains elevated compared to the national average."}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="text-[13px] font-semibold mt-1 text-left hover:underline w-fit"
+                                        style={{ color: "var(--accent-dark)" }}
+                                    >
+                                        View sample briefing →
+                                    </button>
                                 </div>
                             </div>
                         )}

@@ -98,7 +98,7 @@ export function LocalTrendsTopicDetail({
                     className="p-4 rounded-[var(--radius-md)] flex flex-col gap-2"
                     style={{ border: "1px solid var(--border-subtle)", background: "var(--surface-sunken)" }}
                 >
-                    <p className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "var(--text-tertiary)" }}>
+                    <p className="text-[13px]" style={{ color: "var(--text-tertiary)" }}>
                         {topic.keyDriverArticle.source} · {topic.keyDriverArticle.timeAgo}
                     </p>
                     <p className="text-[15px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>
@@ -109,7 +109,7 @@ export function LocalTrendsTopicDetail({
                         className="text-[14px] font-semibold self-start mt-1 hover:underline inline-flex items-center gap-1"
                         style={{ color: "var(--accent-dark)" }}
                     >
-                        Open in your feed
+                        Open coverage
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
