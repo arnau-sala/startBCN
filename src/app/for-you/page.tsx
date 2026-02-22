@@ -255,7 +255,7 @@ export default function ForYouPage() {
               </div>
 
               {/* Timestamp */}
-              <p className="mt-1 text-[11px]" style={{ color: "var(--text-tertiary)" }}>
+              <p className="mt-1 text-[11px]" style={{ color: "var(--text-tertiary)" }} suppressHydrationWarning>
                 {displayTs}
               </p>
             </>

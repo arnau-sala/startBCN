@@ -31,6 +31,10 @@ export interface Topic {
     /** The primary news piece driving the trend */
     keyDriverArticle: MockArticle;
     articles: MockArticle[];
+    /** Professional daily briefing preview */
+    briefingPreview?: string;
+    /** Professional full daily briefing */
+    fullBriefing?: string;
 }
 
 export interface LocalDataset {
@@ -61,7 +65,7 @@ export interface ResolvedData {
 export interface AlertConfig {
     topicId: string;
     topicName: string;
-    type: "daily_digest" | "threshold";
+    type: "daily_briefing" | "threshold";
     threshold?: number; // 20 | 30 | 40 | 50 | 60 | 70
     createdAt: string; // ISO
 }

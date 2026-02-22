@@ -51,30 +51,16 @@ const barcelonaTopicsToday: Topic[] = [
         pct: 35,
         delta: 5,
         whatsGoingOn: [
-          "Catalonia rent cap proposal approved for 2026 after 2025 housing protests.",
-          "Large property owners restricted from acquiring homes in high-pressure areas."
-],
+            "Catalonia rent cap proposal approved for 2026 after 2025 housing protests.",
+            "Large property owners restricted from acquiring homes in high-pressure areas."
+        ],
         forInvestorsUpside: "Increased demand for inflation-linked REITs and rental property ETFs.",
         forInvestorsRisk: "Regulatory uncertainty for Spanish real estate exposure.",
         category: "Real estate",
-        keyDriverArticle: {"source":"El País","title":"Catalonia approves 5% rent cap for 2026","timeAgo":"4h"},
-        articles: ARTICLES.housing
-    },
-    {
-        id: "housing",
-        name: "Housing",
-        icon: "🏠",
-        pct: 25,
-        delta: 5,
-        whatsGoingOn: [
-            "New rent regulation news is sparking concern among local property owners and tenants.",
-            "Local engagement with this topic remains elevated compared to the national average."
-        ],
-        forInvestorsUpside: "Potential opportunities in relevant sector ETFs.",
-        forInvestorsRisk: "Regional volatility driven by recent local news.",
-        category: "Real estate",
-        keyDriverArticle: ARTICLES.housing[0],
-        articles: ARTICLES.housing
+        keyDriverArticle: { "source": "El País", "title": "Catalonia approves 5% rent cap for 2026", "timeAgo": "4h" },
+        articles: ARTICLES.housing,
+        briefingPreview: `"Buenos días. Housing briefing · Barcelona\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 35% local reading activity (+5% vs yesterday)\n\nKey developments\n• Catalonia rent cap proposal approved for 2026 (5% limit)\n• Large property owners now restricted from high-pressure areas\n• Local investors shifting toward inflation-linked assets\n\nInvestor implications\nRisk: Regulatory uncertainty for Spanish REITs\nOpportunity: Demand rising for rental property ETFs"`,
+        fullBriefing: `Buenos días. Housing briefing · Barcelona\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n35% local reading activity (+5% vs yesterday, highest since January)\n\nKey developments\n• Catalonia approves 5% rent cap for 2026 after 2025 housing protests (El País)\n• Large property owners restricted from acquiring homes in high-pressure areas\n• Local investors shifting toward inflation-linked assets and REITs\n\nMarket implications\nRisk: Spanish real estate exposure faces regulatory uncertainty\nOpportunity: Rental property ETFs and inflation-linked funds likely to benefit\n\nRelated coverage\nEl País: "Catalonia approves 5% rent cap for 2026" (4h ago)\nBloomberg: "European property markets face new regulatory pressures" (6h ago)\n\nAction items\n• Review Spanish REIT exposure in your portfolio\n• Consider inflation-linked rental ETFs for diversification\n\nView all related news →`
     },
     {
         id: "rates",
@@ -134,14 +120,16 @@ const barcelonaTopicsWeek: Topic[] = [
         pct: 35,
         delta: 5,
         whatsGoingOn: [
-          "Catalonia rent cap proposal approved for 2026 after 2025 housing protests.",
-          "Large property owners restricted from acquiring homes in high-pressure areas."
-],
+            "Catalonia rent cap proposal approved for 2026 after 2025 housing protests.",
+            "Large property owners restricted from acquiring homes in high-pressure areas."
+        ],
         forInvestorsUpside: "Increased demand for inflation-linked REITs and rental property ETFs.",
         forInvestorsRisk: "Regulatory uncertainty for Spanish real estate exposure.",
         category: "Real estate",
-        keyDriverArticle: {"source":"El País","title":"Catalonia approves 5% rent cap for 2026","timeAgo":"4h"},
-        articles: ARTICLES.housing
+        keyDriverArticle: { "source": "El País", "title": "Catalonia approves 5% rent cap for 2026", "timeAgo": "4h" },
+        articles: ARTICLES.housing,
+        briefingPreview: `"Buenos días. Housing briefing · Barcelona\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 35% local reading activity (+5% vs yesterday)\n\nKey developments\n• Catalonia rent cap proposal approved for 2026 (5% limit)\n• Large property owners now restricted from high-pressure areas\n• Local investors shifting toward inflation-linked assets\n\nInvestor implications\nRisk: Regulatory uncertainty for Spanish REITs\nOpportunity: Demand rising for rental property ETFs"`,
+        fullBriefing: `Buenos días. Housing briefing · Barcelona\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n35% local reading activity (+5% vs yesterday, highest since January)\n\nKey developments\n• Catalonia approves 5% rent cap for 2026 after 2025 housing protests (El País)\n• Large property owners restricted from acquiring homes in high-pressure areas\n• Local investors shifting toward inflation-linked assets and REITs\n\nMarket implications\nRisk: Spanish real estate exposure faces regulatory uncertainty\nOpportunity: Rental property ETFs and inflation-linked funds likely to benefit\n\nRelated coverage\nEl País: "Catalonia approves 5% rent cap for 2026" (4h ago)\nBloomberg: "European property markets face new regulatory pressures" (6h ago)\n\nAction items\n• Review Spanish REIT exposure in your portfolio\n• Consider inflation-linked rental ETFs for diversification\n\nView all related news →`
     },
     {
         id: "crypto",
@@ -219,14 +207,16 @@ const berlinTopicsToday: Topic[] = [
         pct: 40,
         delta: 15,
         whatsGoingOn: [
-          "Sentix investor sentiment +4.2 (highest since July 2025).",
-          "EU50 index up 1.29% to 6133 on Feb 20 amid ECB rate pause."
-],
+            "Sentix investor sentiment +4.2 (highest since July 2025).",
+            "EU50 index up 1.29% to 6133 on Feb 20 amid ECB rate pause."
+        ],
         forInvestorsUpside: "Small cap rotation potential as ECB holds deposit rate at 2.00%.",
         forInvestorsRisk: "Fragile liquidity; EU50 volatility persists post-rate pause.",
         category: "Equity",
-        keyDriverArticle: {"source":"Bloomberg","title":"ECB holds rates but signals deeper cuts ahead","timeAgo":"2h"},
-        articles: ARTICLES.etfs
+        keyDriverArticle: { "source": "Bloomberg", "title": "ECB holds rates but signals deeper cuts ahead", "timeAgo": "2h" },
+        articles: ARTICLES.etfs,
+        briefingPreview: `"Good morning. ETFs briefing · Berlin\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 40% local reading activity (+15% vs last week)\n\nKey developments\n• Sentix investor sentiment +4.2 (highest since July 2025)\n• EU50 index up 1.29% to 6133 amid ECB rate pause\n\nInvestor implications\nRisk: Fragile liquidity persists\nOpportunity: Small cap rotation potential"`,
+        fullBriefing: `Good morning. ETFs briefing · Berlin\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n40% local reading activity (+15% vs last week, peak volume)\n\nKey developments\n• Sentix investor sentiment +4.2 (highest since July 2025)\n• EU50 index up 1.29% to 6133 amid ECB rate pause\n\nMarket implications\nRisk: Fragile liquidity persists in mid-cap segments\nOpportunity: Small cap rotation potential as rate certainty improves\n\nRelated coverage\nBloomberg: "ECB holds rates but signals deeper cuts ahead" (2h ago)\n\nAction items\n• Monitor small cap ETFs for rotation signals\n• Review broad market ETF allocations\n\nView all related news →`
     },
     {
         id: "rates",
@@ -302,14 +292,16 @@ const berlinTopicsWeek: Topic[] = [
         pct: 40,
         delta: 15,
         whatsGoingOn: [
-          "Sentix investor sentiment +4.2 (highest since July 2025).",
-          "EU50 index up 1.29% to 6133 on Feb 20 amid ECB rate pause."
-],
+            "Sentix investor sentiment +4.2 (highest since July 2025).",
+            "EU50 index up 1.29% to 6133 on Feb 20 amid ECB rate pause."
+        ],
         forInvestorsUpside: "Small cap rotation potential as ECB holds deposit rate at 2.00%.",
         forInvestorsRisk: "Fragile liquidity; EU50 volatility persists post-rate pause.",
         category: "Equity",
-        keyDriverArticle: {"source":"Bloomberg","title":"ECB holds rates but signals deeper cuts ahead","timeAgo":"2h"},
-        articles: ARTICLES.etfs
+        keyDriverArticle: { "source": "Bloomberg", "title": "ECB holds rates but signals deeper cuts ahead", "timeAgo": "2h" },
+        articles: ARTICLES.etfs,
+        briefingPreview: `"Good morning. ETFs briefing · Berlin\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 40% local reading activity (+15% vs last week)\n\nKey developments\n• Sentix investor sentiment +4.2 (highest since July 2025)\n• EU50 index up 1.29% to 6133 amid ECB rate pause\n\nInvestor implications\nRisk: Fragile liquidity persists\nOpportunity: Small cap rotation potential"`,
+        fullBriefing: `Good morning. ETFs briefing · Berlin\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n40% local reading activity (+15% vs last week, peak volume)\n\nKey developments\n• Sentix investor sentiment +4.2 (highest since July 2025)\n• EU50 index up 1.29% to 6133 amid ECB rate pause\n\nMarket implications\nRisk: Fragile liquidity persists in mid-cap segments\nOpportunity: Small cap rotation potential as rate certainty improves\n\nRelated coverage\nBloomberg: "ECB holds rates but signals deeper cuts ahead" (2h ago)\n\nAction items\n• Monitor small cap ETFs for rotation signals\n• Review broad market ETF allocations\n\nView all related news →`
     },
     {
         id: "savings",
@@ -388,14 +380,16 @@ const franceCityTopicsToday: Topic[] = [
         pct: 30,
         delta: 8,
         whatsGoingOn: [
-          "ECB digital euro pilot approved for March 2026 (€1.3B cost).",
-          "European crypto ETF flows turned positive (€340M YTD inflows)."
-],
+            "ECB digital euro pilot approved for March 2026 (€1.3B cost).",
+            "European crypto ETF flows turned positive (€340M YTD inflows)."
+        ],
         forInvestorsUpside: "Euro stablecoin opportunity as digital euro timeline clarifies.",
         forInvestorsRisk: "Regulatory uncertainty for BTC/ETH exposure in Europe.",
         category: "Crypto",
-        keyDriverArticle: {"source":"FT","title":"ECB launches digital euro pilot with €1.3B price tag","timeAgo":"6h"},
-        articles: ARTICLES.crypto
+        keyDriverArticle: { "source": "FT", "title": "ECB launches digital euro pilot with €1.3B price tag", "timeAgo": "6h" },
+        articles: ARTICLES.crypto,
+        briefingPreview: `"Bonjour. Crypto briefing · Paris\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 30% local reading activity (+8% vs yesterday)\n\nKey developments\n• ECB digital euro pilot approved for March 2026\n• European crypto ETF flows turn positive YTD\n• New Paris regulatory framework attracts Web3 talent\n\nInvestor implications\nRisk: Regulatory uncertainty for unregulated exchanges\nOpportunity: Regulated Euro stablecoins and diversified ETFs"`,
+        fullBriefing: `Bonjour. Crypto briefing · Paris\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n30% local reading activity (+8% vs yesterday, highest since November)\n\nKey developments\n• ECB digital euro pilot approved for March 2026 with €1.3B budget (FT)\n• European crypto ETF flows turned positive (€340M YTD inflows)\n• AMF (Autorité des Marchés Financiers) releases new guidelines for DeFi\n\nMarket implications\nRisk: Increased scrutiny on unregulated offshore exchanges\nOpportunity: Paris cementing status as Web3 hub, boosting local talent and regulated Euro stablecoin demand\n\nRelated coverage\nFT: "ECB launches digital euro pilot with €1.3B price tag" (6h ago)\nLes Echos: "Paris attire les géants du Web3" (1d ago)\n\nAction items\n• Review portfolio exposure to regulated EU crypto assets\n• Monitor upcoming ECB publications on digital euro\n\nView all related news →`
     },
     {
         id: "savings",
@@ -444,22 +438,6 @@ const franceCityTopicsToday: Topic[] = [
         category: "Equity",
         keyDriverArticle: ARTICLES.etfs[0],
         articles: ARTICLES.etfs
-    },
-    {
-        id: "crypto",
-        name: "Crypto",
-        icon: "₿",
-        pct: 10,
-        delta: -5,
-        whatsGoingOn: [
-            "EU regulatory clarity is reshaping French crypto readership patterns.",
-            "Local engagement with this topic remains elevated compared to the national average."
-        ],
-        forInvestorsUpside: "Potential opportunities in relevant sector ETFs.",
-        forInvestorsRisk: "Regional volatility driven by recent local news.",
-        category: "Crypto",
-        keyDriverArticle: ARTICLES.crypto[0],
-        articles: ARTICLES.crypto
     }
 ];
 
@@ -471,14 +449,16 @@ const franceCityTopicsWeek: Topic[] = [
         pct: 30,
         delta: 8,
         whatsGoingOn: [
-          "ECB digital euro pilot approved for March 2026 (€1.3B cost).",
-          "European crypto ETF flows turned positive (€340M YTD inflows)."
-],
+            "ECB digital euro pilot approved for March 2026 (€1.3B cost).",
+            "European crypto ETF flows turned positive (€340M YTD inflows)."
+        ],
         forInvestorsUpside: "Euro stablecoin opportunity as digital euro timeline clarifies.",
         forInvestorsRisk: "Regulatory uncertainty for BTC/ETH exposure in Europe.",
         category: "Crypto",
-        keyDriverArticle: {"source":"FT","title":"ECB launches digital euro pilot with €1.3B price tag","timeAgo":"6h"},
-        articles: ARTICLES.crypto
+        keyDriverArticle: { "source": "FT", "title": "ECB launches digital euro pilot with €1.3B price tag", "timeAgo": "6h" },
+        articles: ARTICLES.crypto,
+        briefingPreview: `"Bonjour. Crypto briefing · Paris\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus: 30% local reading activity (+8% vs yesterday)\n\nKey developments\n• ECB digital euro pilot approved for March 2026\n• European crypto ETF flows turn positive YTD\n• New Paris regulatory framework attracts Web3 talent\n\nInvestor implications\nRisk: Regulatory uncertainty for unregulated exchanges\nOpportunity: Regulated Euro stablecoins and diversified ETFs"`,
+        fullBriefing: `Bonjour. Crypto briefing · Paris\nMonday, February 22, 2026 · 8:02 AM CET\n\nStatus\n30% local reading activity (+8% vs yesterday, highest since November)\n\nKey developments\n• ECB digital euro pilot approved for March 2026 with €1.3B budget (FT)\n• European crypto ETF flows turned positive (€340M YTD inflows)\n• AMF (Autorité des Marchés Financiers) releases new guidelines for DeFi\n\nMarket implications\nRisk: Increased scrutiny on unregulated offshore exchanges\nOpportunity: Paris cementing status as Web3 hub, boosting local talent and regulated Euro stablecoin demand\n\nRelated coverage\nFT: "ECB launches digital euro pilot with €1.3B price tag" (6h ago)\nLes Echos: "Paris attire les géants du Web3" (1d ago)\n\nAction items\n• Review portfolio exposure to regulated EU crypto assets\n• Monitor upcoming ECB publications on digital euro\n\nView all related news →`
     },
     {
         id: "rates",

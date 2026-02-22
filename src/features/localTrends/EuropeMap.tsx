@@ -108,7 +108,7 @@ export function EuropeMap({ cities, selectedCityId, onCityClick, timeframe }: Eu
                                 r="6%"
                                 gradientUnits="userSpaceOnUse"
                             >
-                                <stop offset="0%" stopColor={c.fill} stopOpacity="0.10" />
+                                <stop offset="0%" stopColor={c.fill} stopOpacity="0.05" />
                                 <stop offset="100%" stopColor={c.fill} stopOpacity="0" />
                             </radialGradient>
                         );
@@ -126,16 +126,16 @@ export function EuropeMap({ cities, selectedCityId, onCityClick, timeframe }: Eu
                     return (
                         <g key={city.id} opacity={isOther ? 0.25 : 1} style={{ transition: "opacity 200ms" }}>
                             {/* Glow blob */}
-                            <circle cx={`${cx}%`} cy={`${cy}%`} r="6%" fill={`url(#lt-gl-${city.id})`} />
+                            <circle cx={`${cx}%`} cy={`${cy}%`} r="6%" fill={`url(#lt-gl-${city.id})`} opacity="0.35" />
                             {/* Pulse ring 1 */}
                             <circle
                                 className="lt-pulse-ring"
                                 cx={`${cx}%`} cy={`${cy}%`} r="1.2%"
                                 fill="#1d6e7a"
-                                style={{ animationDelay: city.id === "berlin" ? "0.45s" : city.id === "paris" ? "0.9s" : "0s", opacity: 0.3 }}
+                                style={{ animationDelay: city.id === "berlin" ? "0.45s" : city.id === "paris" ? "0.9s" : "0s", opacity: 0.2 }}
                             />
                             {/* Pulse ring 2 */}
-                            <circle className="lt-pulse-ring-2" cx={`${cx}%`} cy={`${cy}%`} r="1.2%" fill="#1d6e7a" style={{ opacity: 0.3 }} />
+                            <circle className="lt-pulse-ring-2" cx={`${cx}%`} cy={`${cy}%`} r="1.2%" fill="#1d6e7a" style={{ opacity: 0.2 }} />
                             {/* Core */}
                             <circle
                                 cx={`${cx}%`} cy={`${cy}%`}
@@ -205,16 +205,16 @@ export function EuropeMap({ cities, selectedCityId, onCityClick, timeframe }: Eu
                                 style={{
                                     whiteSpace: "nowrap",
                                     borderRadius: "100px",
-                                    padding: "6px 14px",
+                                    padding: "6px 12px",
                                     fontSize: "13px",
                                     fontWeight: 500,
                                     letterSpacing: "-0.01em",
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "6px",
-                                    background: "var(--surface-raised)",
+                                    background: "var(--surface-page)",
                                     border: "1px solid var(--border-subtle)",
-                                    boxShadow: isSelected ? "0 4px 12px rgba(0,0,0,0.12)" : "0 2px 8px rgba(0,0,0,0.06)",
+                                    boxShadow: isSelected ? "0 4px 12px rgba(0,0,0,0.08)" : "0 2px 4px rgba(0,0,0,0.04)",
                                     transition: "all 200ms ease"
                                 }}
                             >
@@ -224,7 +224,7 @@ export function EuropeMap({ cities, selectedCityId, onCityClick, timeframe }: Eu
                                 <span style={{ color: "var(--text-tertiary)" }}>·</span>
                                 <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{city.pct}%</span>
                                 <span style={{ color: "var(--text-tertiary)" }}>·</span>
-                                <span style={{ fontWeight: 500, color: isUp ? "var(--positive)" : isDown ? "var(--negative)" : "var(--text-tertiary)" }}>
+                                <span style={{ color: isUp ? "var(--positive)" : isDown ? "var(--negative)" : "var(--text-tertiary)" }}>
                                     {isUp ? "↑" : isDown ? "↓" : ""}{Math.abs(city.delta)}% {timeframe === "week" ? "vs last week" : "vs yesterday"}
                                 </span>
                             </div>

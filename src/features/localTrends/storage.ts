@@ -13,7 +13,8 @@ import { AlertConfig } from "./types";
 
 const KEYS = {
     followed: "lt_v1_followed",
-    alerts: "lt_v1_alerts"
+    alerts: "lt_v1_alerts",
+    dailyBriefings: "lt_dailyBriefings"
 } as const;
 
 // ─── Followed topics ──────────────────────────────────────────────────────────
@@ -77,4 +78,31 @@ export function saveAlert(config: Omit<AlertConfig, "createdAt">): AlertConfig {
     }
 
     return full;
+}
+
+// ─── Daily Briefings ─────────────────────────────────────────────────────────
+
+export function saveDailyBriefing(topicId: string, city: string): void {
+    if (typeof window === "undefined") return;
+    try {
+        const raw = localStorage.getItem(KEYS.dailyBriefings);
+        const current = raw ? JSON.parse(raw) : [];
+        const next = [
+            ...current.filter((b: any) => !(b.topicId === topicId && b.city === city)),
+            { topicId, city, active: true, createdAt: new Date().toISOString() }
+        ];
+        localStorage.setItem(KEYS.dailyBriefings, JSON.stringify(next));
+    } catch {
+        // ignore
+    }
+}
+
+export function getActiveBriefings(): any[] {
+    if (typeof window === "undefined") return [];
+    try {
+        const raw = localStorage.getItem(KEYS.dailyBriefings);
+        return raw ? JSON.parse(raw) : [];
+    } catch {
+        return [];
+    }
 }

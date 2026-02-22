@@ -19,6 +19,7 @@ interface Props {
  */
 export function LocalTrendsTopicDetail({
     topic,
+    locationName,
     followed,
     onFollowChange,
     onBack
@@ -32,9 +33,13 @@ export function LocalTrendsTopicDetail({
         onFollowChange(next);
     }
 
-    function handleAlertSaved() {
-        setToast("Alert created ✓");
-        setTimeout(() => setToast(null), 2500);
+    function handleAlertSaved(type: string, topicName: string) {
+        if (type === "daily_briefing") {
+            setToast(`Daily briefing for ${topicName} activated. Your first briefing arrives tomorrow at 8AM CET.`);
+        } else {
+            setToast("Alert created ✓");
+        }
+        setTimeout(() => setToast(null), 3000);
     }
 
     return (
@@ -53,87 +58,103 @@ export function LocalTrendsTopicDetail({
             </button>
 
             {/* Topic header */}
-            <div className="mb-5 flex items-center gap-3">
+            <div className="mb-6 flex items-center gap-3">
                 <span
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-2xl"
-                    style={{ background: "var(--accent-subtle)" }}
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[24px]"
+                    style={{ background: "var(--surface-sunken)" }}
                     aria-hidden
                 >
                     {topic.icon}
                 </span>
                 <div>
-                    <h3 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>
+                    <h3 className="text-[20px] font-bold tracking-tight leading-tight" style={{ color: "var(--text-primary)" }}>
                         {topic.name}
                     </h3>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+                    <p className="text-[14px] mt-0.5" style={{ color: "var(--text-tertiary)" }}>
                         {topic.pct}% of local readers today
                     </p>
                 </div>
             </div>
 
             {/* Why it's trending */}
-            <div
-                className="mb-5 rounded-[var(--radius-md)] p-4"
-                style={{ background: "var(--accent-subtle)", border: "1px solid var(--accent-border)" }}
-            >
-                <p className="eyebrow mb-1">Why it{"'"}s trending</p>
-                <p className="text-sm leading-6" style={{ color: "var(--text-primary)" }}>
-                    {topic.whatsGoingOn.join(" ")}
+            <div className="mb-6">
+                <h4 className="text-[14px] font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+                    Why it{"'"}s trending
+                </h4>
+                <p className="text-[14px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                    {topic.whatsGoingOn[0]}
                 </p>
             </div>
 
-            {/* Top coverage */}
-            <div className="mb-5">
-                <p className="eyebrow mb-3">Top coverage</p>
-                <div className="space-y-2">
-                    {topic.articles.map((article, i) => (
-                        <div
-                            key={i}
-                            className="row-inset"
-                        >
-                            <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>
-                                {article.source} · {article.timeAgo}
-                            </p>
-                            <p className="mt-0.5 text-sm font-medium leading-snug" style={{ color: "var(--text-primary)" }}>
-                                {article.title}
-                            </p>
-                        </div>
-                    ))}
+            {/* Key driver news */}
+            <div className="mb-6">
+                <span
+                    className="inline-block px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-wider mb-2"
+                    style={{ background: "var(--accent-subtle)", color: "var(--accent-dark)" }}
+                >
+                    Key driver news
+                </span>
+                <div
+                    className="p-4 rounded-[var(--radius-md)] flex flex-col gap-2"
+                    style={{ border: "1px solid var(--border-subtle)", background: "var(--surface-sunken)" }}
+                >
+                    <p className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "var(--text-tertiary)" }}>
+                        {topic.keyDriverArticle.source} · {topic.keyDriverArticle.timeAgo}
+                    </p>
+                    <p className="text-[15px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>
+                        “{topic.keyDriverArticle.title}”
+                    </p>
+                    <button
+                        type="button"
+                        className="text-[14px] font-semibold self-start mt-1 hover:underline inline-flex items-center gap-1"
+                        style={{ color: "var(--accent-dark)" }}
+                    >
+                        Open in your feed
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
+            {/* For investors */}
+            <div className="mb-8">
+                <h4 className="text-[14px] font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+                    For investors
+                </h4>
+                <ul className="list-disc pl-5 space-y-2 marker:text-[var(--text-tertiary)] text-[14px] leading-relaxed">
+                    <li style={{ color: "var(--text-secondary)" }}>
+                        <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Upside: </strong>
+                        {topic.forInvestorsUpside}
+                    </li>
+                    <li style={{ color: "var(--text-secondary)" }}>
+                        <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Risk: </strong>
+                        {topic.forInvestorsRisk}
+                    </li>
+                </ul>
+            </div>
+
             {/* Actions */}
-            <div className="mt-auto flex gap-3">
+            <div className="mt-auto flex gap-3 pt-4" style={{ borderTop: "1px solid var(--border-subtle)" }}>
                 <button
                     type="button"
                     onClick={handleFollow}
-                    className="flex-1 rounded-[var(--radius-md)] py-2.5 text-sm font-semibold transition"
+                    className="flex-1 rounded-[var(--radius-md)] py-3 text-[14px] font-semibold transition hover:bg-black/5 active:scale-[0.98]"
                     style={
                         isFollowing
-                            ? {
-                                background: "var(--surface-sunken)",
-                                color: "var(--text-secondary)",
-                                border: "1px solid var(--border-subtle)"
-                            }
-                            : {
-                                background: "var(--accent)",
-                                color: "var(--text-inverse)"
-                            }
+                            ? { background: "var(--surface-sunken)", color: "var(--text-secondary)", border: "1px solid var(--border-subtle)" }
+                            : { background: "var(--text-primary)", color: "var(--surface-page)" }
                     }
                 >
-                    {isFollowing ? "Following ✓" : "Follow topic"}
+                    {isFollowing ? "✓ Following" : "Follow this theme"}
                 </button>
                 <button
                     type="button"
                     onClick={() => setShowAlert(true)}
-                    className="rounded-[var(--radius-md)] px-4 py-2.5 text-sm font-medium transition"
-                    style={{
-                        border: "1px solid var(--border-subtle)",
-                        color: "var(--text-secondary)",
-                        background: "var(--surface-raised)"
-                    }}
+                    className="flex-1 rounded-[var(--radius-md)] py-3 text-[14px] font-semibold transition hover:bg-black/5 active:scale-[0.98]"
+                    style={{ border: "1px solid var(--border-medium)", color: "var(--text-primary)", background: "transparent" }}
                 >
-                    🔔 Alert
+                    Create alert
                 </button>
             </div>
 
@@ -156,8 +177,8 @@ export function LocalTrendsTopicDetail({
             {/* Alert dialog overlay */}
             {showAlert && (
                 <LocalTrendsAlertDialog
-                    topicId={topic.id}
-                    topicName={topic.name}
+                    topic={topic}
+                    locationName={locationName}
                     onClose={() => setShowAlert(false)}
                     onSaved={handleAlertSaved}
                 />

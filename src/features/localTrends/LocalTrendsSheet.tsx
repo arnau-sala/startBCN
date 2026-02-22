@@ -7,6 +7,8 @@ import { resolveDataset } from "./privacy";
 import { getFollowed, toggleFollowed } from "./storage";
 import { EuropeMap, MapCity } from "./EuropeMap";
 import { LocalTrendsAlertDialog } from "./LocalTrendsAlertDialog";
+import { LocalTrendsTopicDetail } from "./LocalTrendsTopicDetail";
+import { TopicsList } from "./TopicsList";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Pill } from "@/components/Pill";
 import { IconButton } from "@/components/IconButton";
@@ -22,7 +24,7 @@ function TrendSegmentedControl({
 }) {
     return (
         <div
-            className="flex rounded-full p-[3px]"
+            className="flex rounded-full p-[2px]"
             style={{ background: "var(--surface-sunken)" }}
             role="tablist"
         >
@@ -35,11 +37,11 @@ function TrendSegmentedControl({
                         role="tab"
                         aria-selected={active}
                         onClick={() => onChange(key)}
-                        className="px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-all duration-200"
+                        className="px-4 py-1.5 rounded-full text-[13px] font-semibold capitalize transition-all duration-200"
                         style={{
-                            background: active ? "var(--surface-raised)" : "transparent",
-                            color: active ? "var(--accent-dark)" : "var(--text-tertiary)",
-                            boxShadow: active ? "0 1px 3px rgba(0,0,0,.10)" : "none"
+                            background: active ? "var(--surface-page)" : "transparent",
+                            color: active ? "var(--text-primary)" : "var(--text-secondary)",
+                            boxShadow: active ? "0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04)" : "none"
                         }}
                     >
                         {key === "today" ? "Today" : "Week"}
@@ -225,6 +227,7 @@ const CITY_IDS = ["barcelona", "berlin", "paris"] as const;
 export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheetProps) {
     const [timeframe, setTimeframe] = useState<TrendTimeframe>("today");
     const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
+    const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
     const [alertTopic, setAlertTopic] = useState<Topic | null>(null);
     const [alertCityId, setAlertCityId] = useState<string | null>(null);
     const [followed, setFollowed] = useState<string[]>([]);
@@ -266,18 +269,36 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
 
     const handleCityClick = useCallback((id: string) => {
         setSelectedCityId((prev) => (prev === id ? null : id));
+        setSelectedTopicId(null);
         setAlertTopic(null);
     }, []);
 
     const handleFollow = useCallback((topicId: string) => {
-        setFollowed(toggleFollowed(topicId));
+        const next = toggleFollowed(topicId);
+        setFollowed(next);
+        if (next.includes(topicId)) {
+            let topicName = "topic";
+            for (const id of CITY_IDS) {
+                const found = MOCK_DATASETS[id].today.find(t => t.id === topicId) || MOCK_DATASETS[id].week.find(t => t.id === topicId);
+                if (found) {
+                    topicName = found.name;
+                    break;
+                }
+            }
+            setToast(`Following ${topicName} ✓`);
+            setTimeout(() => setToast(null), 2000);
+        }
     }, []);
 
-    const handleAlertSaved = useCallback(() => {
-        setToast("Alert created ✓");
+    const handleAlertSaved = useCallback((type: string, topicName?: string) => {
+        if (type === "daily_briefing") {
+            setToast(`Daily briefing for ${topicName} activated. Your first briefing arrives tomorrow at 8AM CET.`);
+        } else {
+            setToast("Alert created ✓");
+        }
         setAlertTopic(null);
         setAlertCityId(null);
-        setTimeout(() => setToast(null), 2500);
+        setTimeout(() => setToast(null), 3000);
     }, []);
 
     if (!open) return null;
@@ -347,11 +368,11 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
                             </svg>
                         </div>
                         <div>
-                            <h2 className="text-[17px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+                            <h2 className="text-[24px] font-bold tracking-tight leading-tight" style={{ color: "var(--text-primary)" }}>
                                 Local trends
                             </h2>
-                            <p className="text-[13px] mt-0.5" style={{ color: "var(--text-tertiary)" }}>
-                                What Europe is reading · Tap a city
+                            <p className="text-[14px] mt-0.5" style={{ color: "var(--text-tertiary)" }}>
+                                What Europe is reading · Tap a city to explore
                             </p>
                         </div>
                     </div>
@@ -407,9 +428,9 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
                                             className="h-2 w-2 rounded-full"
                                             style={{ background: selectedResolved.topics[0].delta > 0 ? "var(--positive)" : selectedResolved.topics[0].delta < 0 ? "var(--negative)" : panelColor.primary }}
                                         />
-                                        <h3 className="text-[17px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+                                        <h2 className="text-[20px] font-bold tracking-tight leading-tight" style={{ color: "var(--text-primary)" }}>
                                             {panelCity.displayName} · Investor briefing
-                                        </h3>
+                                        </h2>
                                         {selectedResolved.wasFallback && (
                                             <Pill label={`Showing ${selectedResolved.level} (low volume)`} variant="neutral" className="ml-2" />
                                         )}
@@ -424,14 +445,27 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
 
                             {/* Scrollable panel body */}
                             <div className="overflow-y-auto" style={{ overscrollBehavior: "contain", flex: 1 }}>
-                                <KeyAssetBriefing
-                                    topic={selectedResolved.topics[0]}
-                                    city={panelCity}
-                                    timeframe={timeframe}
-                                    isFollowing={followed.includes(selectedResolved.topics[0].id)}
-                                    onFollow={() => handleFollow(selectedResolved.topics[0].id)}
-                                    onAlert={() => { setAlertTopic(selectedResolved.topics[0]); setAlertCityId(selectedCityId); }}
-                                />
+                                {selectedTopicId ? (
+                                    <div className="p-6 h-full flex flex-col">
+                                        <LocalTrendsTopicDetail
+                                            topic={selectedResolved.topics.find(t => t.id === selectedTopicId) || selectedResolved.topics[0]}
+                                            locationName={panelCity.displayName}
+                                            followed={followed}
+                                            onFollowChange={setFollowed}
+                                            onBack={() => setSelectedTopicId(null)}
+                                        />
+                                    </div>
+                                ) : (
+                                    <TopicsList
+                                        topics={selectedResolved.topics}
+                                        city={panelCity}
+                                        timeframe={timeframe}
+                                        followed={followed}
+                                        onFollow={(id, e) => { e.stopPropagation(); handleFollow(id); }}
+                                        onAlert={(topic, e) => { e.stopPropagation(); setAlertTopic(topic); setAlertCityId(selectedCityId); }}
+                                        onTopicClick={(id) => setSelectedTopicId(id)}
+                                    />
+                                )}
                             </div>
                         </div>
                     )}
@@ -439,14 +473,14 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
 
                 {/* Footer hint */}
                 <div
-                    className="shrink-0 flex flex-col items-center justify-center gap-1 px-6 py-4"
+                    className="shrink-0 flex flex-col items-center justify-center gap-1.5 px-6 py-5"
                     style={{ borderTop: "1px solid var(--border-subtle)" }}
                 >
-                    <span className="text-[13px] font-medium" style={{ color: "var(--text-secondary)" }}>
+                    <span className="text-[14px] font-medium" style={{ color: "var(--text-secondary)" }}>
                         Tap a city to explore its financial reading trends.
                     </span>
-                    <span className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>
-                        Aggregated &amp; anonymized reading activity. Not financial advice.
+                    <span className="text-[12px]" style={{ color: "var(--text-tertiary)" }}>
+                        Aggregated & anonymized reading activity. Not financial advice.
                     </span>
                 </div>
             </div>
@@ -465,8 +499,8 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
                         onClick={(e) => e.stopPropagation()}
                     >
                         <LocalTrendsAlertDialog
-                            topicId={alertTopic.id}
-                            topicName={alertTopic.name}
+                            topic={alertTopic}
+                            locationName={CITY_IDS.find(id => id === alertCityId)?.replace(/^\w/, c => c.toUpperCase()) || "City"} // Quick fallback, though panelCity might be better handled but it's out of scope of this exact line inside the overlay map.
                             onClose={() => { setAlertTopic(null); setAlertCityId(null); }}
                             onSaved={handleAlertSaved}
                         />
@@ -477,8 +511,8 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
             {/* Toast */}
             {toast && (
                 <div
-                    className="fixed bottom-8 left-1/2 z-[70] -translate-x-1/2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-lg"
-                    style={{ background: "var(--positive)", color: "#fff" }}
+                    className="fixed bottom-10 left-1/2 z-[70] -translate-x-1/2 rounded-full px-5 py-3 text-[14px] font-semibold shadow-xl transition-all"
+                    style={{ background: "var(--positive)", color: "var(--text-inverse)" }}
                     role="status"
                     aria-live="polite"
                 >
