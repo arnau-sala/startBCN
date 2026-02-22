@@ -394,14 +394,14 @@ export function LocalTrendsSheet({ open, onClose, triggerRef }: LocalTrendsSheet
                 </div>
 
                 {/* Map area — map fits entirely, no scroll (uses full width for bigger size) */}
-                <div className="relative flex-1 overflow-hidden flex items-center justify-center min-h-0">
-                    <div className="w-full h-full max-h-full px-2 py-1 relative z-0 flex items-center justify-center">
-                        <div className="w-full max-h-full aspect-[8/5]">
+                <div className="relative flex-1 overflow-visible flex items-center justify-center min-h-0 pt-2 pb-6">
+                    <div className="w-full h-[85%] px-2 relative z-0 flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center">
                             <EuropeMap
-                            cities={mapCities}
-                            selectedCityId={selectedCityId}
-                            onCityClick={handleCityClick}
-                            timeframe={timeframe}
+                                cities={mapCities}
+                                selectedCityId={selectedCityId}
+                                onCityClick={handleCityClick}
+                                timeframe={timeframe}
                             />
                         </div>
                     </div>
