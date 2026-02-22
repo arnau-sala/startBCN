@@ -51,10 +51,12 @@ export const defaultProfile = profilePresets[1];
 
 export type FrontRiskLevel = "conservative" | "moderate" | "aggressive";
 export type FrontInterest = "crypto" | "stocks" | "savings" | "macro";
+export type FrontKnowledgeLevel = "beginner" | "intermediate" | "advanced";
 
 export interface FrontendProfileState {
   name: string;
   username: string;
+  knowledge: FrontKnowledgeLevel;
   risk: FrontRiskLevel;
   interests: FrontInterest[];
 }
@@ -62,6 +64,7 @@ export interface FrontendProfileState {
 export const defaultFrontendProfile: FrontendProfileState = {
   name: "Pepe",
   username: "pepe.n26",
+  knowledge: "beginner",
   risk: "moderate",
   interests: ["stocks", "crypto"]
 };

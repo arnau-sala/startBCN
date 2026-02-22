@@ -428,6 +428,27 @@ export default function ForYouPage() {
         : [],
     [search]
   );
+  const suggestedShares = useMemo(
+    () => [
+      {
+        id: "s-msft",
+        name: "Microsoft",
+        ticker: "MSFT",
+        valueEur: 28120,
+        plEur: 3120,
+        plPct: 12.48
+      },
+      {
+        id: "s-aapl",
+        name: "Apple",
+        ticker: "AAPL",
+        valueEur: 21430,
+        plEur: -980,
+        plPct: -4.37
+      }
+    ],
+    []
+  );
 
   const personalizedNews = useMemo(() => {
     const scoreForItem = (tags: string[]) => {
@@ -749,6 +770,64 @@ export default function ForYouPage() {
         )}
       </Card>
 
+      {/* Suggested shares */}
+      <Card className="flex flex-col lg:min-h-[212px]">
+        <SectionHeader title="Suggested shares" eyebrow="Keep an eye on" />
+        <div className="flex-1 space-y-1.5">
+          {suggestedShares.map((item) => {
+            const pos = item.plEur >= 0;
+            const supported = supportedAssetTickers.includes(item.ticker.toUpperCase() as SupportedAssetTicker);
+            const pnlText = `${item.plEur >= 0 ? "+" : ""}${new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "EUR",
+              maximumFractionDigits: 0
+            }).format(item.plEur)} (${item.plPct >= 0 ? "+" : ""}${item.plPct.toFixed(2)}%)`;
+            return (
+              <button
+                key={`suggested-${item.id}`}
+                type="button"
+                onClick={() => {
+                  if (supported) openAssetFromTicker(item.ticker);
+                }}
+                className={`grid w-full grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-left text-xs transition ${
+                  supported ? "cursor-pointer hover:opacity-85" : "cursor-default"
+                }`}
+                style={{ background: "var(--surface-sunken)" }}
+              >
+                <div className="col-span-2 min-w-0">
+                  <p className="clamp-1 font-medium" style={{ color: "var(--text-primary)" }}>
+                    {item.name}
+                  </p>
+                  <p style={{ color: "var(--text-tertiary)" }}>{item.ticker}</p>
+                </div>
+                <p className="text-center" style={{ color: "var(--text-secondary)" }}>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "EUR",
+                    maximumFractionDigits: 0
+                  }).format(item.valueEur)}
+                </p>
+                <p
+                  className="text-right text-xs font-semibold"
+                  style={{ color: pos ? "var(--positive)" : "var(--negative)" }}
+                >
+                  {pnlText}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          aria-label="View more suggested shares"
+          onClick={() => {}}
+          className="mt-3 block rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:opacity-75 mx-auto"
+          style={{ borderColor: "var(--accent-border)", color: "var(--accent-dark)" }}
+        >
+          View more
+        </button>
+      </Card>
+
     </>
   );
 
@@ -936,7 +1015,7 @@ export default function ForYouPage() {
       </Card>
 
       {/* Personalized News */}
-      <Card className="mt-2">
+      <Card className="mt-2 lg:min-h-[212px]">
         <SectionHeader
           title="Personalized News"
           eyebrow="Curated for you"

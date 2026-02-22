@@ -142,28 +142,26 @@ export function HoldingsTable({
                   }
                 }}
               >
-                <div className="col-span-2 min-w-0">
-                  <div className="flex items-center gap-1">
-                    <p className="clamp-1 font-medium" style={{ color: "var(--text-primary)" }}>
-                      {item.name}
-                    </p>
-                    {isNegative && (
-                      <button
-                        type="button"
-                        aria-label="Panic mode"
-                        title="Panic mode"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          togglePanicPanel(item.ticker, e.currentTarget);
-                        }}
-                        className="inline-flex h-6 min-w-[56px] items-center justify-center rounded-full border bg-white px-2 text-[10px] font-semibold text-red-600 transition hover:bg-red-50"
-                        style={{ borderColor: "var(--border-subtle)" }}
-                      >
-                        Pannic
-                      </button>
-                    )}
-                  </div>
+                <div className="relative col-span-2 min-w-0 pr-[66px]">
+                  <p className="clamp-1 font-medium" style={{ color: "var(--text-primary)" }}>
+                    {item.name}
+                  </p>
                   <p style={{ color: "var(--text-tertiary)" }}>{item.ticker}</p>
+                  {isNegative && (
+                    <button
+                      type="button"
+                      aria-label="Panic mode"
+                      title="Panic mode"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        togglePanicPanel(item.ticker, e.currentTarget);
+                      }}
+                      className="absolute right-0 top-1/2 inline-flex h-6 min-w-[56px] -translate-y-1/2 items-center justify-center rounded-full border bg-white px-2 text-[10px] font-semibold text-red-600 transition hover:bg-red-50"
+                      style={{ borderColor: "var(--border-subtle)" }}
+                    >
+                      Panic
+                    </button>
+                  )}
                 </div>
                 <p className="text-center" style={{ color: "var(--text-secondary)" }}>
                   {money(item.valueEur)}
