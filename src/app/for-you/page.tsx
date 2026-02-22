@@ -103,22 +103,13 @@ function NewsRowCarousel({
     return () => window.clearTimeout(t);
   }, [animationKey, previousIndex]);
 
-  const getDummyTitle = (item: DashboardNewsItem) => {
-    const t = item.tags;
-    if (t.includes("crypto")) return "Crypto moved a lot today";
-    if (t.includes("rates")) return "Interest rates may affect your money";
-    if (t.includes("earnings")) return "A big company shared its results";
-    if (t.includes("ai") || t.includes("tech")) return "AI and tech stocks are in focus";
-    if (t.includes("savings")) return "Savings products may change returns";
-    if (t.includes("macro")) return "The economy could move markets this week";
-    return "A market update that may affect your portfolio";
-  };
+
 
   const tickerStyle: Record<string, { bg: string; text: string; border: string }> = {
     BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
     ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
     NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
-    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    SPY: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
     TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
     GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
     EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
@@ -150,7 +141,7 @@ function NewsRowCarousel({
           className="mt-1 clamp-2 text-sm font-semibold leading-snug"
           style={{ color: "var(--text-primary)" }}
         >
-          {getDummyTitle(news)}
+          {news.simpleTitle}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-1">
           {(news.tickers ?? []).slice(0, 2).map((ticker) => {
@@ -165,9 +156,8 @@ function NewsRowCarousel({
                   e.stopPropagation();
                   if (isSupportedAsset) onOpenAsset?.(t);
                 }}
-                className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide ${
-                  isSupportedAsset ? "cursor-pointer underline-offset-2 hover:underline" : "cursor-default"
-                }`}
+                className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold tracking-wide ${isSupportedAsset ? "cursor-pointer underline-offset-2 hover:underline" : "cursor-default"
+                  }`}
                 style={{ background: style.bg, color: style.text, borderColor: style.border }}
               >
                 {t}
@@ -206,25 +196,22 @@ function NewsRowCarousel({
       >
         {animating && prevItem && (
           <div
-            className={`pointer-events-none absolute inset-0 row-inset ${
-              direction === "next"
-                ? "animate-[news-out-left_.38s_ease_forwards]"
-                : "animate-[news-out-right_.38s_ease_forwards]"
-            }`}
+            className={`pointer-events-none absolute inset-0 row-inset ${direction === "next"
+              ? "animate-[news-out-left_.38s_ease_forwards]"
+              : "animate-[news-out-right_.38s_ease_forwards]"
+              }`}
           >
             {cardContent(prevItem)}
           </div>
         )}
         <div
-          className={`row-inset h-full ${
-            animating && prevItem
-              ? `absolute inset-0 ${
-                direction === "next"
-                  ? "animate-[news-in-right_.38s_ease_forwards]"
-                  : "animate-[news-in-left_.38s_ease_forwards]"
-              }`
-              : ""
-          }`}
+          className={`row-inset h-full ${animating && prevItem
+            ? `absolute inset-0 ${direction === "next"
+              ? "animate-[news-in-right_.38s_ease_forwards]"
+              : "animate-[news-in-left_.38s_ease_forwards]"
+            }`
+            : ""
+            }`}
         >
           {cardContent(item)}
         </div>
@@ -274,7 +261,7 @@ function LegalDocRowCarousel({
     BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
     ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
     NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
-    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    SPY: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
     TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
     GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
     EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
@@ -339,26 +326,23 @@ function LegalDocRowCarousel({
     >
       {animating && prevItem && (
         <div
-          className={`pointer-events-none absolute inset-0 rounded-xl border p-2.5 ${
-            direction === "next"
-              ? "animate-[news-out-left_.38s_ease_forwards]"
-              : "animate-[news-out-right_.38s_ease_forwards]"
-          }`}
+          className={`pointer-events-none absolute inset-0 rounded-xl border p-2.5 ${direction === "next"
+            ? "animate-[news-out-left_.38s_ease_forwards]"
+            : "animate-[news-out-right_.38s_ease_forwards]"
+            }`}
           style={{ borderColor: "var(--border-subtle)", background: "var(--surface-sunken)" }}
         >
           {content(prevItem)}
         </div>
       )}
       <div
-        className={`h-full rounded-xl border p-2.5 ${
-          animating && prevItem
-            ? `absolute inset-0 ${
-              direction === "next"
-                ? "animate-[news-in-right_.38s_ease_forwards]"
-                : "animate-[news-in-left_.38s_ease_forwards]"
-            }`
-            : ""
-        }`}
+        className={`h-full rounded-xl border p-2.5 ${animating && prevItem
+          ? `absolute inset-0 ${direction === "next"
+            ? "animate-[news-in-right_.38s_ease_forwards]"
+            : "animate-[news-in-left_.38s_ease_forwards]"
+          }`
+          : ""
+          }`}
         style={{ borderColor: "var(--border-subtle)", background: "var(--surface-sunken)" }}
       >
         {content(item)}
@@ -489,7 +473,7 @@ export default function ForYouPage() {
   const dailyTips = useMemo(
     () => [
       "BTC: Volatility is elevated today. Do not panic; avoid impulse decisions and focus on your long-term plan.",
-      "MSFT: Trend remains constructive. Keep position size balanced and watch the next guidance update.",
+      "SPY: Broad market trend is constructive. Stay diversified and stick to your allocation plan.",
       "GLD: Acting as a stabilizer in your portfolio. Use it for balance, not for chasing short-term returns."
     ],
     []
@@ -712,7 +696,7 @@ export default function ForYouPage() {
           <HoldingsTable
             items={holdings.slice(0, 3)}
             mode={holdingsMode}
-            onViewMore={() => {}}
+            onViewMore={() => { }}
             enabledDetailTickers={supportedAssetTickers}
             onOpenAssetDetails={(ticker) => {
               setAssetModalTimeframe("day");
@@ -789,9 +773,8 @@ export default function ForYouPage() {
                 onClick={() => {
                   if (supported) openAssetFromTicker(item.ticker);
                 }}
-                className={`grid w-full grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-left text-xs transition ${
-                  supported ? "cursor-pointer hover:opacity-85" : "cursor-default"
-                }`}
+                className={`grid w-full grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-left text-xs transition ${supported ? "cursor-pointer hover:opacity-85" : "cursor-default"
+                  }`}
                 style={{ background: "var(--surface-sunken)" }}
               >
                 <div className="col-span-2 min-w-0">
@@ -820,7 +803,7 @@ export default function ForYouPage() {
         <button
           type="button"
           aria-label="View more suggested shares"
-          onClick={() => {}}
+          onClick={() => { }}
           className="mt-3 block rounded-full border px-3.5 py-1.5 text-xs font-semibold transition hover:opacity-75 mx-auto"
           style={{ borderColor: "var(--accent-border)", color: "var(--accent-dark)" }}
         >
@@ -876,11 +859,10 @@ export default function ForYouPage() {
               {tipAnimating && previousTip && (
                 <p
                   key={`tip-prev-${tipAnimationKey}`}
-                  className={`pointer-events-none absolute inset-0 flex items-center justify-center px-4 text-center text-sm leading-6 ${
-                    tipDirection === "next"
-                      ? "animate-[news-out-left_.38s_ease_forwards]"
-                      : "animate-[news-out-right_.38s_ease_forwards]"
-                  }`}
+                  className={`pointer-events-none absolute inset-0 flex items-center justify-center px-4 text-center text-sm leading-6 ${tipDirection === "next"
+                    ? "animate-[news-out-left_.38s_ease_forwards]"
+                    : "animate-[news-out-right_.38s_ease_forwards]"
+                    }`}
                   style={{ color: "var(--text-primary)" }}
                 >
                   {previousTip}
@@ -888,15 +870,13 @@ export default function ForYouPage() {
               )}
               <p
                 key={`tip-current-${tipAnimationKey}-${tipIndex}`}
-                className={`text-center text-sm leading-6 ${
-                  tipAnimating
-                    ? `absolute inset-0 flex items-center justify-center px-4 ${
-                      tipDirection === "next"
-                        ? "animate-[news-in-right_.38s_ease_forwards]"
-                        : "animate-[news-in-left_.38s_ease_forwards]"
-                    }`
-                    : ""
-                }`}
+                className={`text-center text-sm leading-6 ${tipAnimating
+                  ? `absolute inset-0 flex items-center justify-center px-4 ${tipDirection === "next"
+                    ? "animate-[news-in-right_.38s_ease_forwards]"
+                    : "animate-[news-in-left_.38s_ease_forwards]"
+                  }`
+                  : ""
+                  }`}
                 style={{ color: "var(--text-primary)" }}
               >
                 {currentTip}

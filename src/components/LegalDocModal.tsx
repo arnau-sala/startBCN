@@ -7,7 +7,7 @@ function getTickerStyle(ticker: string) {
     BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
     ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
     NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
-    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    SPY: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
     TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
     GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
     EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }

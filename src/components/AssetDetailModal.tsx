@@ -122,7 +122,7 @@ export function AssetDetailModal({
     BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
     ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
     NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
-    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    SPY: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
     TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
     GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
     EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
@@ -324,11 +324,10 @@ export function AssetDetailModal({
                 >
                   {newsAnimating && newsPrevIndex !== null && (
                     <div
-                      className={`pointer-events-none absolute inset-0 row-inset ${
-                        newsDirection === "next"
+                      className={`pointer-events-none absolute inset-0 row-inset ${newsDirection === "next"
                           ? "animate-[news-out-left_.38s_ease_forwards]"
                           : "animate-[news-out-right_.38s_ease_forwards]"
-                      }`}
+                        }`}
                     >
                       {(() => {
                         const prev = assetNews[((newsPrevIndex % assetNews.length) + assetNews.length) % assetNews.length];
@@ -379,15 +378,13 @@ export function AssetDetailModal({
                     </div>
                   )}
                   <div
-                    className={`row-inset h-full ${
-                      newsAnimating && newsPrevIndex !== null
-                        ? `absolute inset-0 ${
-                          newsDirection === "next"
-                            ? "animate-[news-in-right_.38s_ease_forwards]"
-                            : "animate-[news-in-left_.38s_ease_forwards]"
+                    className={`row-inset h-full ${newsAnimating && newsPrevIndex !== null
+                        ? `absolute inset-0 ${newsDirection === "next"
+                          ? "animate-[news-in-right_.38s_ease_forwards]"
+                          : "animate-[news-in-left_.38s_ease_forwards]"
                         }`
                         : ""
-                    }`}
+                      }`}
                   >
                     <div className="grid grid-cols-[1fr_auto] gap-3">
                       <div className="min-w-0">

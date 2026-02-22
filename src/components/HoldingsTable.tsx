@@ -128,9 +128,8 @@ export function HoldingsTable({
           return (
             <div key={item.id}>
               <div
-                className={`grid grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-xs transition ${
-                  detailsEnabled ? "cursor-pointer hover:opacity-85" : "cursor-not-allowed opacity-70"
-                }`}
+                className={`grid grid-cols-4 items-center rounded-xl px-2.5 py-1.5 text-xs transition ${detailsEnabled ? "cursor-pointer hover:opacity-85" : "cursor-not-allowed opacity-70"
+                  }`}
                 style={{ background: "var(--surface-sunken)" }}
                 role="button"
                 tabIndex={0}
@@ -142,11 +141,13 @@ export function HoldingsTable({
                   }
                 }}
               >
-                <div className="relative col-span-2 min-w-0 pr-[66px]">
-                  <p className="clamp-1 font-medium" style={{ color: "var(--text-primary)" }}>
-                    {item.name}
-                  </p>
-                  <p style={{ color: "var(--text-tertiary)" }}>{item.ticker}</p>
+                <div className="col-span-2 min-w-0 flex items-center gap-2">
+                  <div className="min-w-0">
+                    <p className="clamp-1 font-medium" style={{ color: "var(--text-primary)" }}>
+                      {item.name}
+                    </p>
+                    <p style={{ color: "var(--text-tertiary)" }}>{item.ticker}</p>
+                  </div>
                   {isNegative && (
                     <button
                       type="button"
@@ -156,17 +157,17 @@ export function HoldingsTable({
                         e.stopPropagation();
                         togglePanicPanel(item.ticker, e.currentTarget);
                       }}
-                      className="absolute right-0 top-1/2 inline-flex h-6 min-w-[56px] -translate-y-1/2 items-center justify-center rounded-full border bg-white px-2 text-[10px] font-semibold text-red-600 transition hover:bg-red-50"
+                      className="inline-flex h-6 min-w-[56px] shrink-0 items-center justify-center rounded-full border bg-white px-2 text-[10px] font-semibold text-red-600 transition hover:bg-red-50"
                       style={{ borderColor: "var(--border-subtle)" }}
                     >
                       Panic
                     </button>
                   )}
                 </div>
-                <p className="text-center" style={{ color: "var(--text-secondary)" }}>
+                <p className="text-right tabular-nums" style={{ color: "var(--text-secondary)" }}>
                   {money(item.valueEur)}
                 </p>
-                <div className="text-right">
+                <div className="text-right tabular-nums">
                   {isNegative ? (
                     <div className="flex items-center justify-end">
                       <button
@@ -177,13 +178,13 @@ export function HoldingsTable({
                         }}
                         className="text-right"
                       >
-                        <span className="text-xs font-semibold" style={{ color: "var(--negative)" }}>
+                        <span className="text-xs font-semibold tabular-nums" style={{ color: "var(--negative)" }}>
                           {money(pl)} ({pct(plPct)})
                         </span>
                       </button>
                     </div>
                   ) : (
-                    <p className="text-xs font-semibold" style={{ color: pos ? "var(--positive)" : "var(--negative)" }}>
+                    <p className="text-xs font-semibold tabular-nums" style={{ color: pos ? "var(--positive)" : "var(--negative)" }}>
                       {pos ? "+" : ""}{money(pl)} ({pct(plPct)})
                     </p>
                   )}

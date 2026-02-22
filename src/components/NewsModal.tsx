@@ -8,7 +8,7 @@ function getTickerStyle(ticker: string) {
     BTC: { bg: "#FFF4E6", text: "#B45309", border: "#F59E0B" },
     ETH: { bg: "#EEF2FF", text: "#4338CA", border: "#818CF8" },
     NVDA: { bg: "#ECFDF3", text: "#166534", border: "#34D399" },
-    MSFT: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
+    SPY: { bg: "#E0F2FE", text: "#075985", border: "#38BDF8" },
     TSLA: { bg: "#FEF2F2", text: "#991B1B", border: "#F87171" },
     GLD: { bg: "#FFFBEB", text: "#92400E", border: "#FBBF24" },
     EUR: { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" }
@@ -16,49 +16,7 @@ function getTickerStyle(ticker: string) {
   return map[ticker.toUpperCase()] ?? { bg: "#F1F5F9", text: "#334155", border: "#CBD5E1" };
 }
 
-function getDummyBullets(item: DashboardNewsItem) {
-  const t = item.tags;
-  if (t.includes("crypto")) {
-    return [
-      "Crypto moved fast after traders reduced risk.",
-      "Short-term volatility is higher than usual.",
-      "If volume stays elevated, swings can persist for several sessions."
-    ];
-  }
-  if (t.includes("rates")) {
-    return [
-      "Rate expectations changed market pricing.",
-      "Risky assets may cool while savings can improve.",
-      "Watch central-bank guidance, because wording can move markets quickly."
-    ];
-  }
-  if (t.includes("earnings")) {
-    return [
-      "Quarterly results beat/missed expectations.",
-      "Price moves depend on guidance, not only results.",
-      "In the short term, sentiment can outweigh fundamentals after the release."
-    ];
-  }
-  if (t.includes("ai") || t.includes("tech")) {
-    return [
-      "AI/tech momentum remains a market driver.",
-      "Related stocks often move together.",
-      "This can help returns, but also increases concentration risk in one theme."
-    ];
-  }
-  if (t.includes("macro")) {
-    return [
-      "Macro headlines can move many assets at once.",
-      "Expectation shifts drive most of the reaction.",
-      "Cross-asset reactions (equities, bonds, FX) often confirm trend strength."
-    ];
-  }
-  return [
-    "This headline can shift short-term sentiment.",
-    "Expect temporary volatility around the news.",
-    "Use follow-up headlines to confirm whether the move is noise or trend."
-  ];
-}
+
 
 type Recommendation = "hold" | "wait" | "reduce";
 
@@ -134,51 +92,7 @@ function getWhyMattersToYou(item: DashboardNewsItem, affectedHoldings: string[])
   return "Because this headline can change short-term market risk conditions.";
 }
 
-function getTechnicalArticle(item: DashboardNewsItem) {
-  const t = item.tags;
 
-  if (t.includes("crypto")) {
-    return {
-      subtitle: "Technical market note",
-      paragraphs: [
-        "Price action reflects a deleveraging sequence across perpetual futures, with open interest normalization and a compression in funding asymmetry. The pullback is consistent with a momentum reset rather than a structural breakdown in long-term demand.",
-        "On-chain transfer velocity and exchange netflow behavior suggest mixed positioning: tactical distribution from short-term holders alongside strategic accumulation by longer-horizon wallets. Liquidity depth remains thinner around key psychological levels, amplifying intraday swings.",
-        "From a risk perspective, monitoring realized volatility, liquidation clusters, and basis dynamics can help distinguish continuation from mean-reversion scenarios in the next sessions."
-      ]
-    };
-  }
-
-  if (t.includes("rates") || t.includes("macro")) {
-    return {
-      subtitle: "Macro technical note",
-      paragraphs: [
-        "The headline reprices the terminal-rate path and shifts discount-rate assumptions used in cross-asset valuation. Duration-sensitive assets react first, followed by sector rotation in equities as capital reallocates along the risk curve.",
-        "Forward guidance language and data-dependency framing now matter as much as the headline decision itself. Small changes in policy communication can materially move real yields, which then cascade into growth and cyclical exposures.",
-        "A practical framework is to track rate-volatility, yield-curve shape, and credit-spread behavior jointly to confirm whether this is a transient repricing or a broader regime move."
-      ]
-    };
-  }
-
-  if (t.includes("earnings") || t.includes("ai") || t.includes("tech")) {
-    return {
-      subtitle: "Equity technical note",
-      paragraphs: [
-        "Post-release price discovery is being driven by expectation revision more than by absolute prints. The market is re-rating the forward multiple based on guidance durability, margin trajectory, and capex signaling.",
-        "Cross-name correlation in the same theme (AI/semis/platforms) indicates that factor exposure is currently stronger than idiosyncratic dispersion. This improves momentum carry but increases concentration risk in thematic portfolios.",
-        "Watching estimate revisions, implied volatility term structure, and breadth participation helps validate whether the move is supported by fundamentals or primarily positioning-driven."
-      ]
-    };
-  }
-
-  return {
-    subtitle: "Technical context note",
-    paragraphs: [
-      "The move appears to be driven by a combination of positioning reset and narrative repricing. In this phase, market microstructure often dominates over long-form fundamental interpretation.",
-      "Confirmation generally comes from follow-through in volume profile, correlation behavior, and volatility regime rather than from a single headline reaction.",
-      "For portfolio construction, the key is to separate signal from noise by comparing this event against existing exposure concentration and risk-budget constraints."
-    ]
-  };
-}
 
 export function NewsModal({
   item,
@@ -201,7 +115,7 @@ export function NewsModal({
   const affectedHoldings = getAffectedHoldings(item);
   const confidence = getConfidence(item);
   const whyMatters = getWhyMattersToYou(item, affectedHoldings);
-  const technicalArticle = getTechnicalArticle(item);
+  const technicalArticle = item.fullArticle;
   const actionTone = portfolioView.recommendation === "reduce"
     ? {
       wrapper: "border-red-100 bg-red-50",
@@ -309,7 +223,7 @@ export function NewsModal({
           <div className="h-full p-1">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Simple explanation</p>
             <ul className="mt-2 space-y-1.5 text-sm text-slate-700">
-              {getDummyBullets(item).map((bullet, index) => (
+              {item.simpleBullets.map((bullet: string, index: number) => (
                 <li key={bullet} className="flex items-start gap-2">
                   <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">
                     {index + 1}
@@ -341,7 +255,7 @@ export function NewsModal({
         {showFullArticle && (
           <div className="mt-3 rounded-lg border border-slate-200 bg-white p-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-              Full article (technical mock)
+              Full article
             </p>
             <p className="mt-1 text-sm font-medium text-slate-800">{technicalArticle.subtitle}</p>
             <div className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
