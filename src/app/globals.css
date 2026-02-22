@@ -179,3 +179,44 @@ body {
   text-transform: uppercase;
   color: var(--accent-dark);
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   LOCAL TRENDS — Map heat zone pulse animations
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes lt-heat-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+.lt-pulse-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lt-heat-pulse 2.2s ease-out infinite;
+}
+
+.lt-pulse-ring-2 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lt-heat-pulse 2.2s ease-out 0.75s infinite;
+}
+
+@keyframes lt-slide-up-panel {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.lt-panel-enter {
+  animation: lt-slide-up-panel 260ms cubic-bezier(.32, .72, 0, 1);
+}

@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { LocalTrendsButton } from "@/features/localTrends/LocalTrendsButton";
+import { LocalTrendsSheet } from "@/features/localTrends/LocalTrendsSheet";
 import { Card } from "@/components/Card";
 import { ChatFab } from "@/components/ChatFab";
 import { ChatMessage, ChatWidgetModal } from "@/components/ChatWidgetModal";
@@ -99,6 +101,8 @@ export default function ForYouPage() {
   const [holdingsMode, setHoldingsMode] = useState<HoldingsViewMode>("sinceBuy");
   const [search, setSearch] = useState("");
   const [showProfile, setShowProfile] = useState(false);
+  const [localTrendsOpen, setLocalTrendsOpen] = useState(false);
+  const localTrendsTriggerRef = useRef<HTMLButtonElement>(null);
   const [showResume, setShowResume] = useState(false);
   const [selectedNews, setSelectedNews] = useState<DashboardNewsItem | null>(null);
   const [eli10News, setEli10News] = useState<DashboardNewsItem | null>(null);
@@ -166,6 +170,10 @@ export default function ForYouPage() {
           </h1>
         </div>
         <div className="relative flex items-center gap-2">
+          {/* Local trends — secondary icon, sits quietly before the profile button */}
+          <LocalTrendsButton
+            onClick={() => setLocalTrendsOpen(true)}
+          />
           <IconButton
             icon={
               <span
@@ -406,6 +414,13 @@ export default function ForYouPage() {
 
       <NewsModal item={selectedNews} onClose={() => setSelectedNews(null)} />
       <ExplainModal item={eli10News} onClose={() => setEli10News(null)} />
+
+      {/* Local Trends sheet — zero backend, all mock-local */}
+      <LocalTrendsSheet
+        open={localTrendsOpen}
+        onClose={() => setLocalTrendsOpen(false)}
+        triggerRef={localTrendsTriggerRef}
+      />
 
       {showResume && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-300 px-4">
